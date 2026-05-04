@@ -8,11 +8,11 @@
 body {
     margin: 0;
     background: black;
-    font-family: Arial;
+    font-family: Arial, sans-serif;
     color: white;
 }
 
-/* LOGIN BUTTON */
+/* 🔐 LOGIN BUTTON */
 #loginBar {
     position: absolute;
     top: 40px;
@@ -26,7 +26,7 @@ body {
     cursor: pointer;
 }
 
-/* LOGO */
+/* 🐂 LOGO */
 #logo {
     position: absolute;
     top: 50%;
@@ -39,7 +39,7 @@ body {
     max-width: 80vw;
 }
 
-/* BUTTONS */
+/* 🔘 MENU */
 #menu {
     position: absolute;
     bottom: 80px;
@@ -57,11 +57,11 @@ body {
     cursor: pointer;
 }
 
-.youtube { background: orange; }
-.story { background: #5b5bff; }
-.web { background: #00cfd1; }
+.youtube { background: orange; color: black; }
+.story { background: #5b5bff; color: black; }
+.web { background: #00cfd1; color: black; }
 
-/* 🔐 PIN MODAL */
+/* 🔐 MODAL */
 #pinModal {
     display: none;
     position: fixed;
@@ -69,22 +69,62 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.8);
+    background: rgba(0,0,0,0.85);
     justify-content: center;
     align-items: center;
 }
 
+/* BOX */
 #pinBox {
     background: #111;
-    padding: 30px;
-    text-align: center;
+    padding: 40px;
+    width: 400px;
+    border: 2px solid #555;
 }
 
-#pinInput {
-    padding: 10px;
-    font-size: 18px;
-    margin-top: 10px;
+/* TITLE */
+#pinBox h1 {
+    color: red;
+    font-size: 32px;
 }
+
+/* LABEL */
+#pinBox label {
+    color: red;
+    font-size: 22px;
+}
+
+/* INPUT */
+#pinBox input {
+    width: 100%;
+    padding: 12px;
+    font-size: 18px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    background: black;
+    border: 2px solid #aaa;
+    color: white;
+}
+
+/* BUTTON ROW */
+#btnRow {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* BUTTONS */
+.loginBtn {
+    padding: 12px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    width: 30%;
+}
+
+.green { background: #00c853; }
+.yellow { background: #ffd600; }
+.red { background: #d50000; color: white; }
+
 </style>
 
 </head>
@@ -106,39 +146,63 @@ body {
     <button class="btn web" onclick="openWeb()">Internet</button>
 </div>
 
-<!-- 🔐 PIN POPUP -->
+<!-- 🔐 LOGIN MODAL -->
 <div id="pinModal">
     <div id="pinBox">
-        <h2>PIN eingeben</h2>
-        <input type="password" id="pinInput"><br><br>
-        <button onclick="checkPin()">Login</button>
+
+        <h1>Benutzeranmeldung</h1>
+
+        <label>Name</label>
+        <input type="text" id="nameInput">
+
+        <label>PIN</label>
+        <input type="password" id="pinInput">
+
+        <div id="btnRow">
+            <button class="loginBtn green" onclick="checkLogin()">Anmelden</button>
+            <button class="loginBtn yellow" onclick="showHelp()">Hilfe</button>
+            <button class="loginBtn red" onclick="closeLogin()">Abbruch</button>
+        </div>
+
     </div>
 </div>
 
 <script>
 
-// 🔐 USER LISTE
+// 🔐 USER LISTE (TEST)
 let users = [
     { name: "Admin", pin: "1234" },
-    { name: "Support", pin: "2222" }
+    { name: "Julian", pin: "5678" }
 ];
 
-// LOGIN POPUP
+// LOGIN ÖFFNEN
 function openLogin() {
     document.getElementById("pinModal").style.display = "flex";
 }
 
-// PIN CHECK
-function checkPin() {
+// LOGIN SCHLIESSEN
+function closeLogin() {
+    document.getElementById("pinModal").style.display = "none";
+}
+
+// LOGIN PRÜFEN
+function checkLogin() {
+    let name = document.getElementById("nameInput").value;
     let pin = document.getElementById("pinInput").value;
-    let user = users.find(u => u.pin === pin);
+
+    let user = users.find(u => u.name === name && u.pin === pin);
 
     if (user) {
         alert("Willkommen " + user.name);
-        // 👉 später: weiterleitung auf interne seite
+        closeLogin();
     } else {
-        alert("Falscher PIN");
+        alert("Falsche Daten!");
     }
+}
+
+// HILFE
+function showHelp() {
+    alert("Bitte Name und PIN eingeben.");
 }
 
 // LINKS
@@ -151,7 +215,7 @@ function openWeb() {
 }
 
 function openStory() {
-    alert("Story kommt hier rein");
+    alert("Story kommt als nächstes als richtiges Fenster");
 }
 
 </script>
