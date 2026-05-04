@@ -8,27 +8,57 @@
 body {
     margin: 0;
     background: black;
-    font-family: Arial, sans-serif;
+    font-family: Arial;
     color: white;
-    overflow: hidden;
 }
 
-/* 🔐 LOGIN OBEN */
+/* LOGIN SCREEN */
+#loginScreen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+#loginBox {
+    text-align: center;
+}
+
+#pinInput {
+    padding: 15px;
+    font-size: 20px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+#loginBtn {
+    margin-top: 20px;
+    padding: 10px 30px;
+    font-size: 18px;
+    cursor: pointer;
+    background: #39d353;
+    border: none;
+}
+
+/* DASHBOARD */
+#dashboard {
+    display: none;
+}
+
+/* LOGIN BAR */
 #loginBar {
     position: absolute;
-    top: 40px;
+    top: 30px;
     left: 50%;
     transform: translateX(-50%);
     background: #39d353;
-    padding: 12px 60px;
-    font-size: 24px;
-    font-weight: bold;
+    padding: 10px 40px;
     color: black;
-    border-radius: 4px;
-    text-shadow: 1px 1px 2px black;
+    font-weight: bold;
 }
 
-/* 🐂 LOGO MITTE */
+/* LOGO */
 #logo {
     position: absolute;
     top: 50%;
@@ -41,70 +71,87 @@ body {
     max-width: 80vw;
 }
 
-/* 🔘 BUTTONS UNTEN */
+/* MENU */
 #menu {
     position: absolute;
     bottom: 80px;
     width: 100%;
     display: flex;
     justify-content: center;
-    gap: 120px;
+    gap: 100px;
 }
 
-/* 🔘 BUTTON STYLE */
 .btn {
     padding: 15px 40px;
-    font-size: 22px;
+    font-size: 20px;
     font-weight: bold;
     border: none;
     cursor: pointer;
-    border-radius: 4px;
-    text-shadow: 2px 2px 3px black;
 }
 
-/* 🎨 BUTTON FARBEN */
-.youtube {
-    background: orange;
-    color: black;
-}
-
-.story {
-    background: #5b5bff;
-    color: black;
-}
-
-.web {
-    background: #00cfd1;
-    color: black;
-}
-
-/* 🔥 HOVER EFFEKT */
-.btn:hover {
-    transform: scale(1.1);
-}
+.youtube { background: orange; }
+.story { background: #5b5bff; }
+.web { background: #00cfd1; }
 </style>
 
 </head>
 
 <body>
 
-<!-- 🔐 LOGIN -->
-<div id="loginBar">Login</div>
+<!-- 🔐 LOGIN SCREEN -->
+<div id="loginScreen">
+    <div id="loginBox">
+        <h1>Dark Bulls Login</h1>
+        <input type="password" id="pinInput" placeholder="PIN eingeben">
+        <br>
+        <button id="loginBtn" onclick="login()">Einloggen</button>
+    </div>
+</div>
 
-<!-- 🐂 LOGO -->
+<!-- 🟢 DASHBOARD -->
+<div id="dashboard">
+
+<div id="loginBar">User</div>
+
 <div id="logo">
     <img src="bulls.jpg">
 </div>
 
-<!-- 🔘 MENU -->
 <div id="menu">
     <button class="btn youtube" onclick="openYouTube()">YouTube</button>
     <button class="btn story" onclick="openStory()">Histories</button>
     <button class="btn web" onclick="openWeb()">Internet</button>
 </div>
 
+</div>
+
 <script>
 
+// 🔐 USER LISTE (HIER KOMMEN SPÄTER DEINE 40 LEUTE REIN)
+let users = [
+    { name: "Admin", pin: "1234", role: "Admin" },
+    { name: "Support", pin: "2222", role: "Support" },
+    { name: "Gast", pin: "0000", role: "Gast" }
+];
+
+// 🔐 LOGIN FUNKTION
+function login() {
+    let pin = document.getElementById("pinInput").value;
+
+    let user = users.find(u => u.pin === pin);
+
+    if (user) {
+        document.getElementById("loginScreen").style.display = "none";
+        document.getElementById("dashboard").style.display = "block";
+
+        document.getElementById("loginBar").innerText =
+            user.name + " (" + user.role + ")";
+    } else {
+        alert("Falscher PIN!");
+    }
+}
+
+// LINKS
 function openYouTube() {
     window.open("https://www.youtube.com/@DarkBullsGruppe", "_blank");
 }
@@ -114,7 +161,7 @@ function openWeb() {
 }
 
 function openStory() {
-    alert("Hier kommt deine Geschichte rein (bauen wir gleich als richtiges Fenster)");
+    alert("Story kommt gleich als Fenster");
 }
 
 </script>
