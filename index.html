@@ -12,50 +12,18 @@ body {
     color: white;
 }
 
-/* LOGIN SCREEN */
-#loginScreen {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-}
-
-#loginBox {
-    text-align: center;
-}
-
-#pinInput {
-    padding: 15px;
-    font-size: 20px;
-    text-align: center;
-    margin-top: 20px;
-}
-
-#loginBtn {
-    margin-top: 20px;
-    padding: 10px 30px;
-    font-size: 18px;
-    cursor: pointer;
-    background: #39d353;
-    border: none;
-}
-
-/* DASHBOARD */
-#dashboard {
-    display: none;
-}
-
-/* LOGIN BAR */
+/* LOGIN BUTTON */
 #loginBar {
     position: absolute;
-    top: 30px;
+    top: 40px;
     left: 50%;
     transform: translateX(-50%);
     background: #39d353;
-    padding: 10px 40px;
-    color: black;
+    padding: 12px 60px;
+    font-size: 24px;
     font-weight: bold;
+    color: black;
+    cursor: pointer;
 }
 
 /* LOGO */
@@ -71,19 +39,19 @@ body {
     max-width: 80vw;
 }
 
-/* MENU */
+/* BUTTONS */
 #menu {
     position: absolute;
     bottom: 80px;
     width: 100%;
     display: flex;
     justify-content: center;
-    gap: 100px;
+    gap: 120px;
 }
 
 .btn {
     padding: 15px 40px;
-    font-size: 20px;
+    font-size: 22px;
     font-weight: bold;
     border: none;
     cursor: pointer;
@@ -92,62 +60,84 @@ body {
 .youtube { background: orange; }
 .story { background: #5b5bff; }
 .web { background: #00cfd1; }
+
+/* 🔐 PIN MODAL */
+#pinModal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    justify-content: center;
+    align-items: center;
+}
+
+#pinBox {
+    background: #111;
+    padding: 30px;
+    text-align: center;
+}
+
+#pinInput {
+    padding: 10px;
+    font-size: 18px;
+    margin-top: 10px;
+}
 </style>
 
 </head>
 
 <body>
 
-<!-- 🔐 LOGIN SCREEN -->
-<div id="loginScreen">
-    <div id="loginBox">
-        <h1>Dark Bulls Login</h1>
-        <input type="password" id="pinInput" placeholder="PIN eingeben">
-        <br>
-        <button id="loginBtn" onclick="login()">Einloggen</button>
-    </div>
-</div>
+<!-- 🔐 LOGIN BUTTON -->
+<div id="loginBar" onclick="openLogin()">Login</div>
 
-<!-- 🟢 DASHBOARD -->
-<div id="dashboard">
-
-<div id="loginBar">User</div>
-
+<!-- 🐂 LOGO -->
 <div id="logo">
     <img src="bulls.jpg">
 </div>
 
+<!-- 🔘 MENU -->
 <div id="menu">
     <button class="btn youtube" onclick="openYouTube()">YouTube</button>
     <button class="btn story" onclick="openStory()">Histories</button>
     <button class="btn web" onclick="openWeb()">Internet</button>
 </div>
 
+<!-- 🔐 PIN POPUP -->
+<div id="pinModal">
+    <div id="pinBox">
+        <h2>PIN eingeben</h2>
+        <input type="password" id="pinInput"><br><br>
+        <button onclick="checkPin()">Login</button>
+    </div>
 </div>
 
 <script>
 
-// 🔐 USER LISTE (HIER KOMMEN SPÄTER DEINE 40 LEUTE REIN)
+// 🔐 USER LISTE
 let users = [
-    { name: "Admin", pin: "1234", role: "Admin" },
-    { name: "Support", pin: "2222", role: "Support" },
-    { name: "Gast", pin: "0000", role: "Gast" }
+    { name: "Admin", pin: "1234" },
+    { name: "Support", pin: "2222" }
 ];
 
-// 🔐 LOGIN FUNKTION
-function login() {
-    let pin = document.getElementById("pinInput").value;
+// LOGIN POPUP
+function openLogin() {
+    document.getElementById("pinModal").style.display = "flex";
+}
 
+// PIN CHECK
+function checkPin() {
+    let pin = document.getElementById("pinInput").value;
     let user = users.find(u => u.pin === pin);
 
     if (user) {
-        document.getElementById("loginScreen").style.display = "none";
-        document.getElementById("dashboard").style.display = "block";
-
-        document.getElementById("loginBar").innerText =
-            user.name + " (" + user.role + ")";
+        alert("Willkommen " + user.name);
+        // 👉 später: weiterleitung auf interne seite
     } else {
-        alert("Falscher PIN!");
+        alert("Falscher PIN");
     }
 }
 
@@ -161,7 +151,7 @@ function openWeb() {
 }
 
 function openStory() {
-    alert("Story kommt gleich als Fenster");
+    alert("Story kommt hier rein");
 }
 
 </script>
