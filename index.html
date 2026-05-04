@@ -7,94 +7,80 @@
 <style>
 body {
     margin: 0;
-    font-family: Arial;
+    background: black;
+    font-family: Arial, sans-serif;
     color: white;
-
-    /* 🖼️ Hintergrundbild (JETZT korrekt aus GitHub Repo) */
-    background-image: url("bulls.jpg");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    overflow: hidden;
 }
 
 /* 🔐 LOGIN OBEN */
 #loginBar {
     position: absolute;
-    top: 20px;
+    top: 40px;
     left: 50%;
     transform: translateX(-50%);
-    background: #00c853;
-    padding: 12px 40px;
-    border-radius: 5px;
-    color: black;
+    background: #39d353;
+    padding: 12px 60px;
+    font-size: 24px;
     font-weight: bold;
+    color: black;
+    border-radius: 4px;
+    text-shadow: 1px 1px 2px black;
 }
 
-/* 🔲 BUTTON CONTAINER UNTEN */
+/* 🐂 LOGO MITTE */
+#logo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#logo img {
+    width: 600px;
+    max-width: 80vw;
+}
+
+/* 🔘 BUTTONS UNTEN */
 #menu {
     position: absolute;
-    bottom: 60px;
+    bottom: 80px;
     width: 100%;
     display: flex;
     justify-content: center;
-    gap: 40px;
+    gap: 120px;
 }
 
-/* 🔘 BUTTONS */
+/* 🔘 BUTTON STYLE */
 .btn {
-    padding: 18px 50px;
-    border: none;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 5px;
+    padding: 15px 40px;
+    font-size: 22px;
     font-weight: bold;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    text-shadow: 2px 2px 3px black;
 }
 
+/* 🎨 BUTTON FARBEN */
 .youtube {
-    background: #ffcc00;
+    background: orange;
     color: black;
 }
 
 .story {
-    background: #ff3b3b;
-    color: white;
+    background: #5b5bff;
+    color: black;
 }
 
 .web {
-    background: #ff3b3b;
-    color: white;
+    background: #00cfd1;
+    color: black;
 }
 
-/* 🪟 STORY MODAL */
-#modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.8);
-    justify-content: center;
-    align-items: center;
-}
-
-#modalContent {
-    background: #111;
-    padding: 30px;
-    width: 70%;
-    height: 70%;
-    overflow-y: auto;
-    border-radius: 10px;
-    line-height: 1.5;
-}
-
-#closeBtn {
-    margin-top: 20px;
-    background: red;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
+/* 🔥 HOVER EFFEKT */
+.btn:hover {
+    transform: scale(1.1);
 }
 </style>
 
@@ -103,55 +89,32 @@ body {
 <body>
 
 <!-- 🔐 LOGIN -->
-<div id="loginBar">Admin</div>
+<div id="loginBar">Login</div>
+
+<!-- 🐂 LOGO -->
+<div id="logo">
+    <img src="bulls.jpg">
+</div>
 
 <!-- 🔘 MENU -->
 <div id="menu">
     <button class="btn youtube" onclick="openYouTube()">YouTube</button>
-    <button class="btn story" onclick="openStory()">Unsere Geschichte</button>
-    <button class="btn web" onclick="openWeb()">Internetseite</button>
-</div>
-
-<!-- 🪟 STORY MODAL -->
-<div id="modal">
-    <div id="modalContent">
-
-<h2>🐂 Die Entstehung der Dark Bulls</h2>
-
-<p>
-Alles begann eigentlich ganz unspektakulär – aus purer Langeweile.
-Durch eine Werbung bin ich auf Call of War gestoßen...
-</p>
-
-<p>
-(👉 kompletter Text kann hier rein)
-</p>
-
-<button id="closeBtn" onclick="closeStory()">Schließen</button>
-
-    </div>
+    <button class="btn story" onclick="openStory()">Histories</button>
+    <button class="btn web" onclick="openWeb()">Internet</button>
 </div>
 
 <script>
 
-// ▶ YouTube öffnen
 function openYouTube() {
     window.open("https://www.youtube.com/@DarkBullsGruppe", "_blank");
 }
 
-// ▶ Website öffnen
 function openWeb() {
     window.open("https://darkbulls.jimdofree.com/", "_blank");
 }
 
-// ▶ Story öffnen
 function openStory() {
-    document.getElementById("modal").style.display = "flex";
-}
-
-// ▶ Story schließen
-function closeStory() {
-    document.getElementById("modal").style.display = "none";
+    alert("Hier kommt deine Geschichte rein (bauen wir gleich als richtiges Fenster)");
 }
 
 </script>
