@@ -243,9 +243,28 @@ body {
 
 <div class="panel" id="admin">
     <h2>Admin</h2>
-    <button>Spieler Einstellungen</button>
+    <button onclick="openCreatePlayer()">Spieler Einstellungen</button>
     <button>Statistiken</button>
 </div>
+
+</div>
+
+<!-- 🔧 NEU: SPIELER ANLEGEN -->
+<div id="createPlayer" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); justify-content:center; align-items:center;">
+
+    <div id="pinBox" style="width:450px;">
+
+        <h1>Spieler anlegen</h1>
+
+        <label>Spielername</label>
+        <input type="text" id="p_name">
+
+        <div id="btnRow">
+            <button class="loginBtn green" onclick="savePlayer()">Speichern</button>
+            <button class="loginBtn yellow" onclick="closeCreatePlayer()">Zurück</button>
+        </div>
+
+    </div>
 
 </div>
 
@@ -302,6 +321,27 @@ function login() {
     }
 }
 
+// 🔧 NEU
+function openCreatePlayer() {
+    document.getElementById("createPlayer").style.display = "flex";
+}
+
+function closeCreatePlayer() {
+    document.getElementById("createPlayer").style.display = "none";
+}
+
+function savePlayer() {
+    let name = document.getElementById("p_name").value;
+
+    if (!name) {
+        alert("Bitte Spielername eingeben");
+        return;
+    }
+
+    alert("Spieler erstellt: " + name);
+    closeCreatePlayer();
+}
+
 // LINKS
 function openYouTube() {
     window.open("https://www.youtube.com/@DarkBullsGruppe", "_blank");
@@ -317,8 +357,5 @@ function openStory() {
 
 </script>
 
-
 </body>
-
-    
 </html>
