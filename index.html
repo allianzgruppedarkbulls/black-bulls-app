@@ -17,6 +17,7 @@ body {
     display: block;
 }
 
+/* LOGIN BUTTON */
 #loginBar {
     position: absolute;
     top: 40px;
@@ -30,6 +31,7 @@ body {
     cursor: pointer;
 }
 
+/* LOGO */
 #logo {
     position: absolute;
     top: 50%;
@@ -42,6 +44,7 @@ body {
     max-width: 90vw;
 }
 
+/* MENU */
 #menu {
     position: absolute;
     bottom: 80px;
@@ -63,7 +66,7 @@ body {
 .story { background: #5b5bff; }
 .web { background: #00cfd1; }
 
-/* LOGIN */
+/* LOGIN MODAL */
 #pinModal {
     display: none;
     position: fixed;
@@ -81,6 +84,14 @@ body {
     border: 2px solid #555;
 }
 
+#pinBox h1 {
+    color: red;
+}
+
+#pinBox label {
+    color: red;
+}
+
 #pinBox input {
     width: 100%;
     padding: 10px;
@@ -90,19 +101,28 @@ body {
     border: 2px solid #aaa;
 }
 
+#btnRow {
+    display: flex;
+    justify-content: space-between;
+}
+
 .loginBtn {
-    width: 100%;
+    width: 30%;
     padding: 10px;
     border: none;
     cursor: pointer;
-    background: #00c853;
 }
+
+.green { background: #00c853; }
+.yellow { background: #ffd600; }
+.red { background: #d50000; color: white; }
 
 /* DASHBOARD */
 #dashboard {
     display: none;
 }
 
+/* 🔥 FIXES BILD WIE FIGMA */
 #bg {
     position: fixed;
     width: 100%;
@@ -130,9 +150,11 @@ body {
     padding: 10px;
 }
 
+/* POSITIONEN */
 #personal { top: 50px; left: 20px; }
 #blacklist { top: 250px; left: 20px; }
 #blacklistAdmin { top: 450px; left: 20px; }
+
 #elo { bottom: 50px; right: 200px; }
 #admin { top: 200px; right: 20px; }
 
@@ -141,43 +163,13 @@ body {
     top: 50px;
     right: 20px;
 }
-
-/* PLAYER WINDOW */
-#playerWindow {
-    display: none;
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    background: black;
-    color: white;
-}
-
-#playerBg {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    background: black url("bulls_dashboard.jpg") center no-repeat;
-    background-size: 780px;
-    z-index: -1;
-}
-
-#playerWindow .btn {
-    background: #39d353;
-    margin: 10px;
-    padding: 15px 40px;
-    font-size: 22px;
-    font-weight: bold;
-    border: none;
-    cursor: pointer;
-}
-
 </style>
 
 </head>
 
 <body>
 
-<!-- START -->
+<!-- 🟢 STARTSEITE -->
 <div id="start">
 
 <div id="loginBar" onclick="openLogin()">Login</div>
@@ -187,107 +179,140 @@ body {
 </div>
 
 <div id="menu">
-    <button class="btn youtube">YouTube</button>
-    <button class="btn story">Histories</button>
-    <button class="btn web">Internet</button>
+    <button class="btn youtube" onclick="openYouTube()">YouTube</button>
+    <button class="btn story" onclick="openStory()">Histories</button>
+    <button class="btn web" onclick="openWeb()">Internet</button>
 </div>
 
 </div>
 
-<!-- LOGIN -->
+<!-- 🔐 LOGIN -->
 <div id="pinModal">
     <div id="pinBox">
 
-        <h1>Login</h1>
+        <h1>Benutzeranmeldung</h1>
 
-        <input type="text" id="nameInput" placeholder="Name">
-        <input type="password" id="pinInput" placeholder="PIN">
+        <label>Name</label>
+        <input type="text" id="nameInput">
 
-        <button class="loginBtn" onclick="login()">Anmelden</button>
+        <label>PIN</label>
+        <input type="password" id="pinInput">
+
+        <div id="btnRow">
+            <button class="loginBtn green" onclick="login()">Anmelden</button>
+            <button class="loginBtn yellow" onclick="help()">Hilfe</button>
+            <button class="loginBtn red" onclick="closeLogin()">Abbruch</button>
+        </div>
 
     </div>
 </div>
 
-<!-- DASHBOARD -->
+<!-- 🔥 DASHBOARD -->
 <div id="dashboard">
 
 <div id="bg"></div>
 
 <div id="userInfo">
-    Eingeloggt: <span id="userRole"></span>
-    <button onclick="logout()">Ausloggen</button>
+    Ich bin angemeldet als: <span id="userRole"></span>
 </div>
 
 <div class="panel" id="personal">
-    <h2>Persönlich</h2>
+    <h2>Persönlicher Bereich</h2>
     <button>PIN ändern</button>
+    <button>Statistiken</button>
+    <button>Tipps</button>
 </div>
 
 <div class="panel" id="blacklist">
     <h2>Black Liste</h2>
-    <button>Spieler melden</button>
+    <button>Sp. melden</button>
+    <button>Anschauen</button>
+</div>
+
+<div class="panel" id="blacklistAdmin">
+    <h2>Black Liste Pflege</h2>
+    <button>Spieler eintragen</button>
+    <button>Volle Ansicht</button>
 </div>
 
 <div class="panel" id="elo">
-    <h2>Elo</h2>
-    <button>Rechner</button>
+    <h2>Elo Bereich</h2>
+    <button>Rohstoffrechner</button>
+    <button>Einheiten Rechner</button>
 </div>
 
 <div class="panel" id="admin">
     <h2>Admin</h2>
-    <button onclick="openPlayerWindow()">Spieler Einstellungen</button>
-</div>
-
-</div>
-
-<!-- PLAYER WINDOW -->
-<div id="playerWindow">
-
-<div id="playerBg"></div>
-
-<h2 style="text-align:center;">Spieler Einstellungen</h2>
-
-<div style="text-align:center; margin-top:120px;">
-    <button class="btn" onclick="alert('Anlegen kommt noch')">Spieler anlegen</button>
-    <button class="btn" onclick="alert('Bearbeiten kommt noch')">Spieler bearbeiten</button>
-    <button class="btn" onclick="alert('Löschen kommt noch')">Spieler löschen</button>
+    <button>Spieler Einstellungen</button>
+    <button>Statistiken</button>
 </div>
 
 </div>
 
 <script>
 
-const users = [
-    { name: "Admin", pin: "1234", role: "Admin" }
+// USER LISTE
+let users = [
+    { name: "Admin", pin: "1234", role: "Admin" },
+    { name: "Offizier", pin: "2222", role: "Officer" },
+    { name: "Elo", pin: "3333", role: "Elo" },
+    { name: "Gast", pin: "0000", role: "Guest" }
 ];
 
 function openLogin() {
     document.getElementById("pinModal").style.display = "flex";
 }
 
-function login() {
+function closeLogin() {
+    document.getElementById("pinModal").style.display = "none";
+}
 
+function help() {
+    alert("Bitte Name und PIN eingeben");
+}
+
+function login() {
     let name = document.getElementById("nameInput").value;
     let pin = document.getElementById("pinInput").value;
 
     let user = users.find(u => u.name === name && u.pin === pin);
 
     if (user) {
+
         document.getElementById("start").style.display = "none";
-        document.getElementById("pinModal").style.display = "none";
+        closeLogin();
+
         document.getElementById("dashboard").style.display = "block";
         document.getElementById("userRole").innerText = user.role;
+
+        if (user.role !== "Admin") {
+            document.getElementById("admin").style.display = "none";
+        }
+
+        if (!["Admin", "Officer"].includes(user.role)) {
+            document.getElementById("blacklistAdmin").style.display = "none";
+        }
+
+        if (!["Admin", "Officer", "Elo"].includes(user.role)) {
+            document.getElementById("elo").style.display = "none";
+        }
+
     } else {
         alert("Falsche Daten!");
     }
 }
 
-function openPlayerWindow() {
-    document.getElementById("playerWindow").style.display = "block";
+// LINKS
+function openYouTube() {
+    window.open("https://www.youtube.com/@DarkBullsGruppe", "_blank");
 }
 
-function logout() {
-    location.reload();
+function openWeb() {
+    window.open("https://darkbulls.jimdofree.com/", "_blank");
+}
+
+function openStory() {
+    alert("Story kommt später");
 }
 
 </script>
