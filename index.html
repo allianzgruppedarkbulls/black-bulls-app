@@ -136,6 +136,7 @@ body {
     padding: 10px;
 }
 
+/* POSITIONEN */
 #personal { top: 50px; left: 20px; }
 #blacklist { top: 250px; left: 20px; }
 #elo { bottom: 50px; right: 200px; }
@@ -146,31 +147,13 @@ body {
     right: 20px;
     color: white;
 }
-
-/* =========================
-   PLAYER WINDOW
-========================= */
-#playerWindow {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: black;
-    color: white;
-}
-
-#playerContent {
-    padding: 20px;
-}
-
 </style>
+
 </head>
 
 <body>
 
-<!-- START -->
+<!-- 🟢 STARTSEITE -->
 <div id="start">
 
 <div id="loginBar" onclick="openLogin()">Login</div>
@@ -187,17 +170,21 @@ body {
 
 </div>
 
-<!-- LOGIN -->
+<!-- 🔐 LOGIN -->
 <div id="loginModal">
     <div id="loginBox">
+
         <h2>Login</h2>
+
         <input type="text" id="name" placeholder="Name">
         <input type="password" id="pin" placeholder="PIN">
+
         <button class="loginBtn" onclick="login()">Anmelden</button>
+
     </div>
 </div>
 
-<!-- DASHBOARD -->
+<!-- 🔥 DASHBOARD -->
 <div id="dashboard">
 
 <div id="bg"></div>
@@ -209,32 +196,18 @@ body {
 <div class="panel" id="personal">
     <h2>Persönlich</h2>
     <button>PIN ändern</button>
-    <button onclick="openPlayerWindow()">Spieler Einstellungen</button>
+    <button>Statistiken</button>
 </div>
 
 <div class="panel" id="blacklist">
     <h2>Black Liste</h2>
     <button>Spieler melden</button>
+    <button>Anschauen</button>
 </div>
 
 <div class="panel" id="elo">
     <h2>Elo</h2>
     <button>Rechner</button>
-</div>
-
-</div>
-
-<!-- PLAYER WINDOW -->
-<div id="playerWindow">
-
-<h2 style="text-align:center;">Spieler Einstellungen</h2>
-
-<div id="playerContent"></div>
-
-<div style="position:fixed; bottom:20px; width:100%; display:flex; justify-content:center; gap:20px;">
-    <button onclick="showAddPlayer()">Spieler anlegen</button>
-    <button onclick="renderPlayers()">Liste</button>
-    <button onclick="closePlayerWindow()">Schließen</button>
 </div>
 
 </div>
@@ -245,9 +218,6 @@ const users = [
     { name: "Admin", pin: "1234", role: "Admin" }
 ];
 
-let players = [];
-
-/* LOGIN */
 function openLogin() {
     document.getElementById("loginModal").style.display = "flex";
 }
@@ -260,67 +230,16 @@ function login() {
     let user = users.find(u => u.name === name && u.pin === pin);
 
     if (user) {
+
         document.getElementById("start").style.display = "none";
         document.getElementById("loginModal").style.display = "none";
         document.getElementById("dashboard").style.display = "block";
+
         document.getElementById("role").innerText = user.role;
+
     } else {
         alert("Falsche Daten!");
     }
-}
-
-/* PLAYER SYSTEM */
-function openPlayerWindow() {
-    document.getElementById("playerWindow").style.display = "block";
-}
-
-function closePlayerWindow() {
-    document.getElementById("playerWindow").style.display = "none";
-}
-
-function showAddPlayer() {
-    document.getElementById("playerContent").innerHTML = `
-        <h3>Spieler anlegen</h3>
-
-        <input id="pName" placeholder="Spielername"><br>
-        <input id="pID" placeholder="Spieler ID"><br>
-        <input id="pPoints" placeholder="Punkte"><br>
-        <input id="pRank" placeholder="Rang"><br>
-
-        <button onclick="savePlayer()">Speichern</button>
-    `;
-}
-
-function savePlayer() {
-
-    let tempPass = Math.random().toString(36).substring(2, 8);
-
-    let player = {
-        name: document.getElementById("pName").value,
-        id: document.getElementById("pID").value,
-        points: document.getElementById("pPoints").value,
-        rank: document.getElementById("pRank").value,
-        password: tempPass
-    };
-
-    players.push(player);
-
-    alert("Gespeichert!\nLogin: " + player.name + "\nPasswort: " + tempPass);
-
-    renderPlayers();
-}
-
-function renderPlayers() {
-
-    let html = "<h3>Spieler Liste</h3>";
-
-    players.forEach((p, i) => {
-        html += `<div style="padding:10px; border:1px solid white; margin:5px;">
-            ${p.name} | ${p.id}
-        </div>`;
-    });
-
-    document.getElementById("playerContent").innerHTML = html;
 }
 
 </script>
