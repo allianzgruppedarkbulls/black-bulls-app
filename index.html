@@ -1,123 +1,296 @@
-<!-- =========================
-     PLAYER WINDOW (FULL SYSTEM)
-========================= -->
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Dark Bulls</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial;
+    background: black;
+    color: white;
+}
+
+/* STARTSEITE */
+#start {
+    display: block;
+}
+
+#loginBar {
+    position: absolute;
+    top: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #39d353;
+    padding: 12px 60px;
+    font-size: 24px;
+    font-weight: bold;
+    color: black;
+    cursor: pointer;
+}
+
+#logo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#logo img {
+    width: 780px;
+    max-width: 90vw;
+}
+
+#menu {
+    position: absolute;
+    bottom: 80px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 120px;
+}
+
+.btn {
+    padding: 15px 40px;
+    font-size: 22px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+}
+
+.youtube { background: orange; }
+.story { background: #5b5bff; }
+.web { background: #00cfd1; }
+
+/* LOGIN */
+#pinModal {
+    display: none;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.9);
+    justify-content: center;
+    align-items: center;
+}
+
+#pinBox {
+    background: #111;
+    padding: 40px;
+    width: 400px;
+    border: 2px solid #555;
+}
+
+#pinBox input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    background: black;
+    color: white;
+    border: 2px solid #aaa;
+}
+
+.loginBtn {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    background: #00c853;
+}
+
+/* DASHBOARD */
+#dashboard {
+    display: none;
+}
+
+#bg {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: black url("bulls_dashboard.jpg") center no-repeat;
+    background-size: 780px;
+    z-index: -1;
+}
+
+.panel {
+    position: absolute;
+    background: rgba(0,0,0,0.7);
+    padding: 15px;
+}
+
+.panel h2 {
+    color: red;
+}
+
+.panel button {
+    display: block;
+    margin: 10px 0;
+    background: #39d353;
+    border: none;
+    padding: 10px;
+}
+
+#personal { top: 50px; left: 20px; }
+#blacklist { top: 250px; left: 20px; }
+#blacklistAdmin { top: 450px; left: 20px; }
+#elo { bottom: 50px; right: 200px; }
+#admin { top: 200px; right: 20px; }
+
+#userInfo {
+    position: absolute;
+    top: 50px;
+    right: 20px;
+}
+
+/* PLAYER WINDOW */
+#playerWindow {
+    display: none;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: black;
+    color: white;
+}
+
+#playerBg {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: black url("bulls_dashboard.jpg") center no-repeat;
+    background-size: 780px;
+    z-index: -1;
+}
+
+#playerWindow .btn {
+    background: #39d353;
+    margin: 10px;
+    padding: 15px 40px;
+    font-size: 22px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- START -->
+<div id="start">
+
+<div id="loginBar" onclick="openLogin()">Login</div>
+
+<div id="logo">
+    <img src="bulls_start.jpg">
+</div>
+
+<div id="menu">
+    <button class="btn youtube">YouTube</button>
+    <button class="btn story">Histories</button>
+    <button class="btn web">Internet</button>
+</div>
+
+</div>
+
+<!-- LOGIN -->
+<div id="pinModal">
+    <div id="pinBox">
+
+        <h1>Login</h1>
+
+        <input type="text" id="nameInput" placeholder="Name">
+        <input type="password" id="pinInput" placeholder="PIN">
+
+        <button class="loginBtn" onclick="login()">Anmelden</button>
+
+    </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+
+<div id="bg"></div>
+
+<div id="userInfo">
+    Eingeloggt: <span id="userRole"></span>
+    <button onclick="logout()">Ausloggen</button>
+</div>
+
+<div class="panel" id="personal">
+    <h2>Persönlich</h2>
+    <button>PIN ändern</button>
+</div>
+
+<div class="panel" id="blacklist">
+    <h2>Black Liste</h2>
+    <button>Spieler melden</button>
+</div>
+
+<div class="panel" id="elo">
+    <h2>Elo</h2>
+    <button>Rechner</button>
+</div>
+
+<div class="panel" id="admin">
+    <h2>Admin</h2>
+    <button onclick="openPlayerWindow()">Spieler Einstellungen</button>
+</div>
+
+</div>
+
+<!-- PLAYER WINDOW -->
 <div id="playerWindow">
 
 <div id="playerBg"></div>
 
-<h2 style="text-align:center;">Spieler System</h2>
+<h2 style="text-align:center;">Spieler Einstellungen</h2>
 
-<!-- CONTENT -->
-<div id="playerContent" style="padding:20px; max-width:900px; margin:auto;"></div>
-
-<!-- BUTTON BAR -->
-<div style="position:fixed; bottom:20px; width:100%; display:flex; justify-content:center; gap:15px; flex-wrap:wrap;">
-
-    <button class="btn" onclick="showAddPlayer()">Spieler anlegen</button>
-    <button class="btn" onclick="renderPlayers()">Liste</button>
-    <button class="btn" onclick="closePlayerWindow()">Zurück</button>
-
+<div style="text-align:center; margin-top:120px;">
+    <button class="btn" onclick="alert('Anlegen kommt noch')">Spieler anlegen</button>
+    <button class="btn" onclick="alert('Bearbeiten kommt noch')">Spieler bearbeiten</button>
+    <button class="btn" onclick="alert('Löschen kommt noch')">Spieler löschen</button>
 </div>
 
 </div>
 
 <script>
 
-/* =========================
-   PLAYER DATABASE
-========================= */
-let players = [];
+const users = [
+    { name: "Admin", pin: "1234", role: "Admin" }
+];
 
-/* OPEN / CLOSE */
+function openLogin() {
+    document.getElementById("pinModal").style.display = "flex";
+}
+
+function login() {
+
+    let name = document.getElementById("nameInput").value;
+    let pin = document.getElementById("pinInput").value;
+
+    let user = users.find(u => u.name === name && u.pin === pin);
+
+    if (user) {
+        document.getElementById("start").style.display = "none";
+        document.getElementById("pinModal").style.display = "none";
+        document.getElementById("dashboard").style.display = "block";
+        document.getElementById("userRole").innerText = user.role;
+    } else {
+        alert("Falsche Daten!");
+    }
+}
+
 function openPlayerWindow() {
     document.getElementById("playerWindow").style.display = "block";
 }
 
-function closePlayerWindow() {
-    document.getElementById("playerWindow").style.display = "none";
-}
-
-/* =========================
-   PLAYER FORM (ALLE FELDER)
-========================= */
-function showAddPlayer() {
-
-    document.getElementById("playerContent").innerHTML = `
-        <h3>Spieler anlegen</h3>
-
-        <input id="pName" placeholder="Spielername"><br>
-        <input id="pID" placeholder="Spieler ID"><br>
-        <input id="pDate" placeholder="Anmeldedatum"><br>
-        <input id="pPoints" placeholder="Spieler Punkte"><br>
-        <input id="pRank" placeholder="Globaler Rang"><br>
-        <input id="pJoin" placeholder="Spiel beigetreten (Datum/Season)"><br>
-        <input id="pKoa" placeholder="Koa Siege"><br>
-        <input id="pSingle" placeholder="Einzel Siege"><br>
-        <input id="pDestroyed" placeholder="Zerstört"><br>
-        <input id="pLosses" placeholder="Verluste"><br>
-        <input id="pMap" placeholder="Meistgespielte Map"><br>
-        <input id="pAlliance" placeholder="Bulls Allianz"><br>
-        <input id="pRole" placeholder="Rolle"><br>
-
-        <br>
-        <button onclick="savePlayer()">Speichern</button>
-    `;
-}
-
-/* =========================
-   SAVE PLAYER
-========================= */
-function savePlayer() {
-
-    let tempPass = Math.random().toString(36).substring(2, 8);
-
-    let player = {
-        name: document.getElementById("pName").value,
-        id: document.getElementById("pID").value,
-        date: document.getElementById("pDate").value,
-        points: document.getElementById("pPoints").value,
-        rank: document.getElementById("pRank").value,
-        join: document.getElementById("pJoin").value,
-        koa: document.getElementById("pKoa").value,
-        single: document.getElementById("pSingle").value,
-        destroyed: document.getElementById("pDestroyed").value,
-        losses: document.getElementById("pLosses").value,
-        map: document.getElementById("pMap").value,
-        alliance: document.getElementById("pAlliance").value,
-        role: document.getElementById("pRole").value,
-        password: tempPass,
-        firstLogin: true
-    };
-
-    players.push(player);
-
-    alert(
-        "Spieler erstellt!\n\n" +
-        "Login: " + player.name + "\n" +
-        "Einmalpasswort: " + tempPass + "\n\n" +
-        "Beim ersten Login muss das Passwort geändert werden!"
-    );
-
-    renderPlayers();
-}
-
-/* =========================
-   LISTE
-========================= */
-function renderPlayers() {
-
-    let html = "<h3>Spieler Liste</h3>";
-
-    players.forEach((p, i) => {
-
-        html += `
-            <div style="border:1px solid white; padding:10px; margin:5px;">
-                <b>${p.name}</b> | ID: ${p.id} | Punkte: ${p.points}
-            </div>
-        `;
-    });
-
-    document.getElementById("playerContent").innerHTML = html;
+function logout() {
+    location.reload();
 }
 
 </script>
+
+</body>
+</html>
