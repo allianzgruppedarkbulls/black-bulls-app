@@ -13,9 +13,7 @@ body {
 }
 
 /* STARTSEITE */
-#start {
-    display: block;
-}
+#start { display: block; }
 
 /* LOGIN BUTTON */
 #loginBar {
@@ -93,20 +91,9 @@ body {
     border: 2px solid #aaa;
 }
 
-.loginBtn {
-    width: 100%;
-    padding: 10px;
-    border: none;
-    cursor: pointer;
-    background: #00c853;
-}
-
 /* DASHBOARD */
-#dashboard {
-    display: none;
-}
+#dashboard { display: none; }
 
-/* BACKGROUND */
 #bg {
     position: fixed;
     width: 100%;
@@ -122,9 +109,7 @@ body {
     padding: 15px;
 }
 
-.panel h2 {
-    color: red;
-}
+.panel h2 { color: red; }
 
 .panel button {
     display: block;
@@ -148,15 +133,15 @@ body {
 }
 
 /* =========================
-   PLAYER SYSTEM (NEU)
+   NEU: PLAYER SYSTEM
 ========================= */
+
 #playerSystem {
     display: none;
     position: fixed;
     width: 100%;
     height: 100%;
     background: black;
-    color: white;
 }
 
 #playerBg {
@@ -168,15 +153,31 @@ body {
     z-index: -1;
 }
 
-</style>
+#playerBox {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    text-align: center;
+}
 
+.playerBtn {
+    display: block;
+    margin: 15px auto;
+    padding: 15px 30px;
+    font-size: 18px;
+    background: #39d353;
+    border: none;
+    cursor: pointer;
+}
+
+</style>
 </head>
 
 <body>
 
 <!-- START -->
 <div id="start">
-
 <div id="loginBar" onclick="openLogin()">Login</div>
 
 <div id="logo">
@@ -188,20 +189,15 @@ body {
     <button class="btn story" onclick="openStory()">Histories</button>
     <button class="btn web" onclick="openWeb()">Internet</button>
 </div>
-
 </div>
 
 <!-- LOGIN -->
 <div id="pinModal">
     <div id="pinBox">
-
-        <h1>Benutzeranmeldung</h1>
-
-        <input type="text" id="nameInput" placeholder="Name">
-        <input type="password" id="pinInput" placeholder="PIN">
-
-        <button class="loginBtn" onclick="login()">Anmelden</button>
-
+        <h1>Login</h1>
+        <input id="nameInput" placeholder="Name">
+        <input id="pinInput" type="password" placeholder="PIN">
+        <button onclick="login()">Anmelden</button>
     </div>
 </div>
 
@@ -211,7 +207,7 @@ body {
 <div id="bg"></div>
 
 <div id="userInfo">
-    Ich bin angemeldet als: <span id="userRole"></span>
+    Eingeloggt als: <span id="userRole"></span>
 </div>
 
 <div class="panel" id="personal">
@@ -231,13 +227,13 @@ body {
 
 <div class="panel" id="elo">
     <h2>Elo Bereich</h2>
-    <button>Rohstoffrechner</button>
+    <button>Rechner</button>
 </div>
 
 <div class="panel" id="admin">
     <h2>Admin</h2>
 
-    <!-- NUR DAS IST NEU -->
+    <!-- NUR DAS NEU -->
     <button onclick="openPlayerSystem()">Spieler Einstellungen</button>
 </div>
 
@@ -248,14 +244,15 @@ body {
 
 <div id="playerBg"></div>
 
-<h2 style="text-align:center;">Spieler System</h2>
+<div id="playerBox">
 
-<div style="text-align:center; padding:20px;" id="playerContent"></div>
+    <h2>Spieler System</h2>
 
-<div style="position:fixed; bottom:30px; width:100%; display:flex; justify-content:center; gap:20px;">
+    <button class="playerBtn">Spieler anlegen</button>
+    <button class="playerBtn">Spieler bearbeiten</button>
+    <button class="playerBtn">Spieler löschen</button>
 
-    <button onclick="showAddPlayer()">Spieler anlegen</button>
-    <button onclick="closePlayerSystem()">Zurück</button>
+    <button class="playerBtn" style="background:red" onclick="closePlayerSystem()">Zurück</button>
 
 </div>
 
@@ -268,61 +265,46 @@ const users = [
     { name: "Admin", pin: "1234", role: "Admin" }
 ];
 
-function openLogin() {
-    document.getElementById("pinModal").style.display = "flex";
+function openLogin(){
+    document.getElementById("pinModal").style.display="flex";
 }
 
-function login() {
+function login(){
+    let u=document.getElementById("nameInput").value;
+    let p=document.getElementById("pinInput").value;
 
-    let name = document.getElementById("nameInput").value;
-    let pin = document.getElementById("pinInput").value;
+    let user=users.find(x=>x.name===u&&x.pin===p);
 
-    let user = users.find(u => u.name === name && u.pin === pin);
-
-    if (user) {
-        document.getElementById("start").style.display = "none";
-        document.getElementById("pinModal").style.display = "none";
-        document.getElementById("dashboard").style.display = "block";
-        document.getElementById("userRole").innerText = user.role;
+    if(user){
+        document.getElementById("start").style.display="none";
+        document.getElementById("pinModal").style.display="none";
+        document.getElementById("dashboard").style.display="block";
+        document.getElementById("userRole").innerText=user.role;
     } else {
-        alert("Falsche Daten!");
+        alert("Falsch");
     }
 }
 
 /* LINKS */
-function openYouTube() {
-    window.open("https://www.youtube.com/@DarkBullsGruppe", "_blank");
+function openYouTube(){
+    window.open("https://www.youtube.com/@DarkBullsGruppe","_blank");
 }
 
-function openWeb() {
-    window.open("https://darkbulls.jimdofree.com/", "_blank");
+function openWeb(){
+    window.open("https://darkbulls.jimdofree.com/","_blank");
 }
 
-function openStory() {
+function openStory(){
     alert("Story kommt später");
 }
 
-/* =========================
-   PLAYER SYSTEM
-========================= */
-function openPlayerSystem() {
-    document.getElementById("playerSystem").style.display = "block";
+/* PLAYER SYSTEM */
+function openPlayerSystem(){
+    document.getElementById("playerSystem").style.display="block";
 }
 
-function closePlayerSystem() {
-    document.getElementById("playerSystem").style.display = "none";
-}
-
-function showAddPlayer() {
-    document.getElementById("playerContent").innerHTML = `
-        <h3>Spieler anlegen</h3>
-
-        <input placeholder="Spielername"><br><br>
-        <input placeholder="Spieler ID"><br><br>
-        <input placeholder="Punkte"><br><br>
-
-        <button onclick="alert('gespeichert')">Speichern</button>
-    `;
+function closePlayerSystem(){
+    document.getElementById("playerSystem").style.display="none";
 }
 
 </script>
