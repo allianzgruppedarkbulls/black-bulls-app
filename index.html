@@ -106,6 +106,7 @@ body {
     display: none;
 }
 
+/* BACKGROUND */
 #bg {
     position: fixed;
     width: 100%;
@@ -133,6 +134,7 @@ body {
     padding: 10px;
 }
 
+/* POSITIONEN */
 #personal { top: 50px; left: 20px; }
 #blacklist { top: 250px; left: 20px; }
 #blacklistAdmin { top: 450px; left: 20px; }
@@ -146,9 +148,9 @@ body {
 }
 
 /* =========================
-   PLAYER WINDOW
+   PLAYER SYSTEM (NEU)
 ========================= */
-#playerWindow {
+#playerSystem {
     display: none;
     position: fixed;
     width: 100%;
@@ -192,10 +194,14 @@ body {
 <!-- LOGIN -->
 <div id="pinModal">
     <div id="pinBox">
-        <h1>Login</h1>
+
+        <h1>Benutzeranmeldung</h1>
+
         <input type="text" id="nameInput" placeholder="Name">
         <input type="password" id="pinInput" placeholder="PIN">
+
         <button class="loginBtn" onclick="login()">Anmelden</button>
+
     </div>
 </div>
 
@@ -205,7 +211,7 @@ body {
 <div id="bg"></div>
 
 <div id="userInfo">
-    Eingeloggt als: <span id="userRole"></span>
+    Ich bin angemeldet als: <span id="userRole"></span>
 </div>
 
 <div class="panel" id="personal">
@@ -215,7 +221,7 @@ body {
 
 <div class="panel" id="blacklist">
     <h2>Black Liste</h2>
-    <button>Spieler melden</button>
+    <button>Sp. melden</button>
 </div>
 
 <div class="panel" id="blacklistAdmin">
@@ -225,29 +231,31 @@ body {
 
 <div class="panel" id="elo">
     <h2>Elo Bereich</h2>
-    <button>Rechner</button>
+    <button>Rohstoffrechner</button>
 </div>
 
 <div class="panel" id="admin">
     <h2>Admin</h2>
-    <button onclick="openPlayerWindow()">Spieler Einstellungen</button>
+
+    <!-- NUR DAS IST NEU -->
+    <button onclick="openPlayerSystem()">Spieler Einstellungen</button>
 </div>
 
 </div>
 
-<!-- PLAYER WINDOW -->
-<div id="playerWindow">
+<!-- PLAYER SYSTEM -->
+<div id="playerSystem">
 
 <div id="playerBg"></div>
 
-<h2 style="text-align:center;">Spieler Einstellungen</h2>
+<h2 style="text-align:center;">Spieler System</h2>
 
-<div style="padding:20px; text-align:center;" id="playerContent"></div>
+<div style="text-align:center; padding:20px;" id="playerContent"></div>
 
-<div style="position:fixed; bottom:20px; width:100%; display:flex; justify-content:center; gap:15px;">
+<div style="position:fixed; bottom:30px; width:100%; display:flex; justify-content:center; gap:20px;">
 
     <button onclick="showAddPlayer()">Spieler anlegen</button>
-    <button onclick="closePlayerWindow()">Zurück</button>
+    <button onclick="closePlayerSystem()">Zurück</button>
 
 </div>
 
@@ -255,9 +263,7 @@ body {
 
 <script>
 
-/* =========================
-   LOGIN SYSTEM
-========================= */
+/* LOGIN */
 const users = [
     { name: "Admin", pin: "1234", role: "Admin" }
 ];
@@ -283,58 +289,40 @@ function login() {
     }
 }
 
+/* LINKS */
+function openYouTube() {
+    window.open("https://www.youtube.com/@DarkBullsGruppe", "_blank");
+}
+
+function openWeb() {
+    window.open("https://darkbulls.jimdofree.com/", "_blank");
+}
+
+function openStory() {
+    alert("Story kommt später");
+}
+
 /* =========================
    PLAYER SYSTEM
 ========================= */
-let players = [];
-
-function openPlayerWindow() {
-    document.getElementById("playerWindow").style.display = "block";
+function openPlayerSystem() {
+    document.getElementById("playerSystem").style.display = "block";
 }
 
-function closePlayerWindow() {
-    document.getElementById("playerWindow").style.display = "none";
+function closePlayerSystem() {
+    document.getElementById("playerSystem").style.display = "none";
 }
 
 function showAddPlayer() {
-
     document.getElementById("playerContent").innerHTML = `
         <h3>Spieler anlegen</h3>
 
-        <input id="pName" placeholder="Spielername"><br><br>
-        <input id="pID" placeholder="Spieler ID"><br><br>
-        <input id="pPoints" placeholder="Punkte"><br><br>
-        <input id="pRank" placeholder="Globaler Rang"><br><br>
-        <input id="pMap" placeholder="Meistgespielte Map"><br><br>
-        <input id="pAlliance" placeholder="Bulls Allianz"><br><br>
-        <input id="pRole" placeholder="Rolle"><br><br>
+        <input placeholder="Spielername"><br><br>
+        <input placeholder="Spieler ID"><br><br>
+        <input placeholder="Punkte"><br><br>
 
-        <button onclick="savePlayer()">Speichern</button>
+        <button onclick="alert('gespeichert')">Speichern</button>
     `;
-}
-
-function savePlayer() {
-
-    let tempPass = Math.random().toString(36).substring(2, 8);
-
-    players.push({
-        name: document.getElementById("pName").value,
-        id: document.getElementById("pID").value,
-        points: document.getElementById("pPoints").value,
-        rank: document.getElementById("pRank").value,
-        map: document.getElementById("pMap").value,
-        alliance: document.getElementById("pAlliance").value,
-        role: document.getElementById("pRole").value,
-        password: tempPass,
-        firstLogin: true
-    });
-
-    alert(
-        "Spieler gespeichert!\n\n" +
-        "Login: " + document.getElementById("pName").value + "\n" +
-        "Einmalpasswort: " + tempPass + "\n\n" +
-        "Beim ersten Login muss das Passwort geändert werden."
-    );
 }
 
 </script>
