@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dark Bulls - Dashboard</title>
+    <title>Dark Bulls - Dashboard Cloud-Test</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Almendra:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
 
@@ -44,7 +44,7 @@
             filter: drop-shadow(0 0 60px rgba(255, 0, 0, 0.9));
         }
 
-        /* MENÜ RECHTS MIT EINZEL-RAUSFAHR-EFFEKT */
+        /* MENÜ RECHTS */
         #menu {
             position: absolute; right: 0; top: 50%;
             transform: translateY(-50%);
@@ -61,7 +61,6 @@
             width: 60px; text-align: center;
         }
         
-        /* Hier passiert die Magie: Nacheinander rausfahren */
         #btn-yt { transition-delay: 0.0s; }
         #btn-hist { transition-delay: 0.1s; }
         #btn-web { transition-delay: 0.2s; }
@@ -72,7 +71,7 @@
         .story { background: #5b5bff; color: white; }
         .web { background: #00cfd1; color: black; }
 
-        /* MODALS (Login & Hilfe) */
+        /* MODALS */
         .modal-overlay {
             display: none; position: fixed; z-index: 1000;
             left: 0; top: 0; width: 100%; height: 100%;
@@ -112,12 +111,9 @@
 </head>
 <body>
 
-<!-- STARTSEITE -->
 <div id="start">
     <div id="loginBar" onclick="openLogin()">LOGIN</div>
-    <div id="logo-container">
-        <img src="bulls_start.jpg">
-    </div>
+    <div id="logo-container"><img src="bulls_start.jpg"></div>
     <div id="menu">
         <button id="btn-yt" class="side-btn youtube" onclick="window.open('https://www.youtube.com/@DarkBullsGruppe', '_blank')">YOUTUBE</button>
         <button id="btn-hist" class="side-btn story" onclick="alert('Story folgt!')">HISTORIES</button>
@@ -125,7 +121,6 @@
     </div>
 </div>
 
-<!-- LOGIN & HILFE MODALS -->
 <div id="pinModal" class="modal-overlay">
     <div class="modal-box">
         <h1>ANMELDUNG</h1>
@@ -150,10 +145,9 @@
     </div>
 </div>
 
-<!-- DASHBOARD -->
 <div id="dashboard">
     <div id="top-bar">
-        <div style="font-size: 22px; color:#ff3131">Angemeldet als: <span id="userRole"></span></div>
+        <div style="font-size: 22px; color:#ff3131">Angemeldet als: <span id="userName"></span> (<span id="userRole"></span>)</div>
         <button onclick="logout()" style="background:#d50000; color:white; border:none; padding:8px 25px; cursor:pointer; font-family:'Almendra'; font-weight:bold;">LOGOUT</button>
     </div>
 
@@ -186,7 +180,6 @@
         <h2>Admin</h2>
         <button>Einstellungen</button>
         <button>Statistiken</button>
-        <!-- NEUER BUTTON -->
         <button style="background: #ffd600;" onclick="alert('Postfach: Keine neuen Nachrichten.')">Hilfe-Anfragen</button>
     </div>
 
@@ -200,32 +193,72 @@
 </div>
 
 <script>
-    let users = [{ name: "Admin", pin: "1234", role: "Admin" }, { name: "Gast", pin: "0000", role: "Gast" }];
+    // DEINE GOOGLE SHEET DATEN
+    const SHEET_ID = '1dc3akNMKE9pMP8HCqxleGzBo0kVc5IcYzFQQC2ENiSY';
+    const GID = '598251300';
+    const URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID}`;
+
+    let users = [];
+
+    // Lade die Daten beim Starten der Seite
+    async function loadCloudData() {
+        try {
+            const response = await fetch(URL);
+            const data = await response.text();
+            const rows = data.split('\n').slice(1);
+            
+            users = rows.map(row => {
+                const col = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                const clean = (s) => s ? s.replace(/["']/g, "").trim() : "";
+                return {
+                    name: clean(col[0]),      // Spalte A
+                    allianz: clean(col[1]),   // Spalte B
+                    pin: clean(col[2]),       // Spalte C
+                    role: clean(col[3])       // Spalte D
+                };
+            });
+            console.log("Cloud-Daten geladen!");
+        } catch (error) {
+            console.error("Cloud-Fehler:", error);
+        }
+    }
 
     function openLogin() { document.getElementById("pinModal").style.display = "flex"; }
     function closeLogin() { document.getElementById("pinModal").style.display = "none"; }
     function openHelp() { document.getElementById("pinModal").style.display = "none"; document.getElementById("helpModal").style.display = "flex"; }
     function closeHelp() { document.getElementById("helpModal").style.display = "none"; document.getElementById("pinModal").style.display = "flex"; }
-    
     function sendHelp() { alert("Nachricht an Admin gesendet!"); closeHelp(); }
 
     function login() {
-        let name = document.getElementById("nameInput").value;
-        let pin = document.getElementById("pinInput").value;
-        let user = users.find(u => u.name === name && u.pin === pin);
+        let inputName = document.getElementById("nameInput").value.trim();
+        let inputPin = document.getElementById("pinInput").value.trim();
+        
+        // Suche User in den Cloud-Daten
+        let user = users.find(u => u.name.toLowerCase() === inputName.toLowerCase() && u.pin === inputPin);
+        
         if (user) {
             document.getElementById("start").style.display = "none";
             closeLogin();
             document.getElementById("dashboard").style.display = "block";
+            document.getElementById("userName").innerText = user.name;
             document.getElementById("userRole").innerText = user.role;
-            document.getElementById("admin").style.display = (user.role === "Admin") ? "block" : "none";
-        } else { alert("Name oder PIN falsch!"); }
+            
+            // HIER DIE ÄNDERUNG: Wir lassen alle Panels "block" (sichtbar), egal welche Rolle
+            document.getElementById("admin").style.display = "block";
+            document.getElementById("blacklistAdmin").style.display = "block";
+            document.getElementById("elo").style.display = "block";
+            
+        } else {
+            alert("Name oder PIN falsch oder Cloud noch nicht geladen!");
+        }
     }
 
     function logout() {
-        document.getElementById("dashboard").style.display = "none";
-        document.getElementById("start").style.display = "flex";
+        location.reload(); // Einfachste Art für Logout & Daten-Refresh
     }
+
+    // Beim Laden der Seite direkt Cloud-Daten holen
+    window.onload = loadCloudData;
 </script>
 
 </body>
