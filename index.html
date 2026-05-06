@@ -3,76 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dark Bulls - Dashboard V2.0 FINAL</title>
+    <title>Dark Bulls - Dashboard V2.0 FINAL REPAIR</title>
     <link href="https://fonts.googleapis.com/css2?family=Almendra:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { margin: 0; padding: 0; font-family: 'Almendra', serif; background: #000; color: white; overflow: hidden; height: 100vh; }
+        /* GRUNDGERÜST */
+        body, html { margin: 0; padding: 0; font-family: 'Almendra', serif; background: #000; color: white; height: 100vh; width: 100vw; overflow: hidden; }
         
-        /* STARTSEITE & HINTERGRUND */
-        #start { display: flex; align-items: center; justify-content: center; height: 100vh; position: relative; background: url('bulls_start.jpg') center/cover; }
-        #logo-main { width: 800px; max-width: 75vw; filter: drop-shadow(0 0 50px rgba(255, 0, 0, 0.8)); transition: 0.5s; }
+        /* HINTERGRÜNDE */
+        #start { display: flex; align-items: center; justify-content: center; height: 100vh; width: 100vw; position: relative; background: url('bulls_start.jpg') center/cover no-repeat; z-index: 5; }
+        #dashboard { display: none; width: 100vw; height: 100vh; position: relative; background: #000; z-index: 10; }
+        #bg-dashboard { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 800px; max-width: 90%; opacity: 0.3; z-index: 1; }
 
-        /* LOGIN BAR (LINKS) */
-        #loginBar { position: absolute; left: 0; top: 50%; transform: translateY(-50%); background: #39d353; padding: 60px 15px; font-size: 24px; font-weight: bold; color: black; cursor: pointer; z-index: 100; border-radius: 0 15px 15px 0; writing-mode: vertical-rl; text-orientation: upright; transition: 0.4s; }
-        #loginBar:hover { padding-left: 40px; background: #2fb545; }
-
-        /* HILFE / INFOS (RECHTS) */
-        #side-menu { position: absolute; right: 0; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 15px; z-index: 100; }
-        .info-btn { padding: 30px 15px; font-size: 18px; font-weight: bold; border: none; cursor: pointer; font-family: 'Almendra'; writing-mode: vertical-rl; text-orientation: upright; border-radius: 15px 0 0 15px; transition: 0.3s; width: 50px; text-align: center; }
-        #btn-yt { background: #ff8c00; }
-        #btn-hist { background: #5b5bff; color: white; }
-        #btn-web { background: #00cfd1; }
-        .info-btn:hover { width: 80px; padding-right: 30px; }
-
-        /* MODALS (ANMELDUNG) */
-        .modal-overlay { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); justify-content: center; align-items: center; }
-        .modal-box { background: #151515; padding: 40px; width: 420px; border: 2px solid #333; text-align: center; box-shadow: 0 0 30px rgba(255,0,0,0.2); }
-        .modal-box h2 { color: #ff3131; text-decoration: underline; margin-bottom: 25px; font-size: 32px; }
-        .modal-box input { width: 100%; padding: 12px; margin-bottom: 20px; background: #000; color: #39d353; border: 1px solid #444; font-size: 20px; font-family: 'Almendra'; box-sizing: border-box; }
-        .modal-box p { font-size: 14px; color: #888; margin-top: -10px; margin-bottom: 20px; cursor: pointer; }
-
-        /* DASHBOARD LAYOUT */
-        #dashboard { display: none; width: 100vw; height: 100vh; position: relative; background: #000; }
-        #bg-dashboard { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 900px; opacity: 0.35; z-index: 1; }
+        /* STARTSEITE ELEMENTE */
+        #logo-main { width: 600px; max-width: 80%; filter: drop-shadow(0 0 30px red); }
+        #loginBar { position: absolute; left: 0; top: 50%; transform: translateY(-50%); background: #39d353; padding: 50px 15px; font-size: 22px; font-weight: bold; color: black; cursor: pointer; z-index: 100; border-radius: 0 10px 10px 0; writing-mode: vertical-rl; text-orientation: upright; }
         
-        .panel { position: absolute; background: rgba(26, 26, 26, 0.9); border: 1px solid #444; padding: 20px; z-index: 10; width: 280px; border-radius: 4px; }
-        .panel h3 { color: #ff3131; margin-top: 0; border-bottom: 1px solid #444; padding-bottom: 10px; }
-        .panel button { width: 100%; margin: 8px 0; background: #39d353; border: none; padding: 12px; font-family: 'Almendra'; font-weight: bold; cursor: pointer; font-size: 16px; border-radius: 3px; }
-        .panel button:hover { background: #2fb545; }
+        #side-menu { position: absolute; right: 0; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 10px; z-index: 100; }
+        .info-btn { padding: 25px 12px; font-size: 16px; font-weight: bold; border: none; cursor: pointer; font-family: 'Almendra'; writing-mode: vertical-rl; text-orientation: upright; border-radius: 10px 0 0 10px; width: 45px; }
 
-        #panel-left { left: 40px; top: 40px; }
-        #panel-admin { right: 40px; top: 100px; display: none; border: 1px solid #ffd600; }
-        #panel-search { left: 40px; bottom: 40px; width: 320px; display: none; }
+        /* PANELS IM DASHBOARD - JETZT BOMBENFEST */
+        .panel { position: absolute; background: rgba(20, 20, 20, 0.95); border: 2px solid #444; padding: 15px; z-index: 50; width: 280px; box-shadow: 0 0 15px rgba(0,0,0,0.8); }
+        .panel h3 { color: #ff3131; margin: 0 0 10px 0; border-bottom: 1px solid #ff3131; padding-bottom: 5px; }
+        .panel button { width: 100%; margin: 5px 0; background: #39d353; border: none; padding: 10px; font-family: 'Almendra'; font-weight: bold; cursor: pointer; font-size: 15px; }
+        
+        #panel-left { left: 30px; top: 80px; }
+        #panel-right { right: 30px; top: 80px; border-color: #ffd600; display: none; } /* Admin Panel */
+        #panel-bottom { left: 30px; bottom: 30px; width: 320px; display: none; } /* Suche */
 
         /* TOP NAV */
-        #top-nav { position: absolute; top: 20px; right: 40px; display: flex; align-items: center; gap: 20px; z-index: 100; }
-        .user-tag { color: #39d353; font-size: 20px; border-right: 2px solid #444; padding-right: 20px; }
-        .logout { background: #d50000; color: white; border: none; padding: 10px 20px; cursor: pointer; font-family: 'Almendra'; font-weight: bold; }
+        #top-nav { position: absolute; top: 0; left: 0; width: 100%; height: 60px; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: flex-end; padding: 0 30px; box-sizing: border-box; z-index: 100; border-bottom: 1px solid #333; }
+        .user-tag { color: #39d353; font-size: 18px; margin-right: 20px; }
+        .logout { background: #d50000; color: white; border: none; padding: 8px 15px; cursor: pointer; font-family: 'Almendra'; font-weight: bold; }
+
+        /* MODALS */
+        .modal-overlay { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; }
+        .modal-box { background: #1a1a1a; padding: 30px; width: 350px; border: 2px solid #444; text-align: center; }
+        .modal-box input { width: 100%; padding: 10px; margin-bottom: 15px; background: #000; color: #39d353; border: 1px solid #333; font-family: 'Almendra'; font-size: 18px; box-sizing: border-box; }
     </style>
 </head>
 <body>
 
 <div id="start">
-    <div id="loginBar" onclick="toggleModal('pinModal', true)">L O G I N</div>
-    <div id="logo-container"><img src="bulls_start.jpg" id="logo-main"></div>
-    
+    <div id="loginBar" onclick="document.getElementById('pinModal').style.display='flex'">L O G I N</div>
+    <img src="bulls_start.jpg" id="logo-main" onerror="this.style.display='none'; alert('Hintergrundbild fehlt!')">
     <div id="side-menu">
-        <button id="btn-yt" class="info-btn" onclick="window.open('https://www.youtube.com/@DarkBullsGruppe', '_blank')">YOUTUBE</button>
-        <button id="btn-hist" class="info-btn" onclick="alert('Histories folgen in Kürze!')">HISTORIES</button>
-        <button id="btn-web" class="info-btn" onclick="window.open('https://darkbulls.jimdofree.com/', '_blank')">INTERNET</button>
+        <button class="info-btn" style="background:#ff8c00" onclick="window.open('https://www.youtube.com/@DarkBullsGruppe')">YOUTUBE</button>
+        <button class="info-btn" style="background:#5b5bff; color:white">HISTORIES</button>
+        <button class="info-btn" style="background:#00cfd1" onclick="window.open('https://darkbulls.jimdofree.com/')">INTERNET</button>
     </div>
 </div>
 
 <div id="pinModal" class="modal-overlay">
     <div class="modal-box">
-        <h2>ANMELDUNG</h2>
-        <input type="text" id="nameInput" placeholder="Spielername">
+        <h2 style="color:#ff3131">ANMELDUNG</h2>
+        <input type="text" id="nameInput" placeholder="Name">
         <input type="password" id="pinInput" placeholder="PIN">
-        <p onclick="alert('Wende dich an Julian für einen PIN-Reset!')">PIN vergessen?</p>
-        <div style="display:flex; gap:10px;">
-            <button class="loginBtn" style="background:#39d353; flex:1; padding:15px; cursor:pointer;" onclick="attemptLogin()">ANMELDEN</button>
-            <button class="loginBtn" style="background:#d50000; color:white; flex:1; cursor:pointer;" onclick="toggleModal('pinModal', false)">ABBRUCH</button>
-        </div>
+        <button onclick="attemptLogin()" style="width:100%; padding:10px; background:#39d353; border:none; cursor:pointer; font-family:'Almendra'; font-weight:bold;">LOGIN</button>
+        <button onclick="document.getElementById('pinModal').style.display='none'" style="width:100%; margin-top:10px; background:transparent; color:gray; border:none; cursor:pointer;">Abbrechen</button>
     </div>
 </div>
 
@@ -81,38 +68,34 @@
         <div id="userInfo" class="user-tag">Lädt...</div>
         <button class="logout" onclick="location.reload()">LOGOUT</button>
     </div>
-    
     <img src="bulls_dashboard.jpg" id="bg-dashboard">
     
     <div class="panel" id="panel-left">
         <h3>Mein Bereich</h3>
         <button id="alliDisplay">Allianz: -</button>
-        <button onclick="alert('Statistik wird berechnet...')">Meine Statistik</button>
+        <button onclick="alert('Statistik folgt')">Meine Statistik</button>
     </div>
 
-    <div class="panel" id="panel-admin">
-        <h3 style="color:#ffd600">Admin Panel</h3>
-        <button style="background:#ffd600" onclick="adminReset()">Spieler PIN Reset</button>
-        <button onclick="alert('Mitgliederliste folgt...')">Mitgliederliste</button>
+    <div class="panel" id="panel-right">
+        <h3 style="color:#ffd600">Admin-Panel</h3>
+        <button style="background:#ffd600" onclick="adminReset()">PIN Reset</button>
+        <button onclick="alert('Mitgliederliste')">Mitglieder</button>
     </div>
 
-    <div class="panel" id="panel-search">
+    <div class="panel" id="panel-bottom">
         <h3>FairPlay Suche</h3>
-        <input type="text" id="searchName" placeholder="Spieler suchen..." style="width:100%; padding:10px; margin-bottom:10px; background:#000; color:#39d353; border:1px solid #444; box-sizing:border-box;">
-        <button onclick="checkPlayer()">Prüfen</button>
+        <input type="text" id="searchName" placeholder="Spieler suchen..." style="width:100%; padding:8px; margin-bottom:10px; background:#000; color:#39d353; border:1px solid #444; box-sizing:border-box;">
+        <button onclick="alert('Suche aktiv')">Prüfen</button>
     </div>
 </div>
 
 <script>
-    // DEINE DATEN
     const SHEET_ID = '1dc3akNMKE9pMP8HCqxleGzBo0kVc5IcYzFQQC2ENiSY';
     const GID = '598251300';
     const URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID}`;
 
     let users = [];
-    let currentUser = null;
 
-    // Lade Cloud-Daten beim Start
     async function init() {
         try {
             const res = await fetch(URL);
@@ -121,63 +104,34 @@
             users = rows.map(r => {
                 const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                 const clean = (s) => s ? s.replace(/["']/g, "").trim() : "";
-                return {
-                    name: clean(c[0]), 
-                    alli: clean(c[1]), 
-                    pin: clean(c[2]), 
-                    role: clean(c[3])
-                };
+                return { name: clean(c[0]), alli: clean(c[1]), pin: clean(c[2]), role: clean(c[3]) };
             });
-            console.log("Daten geladen.");
-        } catch (e) { alert("Fehler beim Cloud-Laden!"); }
-    }
-
-    function toggleModal(id, show) {
-        document.getElementById(id).style.display = show ? 'flex' : 'none';
+        } catch (e) { console.log("Fehler Cloud"); }
     }
 
     function attemptLogin() {
-        const uName = document.getElementById("nameInput").value.trim().toLowerCase();
-        const uPin = document.getElementById("pinInput").value.trim();
-        const user = users.find(u => u.name.toLowerCase() === uName && u.pin === uPin);
+        const uN = document.getElementById("nameInput").value.trim().toLowerCase();
+        const uP = document.getElementById("pinInput").value.trim();
+        const user = users.find(u => u.name.toLowerCase() === uN && u.pin === uP);
 
         if (user) {
-            currentUser = user;
-            enterDashboard();
-        } else {
-            alert("Name oder PIN falsch!");
-        }
-    }
+            document.getElementById("start").style.display = "none";
+            document.getElementById("dashboard").style.display = "block";
+            document.getElementById("userInfo").innerText = user.name + " | " + user.role;
+            document.getElementById("alliDisplay").innerText = "Allianz: " + user.alli;
 
-    function enterDashboard() {
-        document.getElementById("start").style.display = "none";
-        document.getElementById("pinModal").style.display = "none";
-        document.getElementById("dashboard").style.display = "block";
-        
-        document.getElementById("userInfo").innerText = `${currentUser.name} | ${currentUser.role}`;
-        document.getElementById("alliDisplay").innerText = `Allianz: ${currentUser.alli}`;
-
-        // Rollensteuerung
-        const role = currentUser.role;
-        if (role === "Admin") {
-            document.getElementById("panel-admin").style.display = "block";
-            document.getElementById("panel-search").style.display = "block";
-        } else if (["Offizier", "Mitglied", "Ausbilder", "Elo"].includes(role)) {
-            document.getElementById("panel-search").style.display = "block";
-        }
+            if (user.role === "Admin") {
+                document.getElementById("panel-right").style.display = "block";
+                document.getElementById("panel-bottom").style.display = "block";
+            } else if (["Offizier", "Mitglied", "Ausbilder", "Elo"].includes(user.role)) {
+                document.getElementById("panel-bottom").style.display = "block";
+            }
+        } else { alert("Falsch!"); }
     }
 
     function adminReset() {
-        const target = prompt("Name für Reset:");
-        if (target) {
-            const code = Math.random().toString(36).substring(2, 6).toUpperCase();
-            alert(`Kopiere für ${target}:\nHallo, dein PIN wurde auf ${code} gesetzt. Bitte nach Login ändern!`);
-        }
-    }
-
-    function checkPlayer() {
-        const s = document.getElementById("searchName").value.trim();
-        if(s) alert(`Suche nach ${s} wird implementiert...`);
+        const t = prompt("Name:");
+        if(t) alert("Reset für " + t + " bereit.");
     }
 
     window.onload = init;
