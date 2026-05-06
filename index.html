@@ -17,69 +17,50 @@
 
         /* STARTSEITE */
         #start {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            position: relative;
+            display: flex; align-items: center; justify-content: center;
+            height: 100vh; position: relative;
         }
 
-        /* LOGIN LINKS AM RAND */
+        /* LOGIN LINKS MIT RAUSFAHR-EFFEKT */
         #loginBar {
             position: absolute;
-            left: 0;
-            top: 50%;
+            left: 0; top: 50%;
             transform: translateY(-50%);
             background: #39d353;
-            padding: 60px 15px; /* Vertikaler Look */
-            font-size: 24px;
-            font-weight: bold;
-            color: black;
+            padding: 60px 15px;
+            font-size: 24px; font-weight: bold; color: black;
             cursor: pointer;
-            box-shadow: 5px 0 20px rgba(57, 211, 83, 0.4);
             z-index: 20;
-            border-top-right-radius: 15px;
-            border-bottom-right-radius: 15px;
-            writing-mode: vertical-rl; /* Text von oben nach unten */
-            text-orientation: upright;
-            letter-spacing: 5px;
+            border-top-right-radius: 15px; border-bottom-right-radius: 15px;
+            writing-mode: vertical-rl; text-orientation: upright;
+            transition: all 0.4s ease-in-out;
+            width: 60px; text-align: center;
+            box-shadow: 5px 0 20px rgba(57, 211, 83, 0.4);
         }
+        #loginBar:hover { width: 90px; padding-left: 30px; }
 
-        /* LOGO MIT EXTREMEM LEUCHTEN */
         #logo-container img {
-            width: 780px;
-            max-width: 70vw;
+            width: 780px; max-width: 70vw;
             filter: drop-shadow(0 0 60px rgba(255, 0, 0, 0.9));
         }
 
-        /* MENÜ RECHTS AM RAND */
+        /* MENÜ RECHTS MIT RAUSFAHR-EFFEKT */
         #menu {
-            position: absolute;
-            right: 0;
-            top: 50%;
+            position: absolute; right: 0; top: 50%;
             transform: translateY(-50%);
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            z-index: 10;
+            display: flex; flex-direction: column; gap: 20px; z-index: 10;
         }
 
         .side-btn {
             padding: 30px 20px;
-            font-size: 20px;
-            font-weight: bold;
-            border: none;
-            cursor: pointer;
+            font-size: 20px; font-weight: bold; border: none; cursor: pointer;
             font-family: 'Almendra', serif;
-            writing-mode: vertical-rl;
-            text-orientation: upright;
-            border-top-left-radius: 15px;
-            border-bottom-left-radius: 15px;
-            transition: 0.3s;
-            width: 60px;
-            text-align: center;
+            writing-mode: vertical-rl; text-orientation: upright;
+            border-top-left-radius: 15px; border-bottom-left-radius: 15px;
+            transition: all 0.4s ease-in-out;
+            width: 60px; text-align: center;
         }
-        .side-btn:hover { width: 80px; }
+        .side-btn:hover { width: 90px; padding-right: 30px; }
         
         .youtube { background: #ff8c00; color: black; }
         .story { background: #5b5bff; color: white; }
@@ -87,16 +68,12 @@
 
         /* MODALS */
         .modal-overlay {
-            display: none;
-            position: fixed; z-index: 1000;
+            display: none; position: fixed; z-index: 1000;
             left: 0; top: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.95);
             justify-content: center; align-items: center;
         }
-        .modal-box {
-            background: #1a1a1a; padding: 40px; width: 450px;
-            border: 2px solid #333; text-align: center;
-        }
+        .modal-box { background: #1a1a1a; padding: 40px; width: 450px; border: 2px solid #333; text-align: center; }
         .modal-box h1 { color: #ff3131; text-decoration: underline; }
         .modal-box input, .modal-box textarea {
             width: 100%; padding: 12px; margin-bottom: 20px;
@@ -109,30 +86,59 @@
         .yellow { background: #ffd600; color: black; }
         .red { background: #d50000; color: white; }
 
-        /* DASHBOARD */
-        #dashboard { display: none; position: relative; width: 100vw; height: 100vh; }
-        #bg-bull { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 850px; z-index: 1; filter: drop-shadow(0 0 40px rgba(255, 0, 0, 0.4)); }
-        #top-bar { position: absolute; top: 20px; right: 40px; display: flex; gap: 20px; z-index: 100; }
-        .panel { position: absolute; background: rgba(20, 20, 20, 0.95); border: 1px solid #444; padding: 15px; z-index: 10; }
-        .panel h2 { color: #ff3131; text-decoration: underline; }
-        .panel button { display: block; width: 100%; margin: 8px 0; background: #39d353; border: none; padding: 10px; font-family: 'Almendra', serif; font-weight: bold; cursor: pointer; }
+        /* DASHBOARD - VOLLSTÄNDIG */
+        #dashboard { display: none; position: relative; width: 100vw; height: 100vh; background: black; }
+        
+        #bg-bull { 
+            position: absolute; left: 50%; top: 45%; 
+            transform: translate(-50%, -50%); 
+            width: 850px; z-index: 1; 
+            filter: drop-shadow(0 0 40px rgba(255, 0, 0, 0.4)); 
+        }
+
+        #top-bar { 
+            position: absolute; top: 20px; right: 40px; 
+            display: flex; align-items: center; gap: 20px; z-index: 100; 
+        }
+
+        .panel { 
+            position: absolute; background: rgba(20, 20, 20, 0.95); 
+            border: 1px solid #444; padding: 15px; z-index: 10; 
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+        }
+        .panel h2 { color: #ff3131; margin: 0 0 10px 0; font-size: 24px; text-decoration: underline; }
+        .panel button { 
+            display: block; width: 100%; margin: 8px 0; 
+            background: #39d353; border: none; padding: 10px; 
+            font-family: 'Almendra', serif; font-weight: bold; cursor: pointer; 
+        }
+
+        /* POSITIONEN DASHBOARD */
         #personal { left: 40px; top: 40px; width: 240px; }
-        #blacklist { left: 40px; top: 380px; width: 240px; }
+        #blacklist { left: 40px; top: 350px; width: 240px; }
+        
         #blacklistAdmin { left: 40px; bottom: 40px; width: 440px; }
-        #admin { right: 40px; top: 120px; width: 260px; }
-        #elo { right: 40px; top: 380px; width: 260px; }
-        #chat-btn { position: absolute; right: 40px; bottom: 40px; background: #ff8c00; padding: 15px 60px; font-size: 28px; font-weight: bold; cursor: pointer; z-index: 10; font-family: 'Almendra'; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+        #admin { right: 40px; top: 100px; width: 260px; }
+        #elo { right: 40px; top: 360px; width: 260px; }
+
+        #chat-btn { 
+            position: absolute; right: 40px; bottom: 40px; 
+            background: #ff8c00; padding: 15px 60px; 
+            font-size: 28px; font-weight: bold; cursor: pointer; 
+            z-index: 10; font-family: 'Almendra'; 
+        }
     </style>
 </head>
 <body>
 
+<!-- STARTSEITE -->
 <div id="start">
     <div id="loginBar" onclick="openLogin()">LOGIN</div>
-    
     <div id="logo-container">
         <img src="bulls_start.jpg">
     </div>
-    
     <div id="menu">
         <button class="side-btn youtube" onclick="window.open('https://www.youtube.com/@DarkBullsGruppe', '_blank')">YOUTUBE</button>
         <button class="side-btn story" onclick="alert('Story folgt!')">HISTORIES</button>
@@ -166,36 +172,91 @@
     </div>
 </div>
 
-<!-- DASHBOARD (Unverändert) -->
+<!-- DASHBOARD -->
 <div id="dashboard">
     <div id="top-bar">
-        <div style="font-size: 24px; color:#ff3131">Angemeldet als: <span id="userRole"></span></div>
-        <button onclick="logout()" style="background:#d50000; color:white; border:none; padding:8px 25px; cursor:pointer; font-family:'Almendra'">LOGOUT</button>
+        <div style="font-size: 22px; color:#ff3131">Angemeldet als: <span id="userRole"></span></div>
+        <button onclick="logout()" style="background:#d50000; color:white; border:none; padding:8px 25px; cursor:pointer; font-family:'Almendra'; font-weight:bold;">LOGOUT</button>
     </div>
+
     <img src="bulls_dashboard.jpg" id="bg-bull">
-    <div class="panel" id="personal"><h2>Persönlich</h2><button>Pin ändern</button><button>Statistiken</button></div>
-    <div class="panel" id="blacklist"><h2>Black Liste</h2><button>Sp. Melden</button><button>Anschauen</button></div>
-    <div class="panel" id="blacklistAdmin"><h2>Black Liste Pflege</h2><button>Eintragen</button><button>Ansicht</button></div>
-    <div class="panel" id="admin"><h2>Admin</h2><button>Einstellungen</button><button>Statistiken</button></div>
-    <div class="panel" id="elo"><h2>Elo Bereich</h2><button>Rechner 1</button><button>Rechner 2</button></div>
+    
+    <!-- LINKER BEREICH -->
+    <div class="panel" id="personal">
+        <h2>Persönlich</h2>
+        <button>Pin ändern</button>
+        <button>Statistiken</button>
+        <button>Tipps</button>
+    </div>
+
+    <div class="panel" id="blacklist">
+        <h2>Black Liste</h2>
+        <button>Sp. Melden</button>
+        <button>Anschauen</button>
+    </div>
+
+    <div class="panel" id="blacklistAdmin">
+        <h2>Black Liste Pflege</h2>
+        <div class="grid">
+            <button style="font-size:14px">Gemeldete Spieler</button>
+            <button>Pflege</button>
+            <button>Eintragen</button>
+            <button>Volle Ansicht</button>
+        </div>
+    </div>
+
+    <!-- RECHTER BEREICH -->
+    <div class="panel" id="admin">
+        <h2>Admin</h2>
+        <button>Einstellungen</button>
+        <button>Statistiken</button>
+    </div>
+
+    <div class="panel" id="elo">
+        <h2>Elo Bereich</h2>
+        <button>Rohstoffrechner</button>
+        <button>Einheitenrechner</button>
+    </div>
+
     <button id="chat-btn">CHAT</button>
 </div>
 
 <script>
-    let users = [{ name: "Admin", pin: "1234", role: "Admin" }, { name: "Gast", pin: "0000", role: "Gast" }];
+    let users = [
+        { name: "Admin", pin: "1234", role: "Admin" }, 
+        { name: "Gast", pin: "0000", role: "Gast" }
+    ];
+
     function openLogin() { document.getElementById("pinModal").style.display = "flex"; }
     function closeLogin() { document.getElementById("pinModal").style.display = "none"; }
     function openHelp() { document.getElementById("pinModal").style.display = "none"; document.getElementById("helpModal").style.display = "flex"; }
     function closeHelp() { document.getElementById("helpModal").style.display = "none"; document.getElementById("pinModal").style.display = "flex"; }
+    
     function sendHelp() { alert("Nachricht an Admin gesendet!"); closeHelp(); }
+
     function login() {
         let name = document.getElementById("nameInput").value;
         let pin = document.getElementById("pinInput").value;
         let user = users.find(u => u.name === name && u.pin === pin);
-        if (user) { document.getElementById("start").style.display = "none"; closeLogin(); document.getElementById("dashboard").style.display = "block"; document.getElementById("userRole").innerText = user.role; }
-        else { alert("Falsch!"); }
+        
+        if (user) {
+            document.getElementById("start").style.display = "none";
+            closeLogin();
+            document.getElementById("dashboard").style.display = "block";
+            document.getElementById("userRole").innerText = user.role;
+            // Admin-Panel nur für Admins zeigen
+            document.getElementById("admin").style.display = (user.role === "Admin") ? "block" : "none";
+        } else { 
+            alert("Name oder PIN falsch!"); 
+        }
     }
-    function logout() { document.getElementById("dashboard").style.display = "none"; document.getElementById("start").style.display = "flex"; }
+
+    function logout() {
+        document.getElementById("dashboard").style.display = "none";
+        document.getElementById("start").style.display = "flex";
+        document.getElementById("nameInput").value = "";
+        document.getElementById("pinInput").value = "";
+    }
 </script>
 
 </body>
