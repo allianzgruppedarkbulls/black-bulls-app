@@ -2,165 +2,179 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dark Bulls - Rollen-System</title>
+    <title>Dark Bulls - Admin Control</title>
     <link href="https://fonts.googleapis.com/css2?family=Almendra:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { margin: 0; padding: 0; font-family: 'Almendra', serif; background: black; color: white; overflow: hidden; height: 100vh; }
-        #start { display: flex; align-items: center; justify-content: center; height: 100vh; position: relative; }
-        #loginBar { position: absolute; left: 0; top: 50%; transform: translateY(-50%); background: #39d353; padding: 60px 15px; font-size: 24px; font-weight: bold; color: black; cursor: pointer; z-index: 20; border-radius: 0 15px 15px 0; writing-mode: vertical-rl; text-orientation: upright; width: 60px; text-align: center; }
-        #logo-container img { width: 780px; max-width: 70vw; filter: drop-shadow(0 0 60px rgba(255, 0, 0, 0.9)); }
+        body { margin: 0; font-family: 'Almendra', serif; background: black; color: white; overflow: hidden; height: 100vh; }
+        #start { display: flex; align-items: center; justify-content: center; height: 100vh; }
+        #loginBar { position: absolute; left: 0; top: 50%; transform: translateY(-50%); background: #39d353; padding: 60px 15px; font-size: 24px; font-weight: bold; color: black; cursor: pointer; border-radius: 0 15px 15px 0; writing-mode: vertical-rl; text-orientation: upright; z-index: 20; }
+        #logo-container img { width: 700px; max-width: 80vw; filter: drop-shadow(0 0 30px red); }
         
-        .modal-overlay { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); justify-content: center; align-items: center; }
-        .modal-box { background: #1a1a1a; padding: 40px; width: 450px; border: 2px solid #333; text-align: center; }
-        .modal-box input { width: 100%; padding: 12px; margin-bottom: 20px; background: #000; color: #39d353; border: 1px solid #444; font-family: 'Almendra'; font-size: 20px; }
-
-        #dashboard { display: none; position: relative; width: 100vw; height: 100vh; background: black; }
-        #bg-bull { position: absolute; left: 50%; top: 45%; transform: translate(-50%, -50%); width: 850px; z-index: 1; opacity: 0.5; }
-        #top-bar { position: absolute; top: 20px; right: 40px; display: flex; align-items: center; gap: 20px; z-index: 100; }
+        #dashboard { display: none; width: 100vw; height: 100vh; position: relative; background: black; }
+        #bg-bull { position: absolute; left: 50%; top: 45%; transform: translate(-50%, -50%); width: 800px; opacity: 0.4; z-index: 1; }
         
-        .panel { position: absolute; background: rgba(20, 20, 20, 0.95); border: 1px solid #444; padding: 15px; z-index: 10; display: none; }
-        .panel h2 { color: #ff3131; margin: 0 0 10px 0; font-size: 24px; text-decoration: underline; }
-        .panel button { display: block; width: 100%; margin: 8px 0; background: #39d353; border: none; padding: 10px; font-family: 'Almendra'; font-weight: bold; cursor: pointer; }
+        .panel { position: absolute; background: rgba(20, 20, 20, 0.95); border: 1px solid #444; padding: 15px; z-index: 10; width: 240px; }
+        #admin { right: 40px; top: 100px; border-color: #ffd600; }
         
-        #personal { left: 40px; top: 40px; width: 240px; }
-        #blacklist { left: 40px; top: 350px; width: 240px; }
-        #blacklistAdmin { left: 40px; bottom: 40px; width: 440px; }
-        #admin { right: 40px; top: 100px; width: 260px; }
-        #elo { right: 40px; top: 380px; width: 260px; }
-        #chat-btn { position: absolute; right: 40px; bottom: 40px; background: #ff8c00; padding: 15px 60px; font-size: 28px; font-weight: bold; cursor: pointer; z-index: 10; font-family: 'Almendra'; display: none; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; }
+        .modal-box { background: #1a1a1a; padding: 30px; width: 450px; border: 2px solid #333; text-align: center; max-height: 90vh; overflow-y: auto; }
+        input, select { width: 100%; padding: 12px; margin: 8px 0; background: #000; color: #39d353; border: 1px solid #444; font-family: 'Almendra'; font-size: 18px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; margin: 5px 0; background: #39d353; border: none; font-weight: bold; cursor: pointer; font-family: 'Almendra'; font-size: 16px; }
+        .btn-red { background: #d50000; color: white; }
+        .btn-yellow { background: #ffd600; color: black; }
+        
+        h2 { color: #ff3131; margin-top: 0; text-decoration: underline; }
+        label { display: block; text-align: left; color: #aaa; font-size: 14px; margin-top: 10px; }
     </style>
 </head>
 <body>
 
 <div id="start">
-    <div id="loginBar" onclick="document.getElementById('pinModal').style.display='flex'">LOGIN</div>
+    <div id="loginBar" onclick="document.getElementById('loginModal').style.display='flex'">LOGIN</div>
     <div id="logo-container"><img src="bulls_start.jpg"></div>
 </div>
 
-<div id="pinModal" class="modal-overlay">
+<div id="loginModal" class="modal">
     <div class="modal-box">
         <h1>ANMELDUNG</h1>
-        <input type="text" id="nameInput" placeholder="Name">
-        <input type="password" id="pinInput" placeholder="PIN">
-        <button onclick="login()" style="width:100%; padding:15px; background:#39d353; border:none; cursor:pointer; font-family:'Almendra'; font-weight:bold;">ANMELDEN</button>
+        <input type="text" id="logName" placeholder="Name">
+        <input type="password" id="logPin" placeholder="PIN">
+        <button onclick="doLogin()">DASHBOARD ÖFFNEN</button>
+        <button class="btn-red" onclick="document.getElementById('loginModal').style.display='none'">ABBRECHEN</button>
+    </div>
+</div>
+
+<div id="settingsModal" class="modal">
+    <div class="modal-box">
+        <h2 style="color:#39d353">SPIELER VERWALTUNG</h2>
+        
+        <label>Spieler auswählen:</label>
+        <select id="selPlayer"></select>
+        
+        <label>Neue Rolle zuweisen:</label>
+        <select id="selRole">
+            <option value="Gast">Gast</option>
+            <option value="Mitglied">Mitglied</option>
+            <option value="Kampfdivision">Kampfdivision</option>
+            <option value="Elo">Elo</option>
+            <option value="Buchhalter">Buchhalter</option>
+            <option value="Ausbilder">Ausbilder</option>
+            <option value="Offizier">Offizier</option>
+            <option value="Admin">Admin</option>
+        </select>
+        <button onclick="saveAction('updateRole')">ROLLE AKTUALISIEREN</button>
+        <button class="btn-yellow" onclick="saveAction('resetPin')">PIN AUF 1234 ZURÜCKSETZEN</button>
+        
+        <hr style="border:0; border-top:1px solid #444; margin:20px 0;">
+        
+        <h2 style="color:#39d353">NEUEN SPIELER ANLEGEN</h2>
+        <input type="text" id="newName" placeholder="Name des neuen Spielers">
+        <button onclick="saveAction('newUser')">SPIELER SPEICHERN</button>
+        
+        <button class="btn-red" style="margin-top:20px" onclick="document.getElementById('settingsModal').style.display='none'">SCHLIESSEN</button>
     </div>
 </div>
 
 <div id="dashboard">
-    <div id="top-bar">
-        <div style="font-size: 22px; color:#ff3131"><span id="userName"></span> (<span id="userRole"></span>)</div>
-        <button onclick="location.reload()" style="background:#d50000; color:white; border:none; padding:8px 25px; cursor:pointer; font-family:'Almendra';">LOGOUT</button>
-    </div>
-
     <img src="bulls_dashboard.jpg" id="bg-bull">
-    
-    <div class="panel" id="personal">
-        <h2>Persönlich</h2>
-        <button id="btn-pin">Pin ändern</button>
-        <button id="btn-stats">Statistiken</button>
-        <button id="btn-tipps">Tipps</button>
-    </div>
-
-    <div class="panel" id="blacklist">
-        <h2>Black Liste</h2>
-        <button>Sp. Melden</button>
-        <button>Anschauen</button>
-    </div>
-
-    <div class="panel" id="blacklistAdmin">
-        <h2>Black Liste Pflege</h2>
-        <div class="grid">
-            <button id="bl-gemeldet" style="font-size:14px">Gemeldete Spieler</button>
-            <button id="bl-pflege">Pflege</button>
-            <button id="bl-eintragen">Eintragen</button>
-            <button id="bl-ansicht">Volle Ansicht</button>
-        </div>
+    <div id="top-bar" style="position:absolute; top:20px; right:40px; z-index:100;">
+        <span id="displayUser" style="color:#ff3131; font-size:20px; margin-right:20px;"></span>
+        <button onclick="location.reload()" style="width:100px; background:red; color:white; display:inline-block;">LOGOUT</button>
     </div>
 
     <div class="panel" id="admin">
         <h2>Admin</h2>
-        <button id="adm-einst">Einstellungen</button>
-        <button id="adm-stats">Statistiken</button>
-        <button id="adm-hilfe" style="background: #ffd600;">Hilfe-Anfragen</button>
+        <button onclick="openSettings()">Einstellungen</button>
+        <button onclick="alert('Statistiken folgen...')">Statistiken</button>
     </div>
-
-    <div class="panel" id="elo">
-        <h2>Elo Bereich</h2>
-        <button>Rohstoffrechner</button>
-        <button>Einheitenrechner</button>
-    </div>
-
-    <button id="chat-btn">CHAT</button>
 </div>
 
 <script>
-    const SHEET_ID = '1dc3akNMKE9pMP8HCqxleGzBo0kVc5IcYzFQQC2ENiSY';
-    const GID = '598251300';
-    const URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID}`;
+    const SHEET_ID = '1HC3U1u4rMU6eVem-wPL9OVDb2bRQNztlig4FQry78yQ';
+    const GID = '2004474173'; 
+    const READ_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID}`;
+    // Deine neue Web-App URL:
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzPsnss_E2hlpuZWuJe3DB3_92PkUG_IM1ETN10vjOBmEEyDrcLZleOSX0WSOm9DPSV/exec';
 
     let users = [];
 
     async function loadData() {
         try {
-            const res = await fetch(URL);
-            const data = await res.text();
-            const rows = data.split('\n').slice(1);
+            const res = await fetch(READ_URL);
+            const text = await res.text();
+            const rows = text.split('\n').slice(1);
             users = rows.map(r => {
                 const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-                const clean = (s) => s ? s.replace(/["']/g, "").trim() : "";
+                const clean = (s) => s ? s.replace(/"/g, "").trim() : "";
                 return { name: clean(c[0]), pin: clean(c[2]), role: clean(c[3]) };
             });
-        } catch (e) { console.error("Cloud-Fehler"); }
+            console.log("Daten geladen:", users.length, "Spieler");
+        } catch (e) {
+            alert("Verbindungsfehler zur Tabelle!");
+        }
     }
 
-    function login() {
-        let name = document.getElementById("nameInput").value.trim();
-        let pin = document.getElementById("pinInput").value.trim();
-        let u = users.find(user => user.name.toLowerCase() === name.toLowerCase() && user.pin === pin);
-
-        if (u) {
+    function doLogin() {
+        const n = document.getElementById("logName").value.trim();
+        const p = document.getElementById("logPin").value.trim();
+        const u = users.find(x => x.name.toLowerCase() === n.toLowerCase() && x.pin === p);
+        
+        if(u) {
             document.getElementById("start").style.display = "none";
-            document.getElementById("pinModal").style.display = "none";
+            document.getElementById("loginModal").style.display = "none";
             document.getElementById("dashboard").style.display = "block";
-            document.getElementById("userName").innerText = u.name;
-            document.getElementById("userRole").innerText = u.role;
-            applyRules(u.role);
-        } else { alert("Login fehlgeschlagen!"); }
+            document.getElementById("displayUser").innerText = u.name + " (" + u.role + ")";
+            // Admin Bereich nur für Admins zeigen
+            document.getElementById("admin").style.display = (u.role === "Admin") ? "block" : "none";
+        } else {
+            alert("Name oder PIN falsch!");
+        }
     }
 
-    function applyRules(role) {
-        // Hilfsfunktion zum Verstecken/Anzeigen
-        const show = (id) => document.getElementById(id).style.display = "block";
-        const hide = (id) => document.getElementById(id).style.display = "none";
+    function openSettings() {
+        const s = document.getElementById("selPlayer");
+        s.innerHTML = users.map(u => `<option value="${u.name}">${u.name} [${u.role}]</option>`).join('');
+        document.getElementById("settingsModal").style.display = "flex";
+    }
 
-        if (role === "Gast") {
-            show("personal"); 
-            hide("btn-stats"); hide("btn-tipps"); // Nur Pin ändern bleibt
-            show("chat-btn");
+    async function saveAction(action) {
+        let payload = { action: action };
+        
+        if (action === 'updateRole') {
+            payload.playerName = document.getElementById("selPlayer").value;
+            payload.newRole = document.getElementById("selRole").value;
+            if(!confirm(`${payload.playerName} zum ${payload.newRole} machen?`)) return;
         } 
-        else if (role === "Mitglied" || role === "Kampfdivision" || role === "Elo" || role === "Buchhalter" || role === "Ausbilder" || role === "Offizier" || role === "Admin") {
-            show("personal"); show("blacklist"); show("chat-btn");
-            
-            if (role === "Kampfdivision") hide("btn-tipps");
-            if (role === "Elo" || role === "Admin") show("elo");
-            
-            if (role === "Buchhalter" || role === "Admin") {
-                show("blacklistAdmin");
-            }
-            
-            if (role === "Ausbilder" || role === "Offizier") {
-                show("blacklistAdmin");
-                hide("bl-gemeldet"); hide("bl-pflege"); hide("bl-eintragen"); // Nur volle Ansicht bleibt
-                show("admin");
-                hide("adm-einst"); // Nur Stats und Hilfe bleiben
-            }
+        else if (action === 'newUser') {
+            payload.name = document.getElementById("newName").value.trim();
+            payload.role = "Mitglied"; // Standardrolle
+            if(!payload.name) return alert("Bitte Namen eingeben!");
+        }
+        else if (action === 'resetPin') {
+            payload.playerName = document.getElementById("selPlayer").value;
+            payload.action = "updatePin"; // Im Script anpassen oder hier nutzen
+            payload.newPin = "1234";
+            if(!confirm(`PIN für ${payload.playerName} auf 1234 setzen?`)) return;
+        }
 
-            if (role === "Admin") {
-                show("admin"); show("blacklistAdmin"); show("elo");
-                show("adm-einst"); show("bl-gemeldet"); show("bl-pflege"); show("bl-eintragen");
-            }
+        // Animation oder Ladehinweis
+        const btn = event.target;
+        const originalText = btn.innerText;
+        btn.innerText = "SENDET...";
+        btn.disabled = true;
+
+        try {
+            await fetch(SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors", // Wichtig für Google Scripts
+                body: JSON.stringify(payload)
+            });
+            alert("Befehl gesendet! Die Tabelle wird aktualisiert. Die Seite lädt neu.");
+            location.reload();
+        } catch (e) {
+            alert("Fehler beim Senden!");
+            btn.innerText = originalText;
+            btn.disabled = false;
         }
     }
 
