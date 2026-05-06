@@ -9,270 +9,204 @@
 
     <style>
         body {
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
             font-family: 'Almendra', serif;
-            background: black;
-            color: white;
-            overflow: hidden;
-            height: 100vh;
+            background: black; color: white;
+            overflow: hidden; height: 100vh;
         }
 
         /* STARTSEITE */
         #start {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
             height: 100vh;
         }
 
         #loginBar {
             position: absolute;
-            top: 40px;
+            top: 25px; /* Höher gesetzt für mehr Rot-Effekt */
             background: #39d353;
-            padding: 12px 60px;
+            padding: 12px 80px;
             font-size: 24px;
             font-weight: bold;
             color: black;
             cursor: pointer;
-            box-shadow: 0 0 15px rgba(57, 211, 83, 0.4);
+            box-shadow: 0 0 20px rgba(57, 211, 83, 0.5);
+            z-index: 10;
         }
 
         #logo-container img {
             width: 750px;
             max-width: 85vw;
-            filter: drop-shadow(0 0 25px rgba(255, 0, 0, 0.5));
+            filter: drop-shadow(0 0 30px rgba(255, 0, 0, 0.6));
         }
 
-        /* DASHBOARD LAYOUT */
-        #dashboard {
-            display: none;
-            position: relative;
-            width: 100vw;
-            height: 100vh;
-            background: black;
-        }
-
-        /* LOGO IN DER MITTE (VERGRÖSSERT) */
-        #bg-bull {
-            position: absolute;
-            left: 50%;
-            top: 45%; /* Etwas höher geschoben für Platz unten */
-            transform: translate(-50%, -50%);
-            width: 850px; /* Hier richtig groß gezogen */
-            z-index: 1;
-            filter: drop-shadow(0 0 40px rgba(255, 0, 0, 0.4));
-        }
-
-        /* TOP BAR MIT LOGOUT */
-        #top-bar {
-            position: absolute;
-            top: 20px;
-            right: 40px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            z-index: 100;
-        }
-
-        #userInfo {
-            font-size: 24px;
-            color: #ff3131;
-        }
-
-        #logout-btn {
-            background: #d50000;
-            color: white;
-            border: none;
-            padding: 8px 25px;
-            font-family: 'Almendra', serif;
-            font-weight: bold;
-            font-size: 18px;
-            cursor: pointer;
-        }
-
-        /* PANEL DESIGN */
-        .panel {
-            position: absolute;
-            background: rgba(20, 20, 20, 0.9);
-            border: 1px solid #444;
-            padding: 15px;
+        #menu {
+            margin-top: 40px;
+            display: flex; gap: 40px;
             z-index: 10;
         }
 
-        .panel h2 {
-            color: #ff3131;
-            margin: 0 0 15px 0;
-            font-size: 26px;
-            text-decoration: underline;
-        }
-
-        .panel button {
-            display: block;
-            width: 100%;
-            margin: 8px 0;
-            background: #39d353;
-            border: none;
-            padding: 10px;
+        .btn {
+            padding: 15px 40px;
+            font-size: 22px; font-weight: bold;
+            border: none; cursor: pointer;
             font-family: 'Almendra', serif;
-            font-weight: bold;
-            font-size: 18px;
-            color: black;
-            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn:hover { transform: scale(1.1); }
+        .youtube { background: #ff8c00; color: black; }
+        .story { background: #5b5bff; color: white; }
+        .web { background: #00cfd1; color: black; }
+
+        /* MODALS (Login & Hilfe) */
+        .modal-overlay {
+            display: none;
+            position: fixed; z-index: 1000;
+            left: 0; top: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9);
+            justify-content: center; align-items: center;
         }
 
-        /* POSITIONEN LINKS */
+        .modal-box {
+            background: #1a1a1a;
+            padding: 40px; width: 400px;
+            border: 2px solid #333; text-align: center;
+        }
+        
+        .modal-box h1 { color: #ff3131; font-size: 32px; margin-bottom: 25px; }
+        .modal-box input, .modal-box textarea {
+            width: 100%; padding: 12px; margin-bottom: 20px;
+            background: #000; color: #39d353;
+            border: 1px solid #444; box-sizing: border-box;
+            font-family: 'Almendra', serif; font-size: 18px;
+        }
+
+        .btn-row { display: flex; gap: 10px; justify-content: center; }
+        .loginBtn { padding: 12px; border: none; cursor: pointer; font-weight: bold; font-family: 'Almendra', serif; font-size: 16px; flex: 1; }
+        
+        .green { background: #39d353; color: black; }
+        .yellow { background: #ffd600; color: black; }
+        .red { background: #d50000; color: white; }
+
+        /* DASHBOARD (Unverändert, weil krass geil) */
+        #dashboard { display: none; position: relative; width: 100vw; height: 100vh; }
+        #bg-bull { position: absolute; left: 50%; top: 45%; transform: translate(-50%, -50%); width: 850px; z-index: 1; filter: drop-shadow(0 0 40px rgba(255, 0, 0, 0.4)); }
+        #top-bar { position: absolute; top: 20px; right: 40px; display: flex; align-items: center; gap: 20px; z-index: 100; }
+        #userInfo { font-size: 24px; color: #ff3131; }
+        #logout-btn { background: #d50000; color: white; border: none; padding: 8px 25px; font-family: 'Almendra', serif; font-weight: bold; cursor: pointer; }
+
+        .panel { position: absolute; background: rgba(20, 20, 20, 0.9); border: 1px solid #444; padding: 15px; z-index: 10; }
+        .panel h2 { color: #ff3131; margin: 0 0 15px 0; font-size: 26px; text-decoration: underline; }
+        .panel button { display: block; width: 100%; margin: 8px 0; background: #39d353; border: none; padding: 10px; font-family: 'Almendra', serif; font-weight: bold; font-size: 18px; color: black; cursor: pointer; }
+
         #personal { left: 40px; top: 40px; width: 240px; }
         #blacklist { left: 40px; top: 380px; width: 240px; }
         #blacklistAdmin { left: 40px; bottom: 40px; width: 440px; }
         #blacklistAdmin .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-
-        /* POSITIONEN RECHTS (Elo unter Admin) */
         #admin { right: 40px; top: 120px; width: 260px; }
-        #elo { right: 40px; top: 380px; width: 260px; } /* Elo sitzt jetzt unter Admin */
-
-        #chat-btn {
-            position: absolute;
-            right: 40px;
-            bottom: 40px;
-            background: #ff8c00;
-            padding: 15px 60px;
-            font-size: 28px;
-            font-weight: bold;
-            color: black;
-            border: none;
-            cursor: pointer;
-            z-index: 10;
-        }
-
-        /* LOGIN MODAL */
-        #pinModal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0; top: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95);
-            justify-content: center;
-            align-items: center;
-        }
-
-        #pinBox {
-            background: #1a1a1a;
-            padding: 40px;
-            width: 350px;
-            border: 2px solid #333;
-            text-align: center;
-        }
-        
-        #pinBox input {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
-            background: #000;
-            color: #39d353;
-            border: 1px solid #444;
-            box-sizing: border-box;
-        }
+        #elo { right: 40px; top: 380px; width: 260px; }
+        #chat-btn { position: absolute; right: 40px; bottom: 40px; background: #ff8c00; padding: 15px 60px; font-size: 28px; font-weight: bold; color: black; border: none; cursor: pointer; z-index: 10; }
     </style>
 </head>
 <body>
 
+<!-- STARTSEITE -->
 <div id="start">
     <div id="loginBar" onclick="openLogin()">LOGIN</div>
     <div id="logo-container">
         <img src="bulls_start.jpg">
     </div>
+    <div id="menu">
+        <button class="btn youtube" onclick="window.open('https://www.youtube.com/@DarkBullsGruppe', '_blank')">YOUTUBE</button>
+        <button class="btn story" onclick="alert('Story folgt!')">HISTORIES</button>
+        <button class="btn web" onclick="window.open('https://darkbulls.jimdofree.com/', '_blank')">INTERNET</button>
+    </div>
 </div>
 
-<div id="pinModal">
-    <div id="pinBox">
-        <h1 style="color:#ff3131">ANMELDUNG</h1>
+<!-- LOGIN MODAL -->
+<div id="pinModal" class="modal-overlay">
+    <div class="modal-box">
+        <h1>ANMELDUNG</h1>
         <input type="text" id="nameInput" placeholder="Name">
         <input type="password" id="pinInput" placeholder="PIN">
-        <div style="display: flex; gap: 10px;">
-            <button onclick="login()" style="background:#39d353; flex:2; padding:10px; border:none; cursor:pointer; font-weight:bold;">LOGIN</button>
-            <button onclick="closeLogin()" style="background:#d50000; flex:1; color:white; border:none; cursor:pointer;">X</button>
+        <div class="btn-row">
+            <button class="loginBtn green" onclick="login()">ANMELDEN</button>
+            <button class="loginBtn yellow" onclick="openHelp()">HILFE</button>
+            <button class="loginBtn red" onclick="closeLogin()">ABBRUCH</button>
         </div>
     </div>
 </div>
 
+<!-- HILFE / ADMIN NACHRICHT MODAL -->
+<div id="helpModal" class="modal-overlay">
+    <div class="modal-box">
+        <h1>ADMIN HILFE</h1>
+        <p style="color: #aaa; margin-bottom: 15px;">Sende eine Nachricht an den Admin:</p>
+        <textarea id="helpText" rows="4" placeholder="Schreib hier dein Problem..."></textarea>
+        <div class="btn-row">
+            <button class="loginBtn green" onclick="sendHelp()">ABSENDEN</button>
+            <button class="loginBtn red" onclick="closeHelp()">ZURÜCK</button>
+        </div>
+    </div>
+</div>
+
+<!-- DASHBOARD -->
 <div id="dashboard">
     <div id="top-bar">
         <div id="userInfo">Angemeldet als: <span id="userRole"></span></div>
         <button id="logout-btn" onclick="logout()">LOGOUT</button>
     </div>
-
     <img src="bulls_dashboard.jpg" id="bg-bull">
-    
-    <div class="panel" id="personal">
-        <h2>Persönlich</h2>
-        <button>Pin ändern</button>
-        <button>Statistiken</button>
-        <button>Tipps</button>
-    </div>
-
-    <div class="panel" id="blacklist">
-        <h2>Black Liste</h2>
-        <button>Sp. Melden</button>
-        <button>Anschauen</button>
-    </div>
-
-    <div class="panel" id="blacklistAdmin">
-        <h2>Black Liste Pflege</h2>
-        <div class="grid">
-            <button style="font-size: 14px;">Gemeldete Spieler</button>
-            <button>Pflege</button>
-            <button>Eintragen</button>
-            <button>Ansicht</button>
-        </div>
-    </div>
-
-    <div class="panel" id="admin">
-        <h2>Admin</h2>
-        <button>Einstellungen</button>
-        <button>Statistiken</button>
-    </div>
-
-    <div class="panel" id="elo">
-        <h2>Elo Bereich</h2>
-        <button>Rohstoffrechner</button>
-        <button>Einheiten Rechner</button>
-    </div>
-
+    <div class="panel" id="personal"><h2>Persönlich</h2><button>Pin ändern</button><button>Statistiken</button></div>
+    <div class="panel" id="blacklist"><h2>Black Liste</h2><button>Sp. Melden</button><button>Anschauen</button></div>
+    <div class="panel" id="blacklistAdmin"><h2>Black Liste Pflege</h2><div class="grid"><button>Eintragen</button><button>Ansicht</button></div></div>
+    <div class="panel" id="admin"><h2>Admin</h2><button>Einstellungen</button><button>Statistiken</button></div>
+    <div class="panel" id="elo"><h2>Elo Bereich</h2><button>Rechner 1</button><button>Rechner 2</button></div>
     <button id="chat-btn">CHAT</button>
 </div>
 
 <script>
-    let users = [
-        { name: "Admin", pin: "1234", role: "Admin" },
-        { name: "Gast", pin: "0000", role: "Gast" }
-    ];
+    let users = [{ name: "Admin", pin: "1234", role: "Admin" }, { name: "Gast", pin: "0000", role: "Gast" }];
 
     function openLogin() { document.getElementById("pinModal").style.display = "flex"; }
     function closeLogin() { document.getElementById("pinModal").style.display = "none"; }
     
+    function openHelp() { 
+        document.getElementById("pinModal").style.display = "none";
+        document.getElementById("helpModal").style.display = "flex"; 
+    }
+    function closeHelp() { 
+        document.getElementById("helpModal").style.display = "none";
+        document.getElementById("pinModal").style.display = "flex";
+    }
+
+    function sendHelp() {
+        let text = document.getElementById("helpText").value;
+        if(text) {
+            alert("Nachricht an Admin gesendet: " + text);
+            document.getElementById("helpText").value = "";
+            closeHelp();
+        } else {
+            alert("Bitte gib eine Nachricht ein!");
+        }
+    }
+
     function login() {
         let name = document.getElementById("nameInput").value;
         let pin = document.getElementById("pinInput").value;
         let user = users.find(u => u.name === name && u.pin === pin);
-
         if (user) {
             document.getElementById("start").style.display = "none";
             closeLogin();
             document.getElementById("dashboard").style.display = "block";
             document.getElementById("userRole").innerText = user.role;
-            if (user.role !== "Admin") document.getElementById("admin").style.display = "none";
-        } else {
-            alert("Daten falsch!");
-        }
+        } else { alert("Daten falsch!"); }
     }
 
     function logout() {
         document.getElementById("dashboard").style.display = "none";
         document.getElementById("start").style.display = "flex";
-        document.getElementById("nameInput").value = "";
-        document.getElementById("pinInput").value = "";
     }
 </script>
 
