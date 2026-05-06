@@ -3,106 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dark Bulls - Dashboard V2.0 Cloud</title>
+    <title>Dark Bulls - Dashboard V2.0 FINAL</title>
     <link href="https://fonts.googleapis.com/css2?family=Almendra:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { margin: 0; padding: 0; font-family: 'Almendra', serif; background: black; color: white; overflow: hidden; height: 100vh; }
+        body { margin: 0; padding: 0; font-family: 'Almendra', serif; background: #000; color: white; overflow: hidden; height: 100vh; }
         
-        /* STARTSEITE */
+        /* STARTSEITE & HINTERGRUND */
         #start { display: flex; align-items: center; justify-content: center; height: 100vh; position: relative; background: url('bulls_start.jpg') center/cover; }
-        #loginBar { position: absolute; left: 0; top: 50%; transform: translateY(-50%); background: #39d353; padding: 60px 15px; font-size: 24px; font-weight: bold; color: black; cursor: pointer; z-index: 20; border-radius: 0 15px 15px 0; writing-mode: vertical-rl; text-orientation: upright; transition: 0.4s; width: 60px; text-align: center; }
-        #loginBar:hover { width: 95px; padding-left: 35px; }
-        #logo-container img { width: 780px; max-width: 70vw; filter: drop-shadow(0 0 60px rgba(255, 0, 0, 0.9)); }
+        #logo-main { width: 800px; max-width: 75vw; filter: drop-shadow(0 0 50px rgba(255, 0, 0, 0.8)); transition: 0.5s; }
 
-        /* RECHTE BUTTONS */
-        #menu-rechts { position: absolute; right: 0; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 20px; z-index: 10; }
-        .side-btn { padding: 30px 20px; font-size: 20px; font-weight: bold; border: none; cursor: pointer; font-family: 'Almendra'; writing-mode: vertical-rl; text-orientation: upright; border-radius: 15px 0 0 15px; transition: 0.4s; width: 60px; text-align: center; }
+        /* LOGIN BAR (LINKS) */
+        #loginBar { position: absolute; left: 0; top: 50%; transform: translateY(-50%); background: #39d353; padding: 60px 15px; font-size: 24px; font-weight: bold; color: black; cursor: pointer; z-index: 100; border-radius: 0 15px 15px 0; writing-mode: vertical-rl; text-orientation: upright; transition: 0.4s; }
+        #loginBar:hover { padding-left: 40px; background: #2fb545; }
+
+        /* HILFE / INFOS (RECHTS) */
+        #side-menu { position: absolute; right: 0; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 15px; z-index: 100; }
+        .info-btn { padding: 30px 15px; font-size: 18px; font-weight: bold; border: none; cursor: pointer; font-family: 'Almendra'; writing-mode: vertical-rl; text-orientation: upright; border-radius: 15px 0 0 15px; transition: 0.3s; width: 50px; text-align: center; }
         #btn-yt { background: #ff8c00; }
         #btn-hist { background: #5b5bff; color: white; }
         #btn-web { background: #00cfd1; }
-        .side-btn:hover { width: 95px; padding-right: 35px; }
+        .info-btn:hover { width: 80px; padding-right: 30px; }
 
-        /* MODALS */
-        .modal-overlay { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; }
-        .modal-box { background: #1a1a1a; padding: 40px; width: 450px; border: 2px solid #333; text-align: center; }
-        .modal-box h1 { color: #ff3131; text-decoration: underline; margin-top: 0; }
+        /* MODALS (ANMELDUNG) */
+        .modal-overlay { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); justify-content: center; align-items: center; }
+        .modal-box { background: #151515; padding: 40px; width: 420px; border: 2px solid #333; text-align: center; box-shadow: 0 0 30px rgba(255,0,0,0.2); }
+        .modal-box h2 { color: #ff3131; text-decoration: underline; margin-bottom: 25px; font-size: 32px; }
         .modal-box input { width: 100%; padding: 12px; margin-bottom: 20px; background: #000; color: #39d353; border: 1px solid #444; font-size: 20px; font-family: 'Almendra'; box-sizing: border-box; }
-        .btn-row { display: flex; gap: 10px; }
-        .loginBtn { padding: 12px; border: none; cursor: pointer; font-weight: bold; font-family: 'Almendra'; flex: 1; font-size: 16px; }
-        .green { background: #39d353; color: black; }
-        .red { background: #d50000; color: white; }
-        .yellow { background: #ffd600; color: black; }
+        .modal-box p { font-size: 14px; color: #888; margin-top: -10px; margin-bottom: 20px; cursor: pointer; }
 
-        /* DASHBOARD */
-        #dashboard { display: none; position: relative; width: 100vw; height: 100vh; background: black; }
-        #bg-bull { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 850px; opacity: 0.4; z-index: 1; }
+        /* DASHBOARD LAYOUT */
+        #dashboard { display: none; width: 100vw; height: 100vh; position: relative; background: #000; }
+        #bg-dashboard { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 900px; opacity: 0.35; z-index: 1; }
         
-        .panel { position: absolute; background: rgba(20, 20, 20, 0.9); border: 1px solid #444; padding: 20px; z-index: 10; width: 280px; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
-        .panel h2 { color: #ff3131; margin: 0 0 15px 0; text-decoration: underline; font-size: 24px; }
-        .panel button { width: 100%; margin: 8px 0; background: #39d353; border: none; padding: 12px; font-family: 'Almendra'; font-weight: bold; cursor: pointer; font-size: 16px; transition: 0.2s; }
-        .panel button:hover { background: #2fb545; transform: scale(1.02); }
-        
-        #personal { left: 40px; top: 40px; }
-        #admin-panel { right: 40px; top: 100px; display: none; }
-        #blacklist-panel { left: 40px; bottom: 40px; width: 350px; display: none; }
-        
-        #top-right { position: absolute; top: 20px; right: 40px; display: flex; align-items: center; gap: 20px; z-index: 100; }
-        .user-info { color: #39d353; font-size: 22px; font-weight: bold; }
-        .logout-btn { background: #d50000; color: white; border: none; padding: 8px 20px; cursor: pointer; font-family: 'Almendra'; font-weight: bold; border-radius: 5px; }
+        .panel { position: absolute; background: rgba(26, 26, 26, 0.9); border: 1px solid #444; padding: 20px; z-index: 10; width: 280px; border-radius: 4px; }
+        .panel h3 { color: #ff3131; margin-top: 0; border-bottom: 1px solid #444; padding-bottom: 10px; }
+        .panel button { width: 100%; margin: 8px 0; background: #39d353; border: none; padding: 12px; font-family: 'Almendra'; font-weight: bold; cursor: pointer; font-size: 16px; border-radius: 3px; }
+        .panel button:hover { background: #2fb545; }
+
+        #panel-left { left: 40px; top: 40px; }
+        #panel-admin { right: 40px; top: 100px; display: none; border: 1px solid #ffd600; }
+        #panel-search { left: 40px; bottom: 40px; width: 320px; display: none; }
+
+        /* TOP NAV */
+        #top-nav { position: absolute; top: 20px; right: 40px; display: flex; align-items: center; gap: 20px; z-index: 100; }
+        .user-tag { color: #39d353; font-size: 20px; border-right: 2px solid #444; padding-right: 20px; }
+        .logout { background: #d50000; color: white; border: none; padding: 10px 20px; cursor: pointer; font-family: 'Almendra'; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div id="start">
-    <div id="loginBar" onclick="openLogin()">LOGIN</div>
-    <div id="logo-container"><img src="bulls_start.jpg" alt="Dark Bulls"></div>
-    <div id="menu-rechts">
-        <button id="btn-yt" class="side-btn" onclick="window.open('https://www.youtube.com/@DarkBullsGruppe', '_blank')">YOUTUBE</button>
-        <button id="btn-hist" class="side-btn" onclick="alert('Histories folgen!')">HISTORIES</button>
-        <button id="btn-web" class="side-btn" onclick="window.open('https://darkbulls.jimdofree.com/', '_blank')">INTERNET</button>
+    <div id="loginBar" onclick="toggleModal('pinModal', true)">L O G I N</div>
+    <div id="logo-container"><img src="bulls_start.jpg" id="logo-main"></div>
+    
+    <div id="side-menu">
+        <button id="btn-yt" class="info-btn" onclick="window.open('https://www.youtube.com/@DarkBullsGruppe', '_blank')">YOUTUBE</button>
+        <button id="btn-hist" class="info-btn" onclick="alert('Histories folgen in Kürze!')">HISTORIES</button>
+        <button id="btn-web" class="info-btn" onclick="window.open('https://darkbulls.jimdofree.com/', '_blank')">INTERNET</button>
     </div>
 </div>
 
 <div id="pinModal" class="modal-overlay">
     <div class="modal-box">
-        <h1>ANMELDUNG</h1>
+        <h2>ANMELDUNG</h2>
         <input type="text" id="nameInput" placeholder="Spielername">
         <input type="password" id="pinInput" placeholder="PIN">
-        <div class="btn-row">
-            <button class="loginBtn green" onclick="login()">ANMELDEN</button>
-            <button class="loginBtn red" onclick="closeLogin()">ABBRUCH</button>
+        <p onclick="alert('Wende dich an Julian für einen PIN-Reset!')">PIN vergessen?</p>
+        <div style="display:flex; gap:10px;">
+            <button class="loginBtn" style="background:#39d353; flex:1; padding:15px; cursor:pointer;" onclick="attemptLogin()">ANMELDEN</button>
+            <button class="loginBtn" style="background:#d50000; color:white; flex:1; cursor:pointer;" onclick="toggleModal('pinModal', false)">ABBRUCH</button>
         </div>
     </div>
 </div>
 
 <div id="dashboard">
-    <div id="top-right">
-        <div id="statusInfo" class="user-info"></div>
-        <button class="logout-btn" onclick="location.reload()">LOGOUT</button>
+    <div id="top-nav">
+        <div id="userInfo" class="user-tag">Lädt...</div>
+        <button class="logout" onclick="location.reload()">LOGOUT</button>
     </div>
     
-    <img src="bulls_dashboard.jpg" id="bg-bull">
+    <img src="bulls_dashboard.jpg" id="bg-dashboard">
     
-    <div class="panel" id="personal">
-        <h2>Mein Bereich</h2>
-        <button onclick="alert('Statistik wird geladen...')">Statistik</button>
-        <button id="alliBtn">Meine Allianz</button>
+    <div class="panel" id="panel-left">
+        <h3>Mein Bereich</h3>
+        <button id="alliDisplay">Allianz: -</button>
+        <button onclick="alert('Statistik wird berechnet...')">Meine Statistik</button>
     </div>
 
-    <div class="panel" id="admin-panel">
-        <h2>Admin Panel</h2>
-        <button class="yellow" onclick="adminReset()">Spieler PIN Reset</button>
-        <button onclick="alert('Mitgliederliste wird vorbereitet...')">Mitgliederliste</button>
+    <div class="panel" id="panel-admin">
+        <h3 style="color:#ffd600">Admin Panel</h3>
+        <button style="background:#ffd600" onclick="adminReset()">Spieler PIN Reset</button>
+        <button onclick="alert('Mitgliederliste folgt...')">Mitgliederliste</button>
     </div>
 
-    <div class="panel" id="blacklist-panel">
-        <h2>FairPlay Suche</h2>
-        <input type="text" id="searchPlayer" placeholder="Name eingeben..." style="width:100%; padding:10px; margin-bottom:10px; background:#000; color:#39d353; border:1px solid #444; box-sizing: border-box; font-family:'Almendra';">
-        <button onclick="alert('Spieler-Check läuft...')">Prüfen</button>
+    <div class="panel" id="panel-search">
+        <h3>FairPlay Suche</h3>
+        <input type="text" id="searchName" placeholder="Spieler suchen..." style="width:100%; padding:10px; margin-bottom:10px; background:#000; color:#39d353; border:1px solid #444; box-sizing:border-box;">
+        <button onclick="checkPlayer()">Prüfen</button>
     </div>
 </div>
 
 <script>
+    // DEINE DATEN
     const SHEET_ID = '1dc3akNMKE9pMP8HCqxleGzBo0kVc5IcYzFQQC2ENiSY';
     const GID = '598251300';
     const URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID}`;
@@ -110,71 +112,75 @@
     let users = [];
     let currentUser = null;
 
-    async function loadData() {
+    // Lade Cloud-Daten beim Start
+    async function init() {
         try {
             const res = await fetch(URL);
-            const text = await res.text();
-            const rows = text.split('\n').slice(1);
-            
+            const data = await res.text();
+            const rows = data.split('\n').slice(1);
             users = rows.map(r => {
                 const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                 const clean = (s) => s ? s.replace(/["']/g, "").trim() : "";
                 return {
-                    name: clean(c[0]),    // Spalte A: Name
-                    allianz: clean(c[1]), // Spalte B: Allianz
-                    pin: clean(c[2]),     // Spalte C: PIN
-                    role: clean(c[3]),    // Spalte D: Rolle
-                    needsReset: clean(c[4]) === "TRUE" // Spalte E: Reset
+                    name: clean(c[0]), 
+                    alli: clean(c[1]), 
+                    pin: clean(c[2]), 
+                    role: clean(c[3])
                 };
             });
-            console.log("Daten synchronisiert.");
-        } catch (e) {
-            console.error("Cloud-Verbindungsfehler");
-        }
+            console.log("Daten geladen.");
+        } catch (e) { alert("Fehler beim Cloud-Laden!"); }
     }
 
-    function openLogin() { document.getElementById("pinModal").style.display = "flex"; }
-    function closeLogin() { document.getElementById("pinModal").style.display = "none"; }
+    function toggleModal(id, show) {
+        document.getElementById(id).style.display = show ? 'flex' : 'none';
+    }
 
-    function login() {
-        const inputName = document.getElementById("nameInput").value.trim().toLowerCase();
-        const inputPin = document.getElementById("pinInput").value.trim();
-        
-        const user = users.find(u => u.name.toLowerCase() === inputName && u.pin === inputPin);
+    function attemptLogin() {
+        const uName = document.getElementById("nameInput").value.trim().toLowerCase();
+        const uPin = document.getElementById("pinInput").value.trim();
+        const user = users.find(u => u.name.toLowerCase() === uName && u.pin === uPin);
 
         if (user) {
             currentUser = user;
-            showDashboard(user);
+            enterDashboard();
         } else {
-            alert("Login fehlgeschlagen! Name oder PIN nicht korrekt.");
+            alert("Name oder PIN falsch!");
         }
     }
 
-    function showDashboard(user) {
+    function enterDashboard() {
         document.getElementById("start").style.display = "none";
         document.getElementById("pinModal").style.display = "none";
         document.getElementById("dashboard").style.display = "block";
-        document.getElementById("statusInfo").innerText = `${user.name} | ${user.role}`;
-        document.getElementById("alliBtn").innerText = `Allianz: ${user.allianz}`;
+        
+        document.getElementById("userInfo").innerText = `${currentUser.name} | ${currentUser.role}`;
+        document.getElementById("alliDisplay").innerText = `Allianz: ${currentUser.alli}`;
 
-        // Rechteprüfung
-        if (user.role === "Admin") {
-            document.getElementById("admin-panel").style.display = "block";
-            document.getElementById("blacklist-panel").style.display = "block";
-        } else if (["Offizier", "Mitglied", "Ausbilder", "Elo"].includes(user.role)) {
-            document.getElementById("blacklist-panel").style.display = "block";
+        // Rollensteuerung
+        const role = currentUser.role;
+        if (role === "Admin") {
+            document.getElementById("panel-admin").style.display = "block";
+            document.getElementById("panel-search").style.display = "block";
+        } else if (["Offizier", "Mitglied", "Ausbilder", "Elo"].includes(role)) {
+            document.getElementById("panel-search").style.display = "block";
         }
     }
 
     function adminReset() {
-        const target = prompt("Name des Spielers für PIN-Reset:");
+        const target = prompt("Name für Reset:");
         if (target) {
-            const temp = Math.random().toString(36).substring(2, 6).toUpperCase();
-            alert(`Kopiere diesen Text für ${target}:\n\nHallo, dein PIN wurde auf ${temp} zurückgesetzt. Bitte logge dich ein und ändere ihn sofort!`);
+            const code = Math.random().toString(36).substring(2, 6).toUpperCase();
+            alert(`Kopiere für ${target}:\nHallo, dein PIN wurde auf ${code} gesetzt. Bitte nach Login ändern!`);
         }
     }
 
-    window.onload = loadData;
+    function checkPlayer() {
+        const s = document.getElementById("searchName").value.trim();
+        if(s) alert(`Suche nach ${s} wird implementiert...`);
+    }
+
+    window.onload = init;
 </script>
 </body>
 </html>
