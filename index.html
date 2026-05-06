@@ -3,18 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dark Bulls - Rollen-System</title>
+    <title>Dark Bulls - Dashboard V2.0</title>
     <link href="https://fonts.googleapis.com/css2?family=Almendra:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body { margin: 0; padding: 0; font-family: 'Almendra', serif; background: black; color: white; overflow: hidden; height: 100vh; }
-        #start { display: flex; align-items: center; justify-content: center; height: 100vh; position: relative; }
-        #loginBar { position: absolute; left: 0; top: 50%; transform: translateY(-50%); background: #39d353; padding: 60px 15px; font-size: 24px; font-weight: bold; color: black; cursor: pointer; z-index: 20; border-radius: 0 15px 15px 0; writing-mode: vertical-rl; text-orientation: upright; width: 60px; text-align: center; }
-        #logo-container img { width: 780px; max-width: 70vw; filter: drop-shadow(0 0 60px rgba(255, 0, 0, 0.9)); }
         
+        /* STARTSEITE */
+        #start { display: flex; align-items: center; justify-content: center; height: 100vh; position: relative; }
+        
+        /* LOGIN LINKS */
+        #loginBar { position: absolute; left: 0; top: 50%; transform: translateY(-50%); background: #39d353; padding: 60px 15px; font-size: 24px; font-weight: bold; color: black; cursor: pointer; z-index: 20; border-radius: 0 15px 15px 0; writing-mode: vertical-rl; text-orientation: upright; width: 60px; text-align: center; }
+        
+        #logo-container img { width: 780px; max-width: 70vw; filter: drop-shadow(0 0 60px rgba(255, 0, 0, 0.9)); }
+
+        /* MENÜ RECHTS (Das fehlte!) */
+        #side-menu { position: absolute; right: 0; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 15px; z-index: 100; }
+        .info-btn { padding: 30px 15px; font-size: 18px; font-weight: bold; border: none; cursor: pointer; font-family: 'Almendra'; writing-mode: vertical-rl; text-orientation: upright; border-radius: 15px 0 0 15px; transition: 0.3s; width: 60px; text-align: center; }
+        #btn-yt { background: #ff8c00; color: black; }
+        #btn-hist { background: #5b5bff; color: white; }
+        #btn-web { background: #00cfd1; color: black; }
+        
+        /* MODALS */
         .modal-overlay { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); justify-content: center; align-items: center; }
         .modal-box { background: #1a1a1a; padding: 40px; width: 450px; border: 2px solid #333; text-align: center; }
         .modal-box input { width: 100%; padding: 12px; margin-bottom: 20px; background: #000; color: #39d353; border: 1px solid #444; font-family: 'Almendra'; font-size: 20px; }
 
+        /* DASHBOARD */
         #dashboard { display: none; position: relative; width: 100vw; height: 100vh; background: black; }
         #bg-bull { position: absolute; left: 50%; top: 45%; transform: translate(-50%, -50%); width: 850px; z-index: 1; opacity: 0.5; }
         #top-bar { position: absolute; top: 20px; right: 40px; display: flex; align-items: center; gap: 20px; z-index: 100; }
@@ -37,6 +51,12 @@
 <div id="start">
     <div id="loginBar" onclick="document.getElementById('pinModal').style.display='flex'">LOGIN</div>
     <div id="logo-container"><img src="bulls_start.jpg"></div>
+    
+    <div id="side-menu">
+        <button id="btn-yt" class="info-btn" onclick="window.open('https://www.youtube.com/@DarkBullsGruppe')">YOUTUBE</button>
+        <button id="btn-hist" class="info-btn" onclick="alert('Histories folgen!')">HISTORIES</button>
+        <button id="btn-web" class="info-btn" onclick="window.open('https://darkbulls.jimdofree.com/')">INTERNET</button>
+    </div>
 </div>
 
 <div id="pinModal" class="modal-overlay">
@@ -45,6 +65,7 @@
         <input type="text" id="nameInput" placeholder="Name">
         <input type="password" id="pinInput" placeholder="PIN">
         <button onclick="login()" style="width:100%; padding:15px; background:#39d353; border:none; cursor:pointer; font-family:'Almendra'; font-weight:bold;">ANMELDEN</button>
+        <button onclick="document.getElementById('pinModal').style.display='none'" style="margin-top:10px; background:transparent; color:red; border:none; cursor:pointer;">Abbrechen</button>
     </div>
 </div>
 
@@ -96,15 +117,17 @@
 </div>
 
 <script>
-    const SHEET_ID = '1dc3akNMKE9pMP8HCqxleGzBo0kVc5IcYzFQQC2ENiSY';
-    const GID = '598251300';
-    const URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID}`;
+    // DEINE NEUE MASTER-TABELLE
+    const SHEET_ID = '1HC3U1u4rMU6eVem-wPL9OVDb2bRQNztlig4FQry78yQ';
+    const GID = '2004474173';
+    const READ_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID}`;
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzPsnss_E2hlpuZWuJe3DB3_92PkUG_IM1ETN10vjOBmEEyDrcLZleOSX0WSOm9DPSV/exec';
 
     let users = [];
 
     async function loadData() {
         try {
-            const res = await fetch(URL);
+            const res = await fetch(READ_URL);
             const data = await res.text();
             const rows = data.split('\n').slice(1);
             users = rows.map(r => {
@@ -131,30 +154,26 @@
     }
 
     function applyRules(role) {
-        // Hilfsfunktion zum Verstecken/Anzeigen
         const show = (id) => document.getElementById(id).style.display = "block";
         const hide = (id) => document.getElementById(id).style.display = "none";
 
         if (role === "Gast") {
             show("personal"); 
-            hide("btn-stats"); hide("btn-tipps"); // Nur Pin ändern bleibt
+            hide("btn-stats"); hide("btn-tipps");
             show("chat-btn");
         } 
-        else if (role === "Mitglied" || role === "Kampfdivision" || role === "Elo" || role === "Buchhalter" || role === "Ausbilder" || role === "Offizier" || role === "Admin") {
+        else if (["Mitglied", "Kampfdivision", "Elo", "Buchhalter", "Ausbilder", "Offizier", "Admin"].includes(role)) {
             show("personal"); show("blacklist"); show("chat-btn");
             
             if (role === "Kampfdivision") hide("btn-tipps");
             if (role === "Elo" || role === "Admin") show("elo");
-            
-            if (role === "Buchhalter" || role === "Admin") {
-                show("blacklistAdmin");
-            }
+            if (role === "Buchhalter" || role === "Admin") show("blacklistAdmin");
             
             if (role === "Ausbilder" || role === "Offizier") {
                 show("blacklistAdmin");
-                hide("bl-gemeldet"); hide("bl-pflege"); hide("bl-eintragen"); // Nur volle Ansicht bleibt
+                hide("bl-gemeldet"); hide("bl-pflege"); hide("bl-eintragen");
                 show("admin");
-                hide("adm-einst"); // Nur Stats und Hilfe bleiben
+                hide("adm-einst");
             }
 
             if (role === "Admin") {
