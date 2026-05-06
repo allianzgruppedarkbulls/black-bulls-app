@@ -20,28 +20,35 @@
             display: flex; flex-direction: column;
             align-items: center; justify-content: center;
             height: 100vh;
+            position: relative;
         }
 
-       #loginBar {
-    position: absolute;
-    top: 15px; 
-    background: #39d353;
-    padding: 10px 80px; 
-    font-size: 24px;
-    font-weight: bold;
-    color: black;
-    cursor: pointer;
-    box-shadow: 0 0 20px rgba(57, 211, 83, 0.5);
-    z-index: 10;
-}
+        /* LOGIN BUTTON GANZ OBEN */
+        #loginBar {
+            position: absolute;
+            top: 0; /* Direkt an die Oberkante */
+            background: #39d353;
+            padding: 10px 100px;
+            font-size: 24px;
+            font-weight: bold;
+            color: black;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(57, 211, 83, 0.4);
+            z-index: 20;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
 
-       #logo-container img {
-    width: 750px;
-    max-width: 85vw;
-    filter: drop-shadow(0 0 50px rgba(255, 0, 0, 0.8));
-}
+        #logo-container img {
+            width: 750px;
+            max-width: 85vw;
+            /* Extra starker roter Schein */
+            filter: drop-shadow(0 0 50px rgba(255, 0, 0, 0.8));
+            margin-top: 20px;
+        }
+
         #menu {
-            margin-top: 40px;
+            margin-top: 50px;
             display: flex; gap: 40px;
             z-index: 10;
         }
@@ -58,44 +65,48 @@
         .story { background: #5b5bff; color: white; }
         .web { background: #00cfd1; color: black; }
 
-        /* MODALS (Login & Hilfe) */
+        /* MODALS */
         .modal-overlay {
             display: none;
             position: fixed; z-index: 1000;
             left: 0; top: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9);
+            background: rgba(0,0,0,0.95);
             justify-content: center; align-items: center;
         }
 
         .modal-box {
             background: #1a1a1a;
-            padding: 40px; width: 400px;
+            padding: 40px; width: 450px;
             border: 2px solid #333; text-align: center;
+            box-shadow: 0 0 40px rgba(0,0,0,1);
         }
         
-        .modal-box h1 { color: #ff3131; font-size: 32px; margin-bottom: 25px; }
+        .modal-box h1 { color: #ff3131; font-size: 32px; margin-bottom: 25px; text-decoration: underline; }
+        
+        .modal-box label { display: block; text-align: left; color: #ff3131; margin-bottom: 5px; font-size: 20px; }
+
         .modal-box input, .modal-box textarea {
             width: 100%; padding: 12px; margin-bottom: 20px;
             background: #000; color: #39d353;
             border: 1px solid #444; box-sizing: border-box;
-            font-family: 'Almendra', serif; font-size: 18px;
+            font-family: 'Almendra', serif; font-size: 20px;
         }
 
-        .btn-row { display: flex; gap: 10px; justify-content: center; }
-        .loginBtn { padding: 12px; border: none; cursor: pointer; font-weight: bold; font-family: 'Almendra', serif; font-size: 16px; flex: 1; }
+        .btn-row { display: flex; gap: 10px; margin-top: 10px; }
+        .loginBtn { padding: 12px 5px; border: none; cursor: pointer; font-weight: bold; font-family: 'Almendra', serif; font-size: 16px; flex: 1; }
         
         .green { background: #39d353; color: black; }
         .yellow { background: #ffd600; color: black; }
         .red { background: #d50000; color: white; }
 
-        /* DASHBOARD (Unverändert, weil krass geil) */
+        /* DASHBOARD (Hier bleibt alles wie gewünscht) */
         #dashboard { display: none; position: relative; width: 100vw; height: 100vh; }
         #bg-bull { position: absolute; left: 50%; top: 45%; transform: translate(-50%, -50%); width: 850px; z-index: 1; filter: drop-shadow(0 0 40px rgba(255, 0, 0, 0.4)); }
         #top-bar { position: absolute; top: 20px; right: 40px; display: flex; align-items: center; gap: 20px; z-index: 100; }
         #userInfo { font-size: 24px; color: #ff3131; }
         #logout-btn { background: #d50000; color: white; border: none; padding: 8px 25px; font-family: 'Almendra', serif; font-weight: bold; cursor: pointer; }
 
-        .panel { position: absolute; background: rgba(20, 20, 20, 0.9); border: 1px solid #444; padding: 15px; z-index: 10; }
+        .panel { position: absolute; background: rgba(20, 20, 20, 0.95); border: 1px solid #444; padding: 15px; z-index: 10; }
         .panel h2 { color: #ff3131; margin: 0 0 15px 0; font-size: 26px; text-decoration: underline; }
         .panel button { display: block; width: 100%; margin: 8px 0; background: #39d353; border: none; padding: 10px; font-family: 'Almendra', serif; font-weight: bold; font-size: 18px; color: black; cursor: pointer; }
 
@@ -110,12 +121,14 @@
 </head>
 <body>
 
-<!-- STARTSEITE -->
 <div id="start">
+    <!-- Login jetzt ganz oben am Rand -->
     <div id="loginBar" onclick="openLogin()">LOGIN</div>
+    
     <div id="logo-container">
         <img src="bulls_start.jpg">
     </div>
+    
     <div id="menu">
         <button class="btn youtube" onclick="window.open('https://www.youtube.com/@DarkBullsGruppe', '_blank')">YOUTUBE</button>
         <button class="btn story" onclick="alert('Story folgt!')">HISTORIES</button>
@@ -123,12 +136,13 @@
     </div>
 </div>
 
-<!-- LOGIN MODAL -->
 <div id="pinModal" class="modal-overlay">
     <div class="modal-box">
         <h1>ANMELDUNG</h1>
-        <input type="text" id="nameInput" placeholder="Name">
-        <input type="password" id="pinInput" placeholder="PIN">
+        <label>Name</label>
+        <input type="text" id="nameInput">
+        <label>PIN</label>
+        <input type="password" id="pinInput">
         <div class="btn-row">
             <button class="loginBtn green" onclick="login()">ANMELDEN</button>
             <button class="loginBtn yellow" onclick="openHelp()">HILFE</button>
@@ -137,12 +151,10 @@
     </div>
 </div>
 
-<!-- HILFE / ADMIN NACHRICHT MODAL -->
 <div id="helpModal" class="modal-overlay">
     <div class="modal-box">
         <h1>ADMIN HILFE</h1>
-        <p style="color: #aaa; margin-bottom: 15px;">Sende eine Nachricht an den Admin:</p>
-        <textarea id="helpText" rows="4" placeholder="Schreib hier dein Problem..."></textarea>
+        <textarea id="helpText" rows="4" placeholder="Schreib hier dein Anliegen..."></textarea>
         <div class="btn-row">
             <button class="loginBtn green" onclick="sendHelp()">ABSENDEN</button>
             <button class="loginBtn red" onclick="closeHelp()">ZURÜCK</button>
@@ -150,7 +162,6 @@
     </div>
 </div>
 
-<!-- DASHBOARD -->
 <div id="dashboard">
     <div id="top-bar">
         <div id="userInfo">Angemeldet als: <span id="userRole"></span></div>
@@ -170,25 +181,13 @@
 
     function openLogin() { document.getElementById("pinModal").style.display = "flex"; }
     function closeLogin() { document.getElementById("pinModal").style.display = "none"; }
-    
-    function openHelp() { 
-        document.getElementById("pinModal").style.display = "none";
-        document.getElementById("helpModal").style.display = "flex"; 
-    }
-    function closeHelp() { 
-        document.getElementById("helpModal").style.display = "none";
-        document.getElementById("pinModal").style.display = "flex";
-    }
+    function openHelp() { document.getElementById("pinModal").style.display = "none"; document.getElementById("helpModal").style.display = "flex"; }
+    function closeHelp() { document.getElementById("helpModal").style.display = "none"; document.getElementById("pinModal").style.display = "flex"; }
 
     function sendHelp() {
-        let text = document.getElementById("helpText").value;
-        if(text) {
-            alert("Nachricht an Admin gesendet: " + text);
-            document.getElementById("helpText").value = "";
-            closeHelp();
-        } else {
-            alert("Bitte gib eine Nachricht ein!");
-        }
+        alert("Nachricht wurde an den Admin übermittelt!");
+        document.getElementById("helpText").value = "";
+        closeHelp();
     }
 
     function login() {
@@ -200,7 +199,7 @@
             closeLogin();
             document.getElementById("dashboard").style.display = "block";
             document.getElementById("userRole").innerText = user.role;
-        } else { alert("Daten falsch!"); }
+        } else { alert("Name oder PIN falsch!"); }
     }
 
     function logout() {
