@@ -3,122 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dark Bulls - Dashboard Cloud-Test</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Almendra:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
-
+    <title>Dark Bulls - Rollen-System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Almendra:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            margin: 0; padding: 0;
-            font-family: 'Almendra', serif;
-            background: black; color: white;
-            overflow: hidden; height: 100vh;
-        }
-
-        /* STARTSEITE */
-        #start {
-            display: flex; align-items: center; justify-content: center;
-            height: 100vh; position: relative;
-        }
-
-        /* LOGIN LINKS */
-        #loginBar {
-            position: absolute;
-            left: 0; top: 50%;
-            transform: translateY(-50%);
-            background: #39d353;
-            padding: 60px 15px;
-            font-size: 24px; font-weight: bold; color: black;
-            cursor: pointer;
-            z-index: 20;
-            border-top-right-radius: 15px; border-bottom-right-radius: 15px;
-            writing-mode: vertical-rl; text-orientation: upright;
-            transition: all 0.4s ease-in-out;
-            width: 60px; text-align: center;
-            box-shadow: 5px 0 20px rgba(57, 211, 83, 0.4);
-        }
-        #loginBar:hover { width: 95px; padding-left: 35px; }
-
-        #logo-container img {
-            width: 780px; max-width: 70vw;
-            filter: drop-shadow(0 0 60px rgba(255, 0, 0, 0.9));
-        }
-
-        /* MENÜ RECHTS */
-        #menu {
-            position: absolute; right: 0; top: 50%;
-            transform: translateY(-50%);
-            display: flex; flex-direction: column; gap: 20px; z-index: 10;
-        }
-
-        .side-btn {
-            padding: 30px 20px;
-            font-size: 20px; font-weight: bold; border: none; cursor: pointer;
-            font-family: 'Almendra', serif;
-            writing-mode: vertical-rl; text-orientation: upright;
-            border-top-left-radius: 15px; border-bottom-left-radius: 15px;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            width: 60px; text-align: center;
-        }
+        body { margin: 0; padding: 0; font-family: 'Almendra', serif; background: black; color: white; overflow: hidden; height: 100vh; }
+        #start { display: flex; align-items: center; justify-content: center; height: 100vh; position: relative; }
+        #loginBar { position: absolute; left: 0; top: 50%; transform: translateY(-50%); background: #39d353; padding: 60px 15px; font-size: 24px; font-weight: bold; color: black; cursor: pointer; z-index: 20; border-radius: 0 15px 15px 0; writing-mode: vertical-rl; text-orientation: upright; width: 60px; text-align: center; }
+        #logo-container img { width: 780px; max-width: 70vw; filter: drop-shadow(0 0 60px rgba(255, 0, 0, 0.9)); }
         
-        #btn-yt { transition-delay: 0.0s; }
-        #btn-hist { transition-delay: 0.1s; }
-        #btn-web { transition-delay: 0.2s; }
-
-        .side-btn:hover { width: 95px; padding-right: 35px; }
-        
-        .youtube { background: #ff8c00; color: black; }
-        .story { background: #5b5bff; color: white; }
-        .web { background: #00cfd1; color: black; }
-
-        /* MODALS */
-        .modal-overlay {
-            display: none; position: fixed; z-index: 1000;
-            left: 0; top: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95);
-            justify-content: center; align-items: center;
-        }
+        .modal-overlay { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); justify-content: center; align-items: center; }
         .modal-box { background: #1a1a1a; padding: 40px; width: 450px; border: 2px solid #333; text-align: center; }
-        .modal-box h1 { color: #ff3131; text-decoration: underline; }
-        .modal-box input, .modal-box textarea {
-            width: 100%; padding: 12px; margin-bottom: 20px;
-            background: #000; color: #39d353; border: 1px solid #444;
-            font-family: 'Almendra', serif; font-size: 20px;
-        }
-        .btn-row { display: flex; gap: 10px; }
-        .loginBtn { padding: 12px; border: none; cursor: pointer; font-weight: bold; font-family: 'Almendra', serif; flex: 1; }
-        .green { background: #39d353; color: black; }
-        .yellow { background: #ffd600; color: black; }
-        .red { background: #d50000; color: white; }
+        .modal-box input { width: 100%; padding: 12px; margin-bottom: 20px; background: #000; color: #39d353; border: 1px solid #444; font-family: 'Almendra'; font-size: 20px; }
 
-        /* DASHBOARD */
         #dashboard { display: none; position: relative; width: 100vw; height: 100vh; background: black; }
-        #bg-bull { position: absolute; left: 50%; top: 45%; transform: translate(-50%, -50%); width: 850px; z-index: 1; filter: drop-shadow(0 0 40px rgba(255, 0, 0, 0.4)); }
+        #bg-bull { position: absolute; left: 50%; top: 45%; transform: translate(-50%, -50%); width: 850px; z-index: 1; opacity: 0.5; }
         #top-bar { position: absolute; top: 20px; right: 40px; display: flex; align-items: center; gap: 20px; z-index: 100; }
-
-        .panel { position: absolute; background: rgba(20, 20, 20, 0.95); border: 1px solid #444; padding: 15px; z-index: 10; box-shadow: 0 0 15px rgba(0,0,0,0.5); }
+        
+        .panel { position: absolute; background: rgba(20, 20, 20, 0.95); border: 1px solid #444; padding: 15px; z-index: 10; display: none; }
         .panel h2 { color: #ff3131; margin: 0 0 10px 0; font-size: 24px; text-decoration: underline; }
-        .panel button { display: block; width: 100%; margin: 8px 0; background: #39d353; border: none; padding: 10px; font-family: 'Almendra', serif; font-weight: bold; cursor: pointer; }
-
+        .panel button { display: block; width: 100%; margin: 8px 0; background: #39d353; border: none; padding: 10px; font-family: 'Almendra'; font-weight: bold; cursor: pointer; }
+        
         #personal { left: 40px; top: 40px; width: 240px; }
         #blacklist { left: 40px; top: 350px; width: 240px; }
         #blacklistAdmin { left: 40px; bottom: 40px; width: 440px; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         #admin { right: 40px; top: 100px; width: 260px; }
         #elo { right: 40px; top: 380px; width: 260px; }
-        #chat-btn { position: absolute; right: 40px; bottom: 40px; background: #ff8c00; padding: 15px 60px; font-size: 28px; font-weight: bold; cursor: pointer; z-index: 10; font-family: 'Almendra'; }
+        #chat-btn { position: absolute; right: 40px; bottom: 40px; background: #ff8c00; padding: 15px 60px; font-size: 28px; font-weight: bold; cursor: pointer; z-index: 10; font-family: 'Almendra'; display: none; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     </style>
 </head>
 <body>
 
 <div id="start">
-    <div id="loginBar" onclick="openLogin()">LOGIN</div>
+    <div id="loginBar" onclick="document.getElementById('pinModal').style.display='flex'">LOGIN</div>
     <div id="logo-container"><img src="bulls_start.jpg"></div>
-    <div id="menu">
-        <button id="btn-yt" class="side-btn youtube" onclick="window.open('https://www.youtube.com/@DarkBullsGruppe', '_blank')">YOUTUBE</button>
-        <button id="btn-hist" class="side-btn story" onclick="alert('Story folgt!')">HISTORIES</button>
-        <button id="btn-web" class="side-btn web" onclick="window.open('https://darkbulls.jimdofree.com/', '_blank')">INTERNET</button>
-    </div>
 </div>
 
 <div id="pinModal" class="modal-overlay">
@@ -126,38 +44,23 @@
         <h1>ANMELDUNG</h1>
         <input type="text" id="nameInput" placeholder="Name">
         <input type="password" id="pinInput" placeholder="PIN">
-        <div class="btn-row">
-            <button class="loginBtn green" onclick="login()">ANMELDEN</button>
-            <button class="loginBtn yellow" onclick="openHelp()">HILFE</button>
-            <button class="loginBtn red" onclick="closeLogin()">ABBRUCH</button>
-        </div>
-    </div>
-</div>
-
-<div id="helpModal" class="modal-overlay">
-    <div class="modal-box">
-        <h1>ADMIN HILFE</h1>
-        <textarea id="helpText" rows="4" placeholder="Schreib hier dein Anliegen..."></textarea>
-        <div class="btn-row">
-            <button class="loginBtn green" onclick="sendHelp()">ABSENDEN</button>
-            <button class="loginBtn red" onclick="closeHelp()">ZURÜCK</button>
-        </div>
+        <button onclick="login()" style="width:100%; padding:15px; background:#39d353; border:none; cursor:pointer; font-family:'Almendra'; font-weight:bold;">ANMELDEN</button>
     </div>
 </div>
 
 <div id="dashboard">
     <div id="top-bar">
-        <div style="font-size: 22px; color:#ff3131">Angemeldet als: <span id="userName"></span> (<span id="userRole"></span>)</div>
-        <button onclick="logout()" style="background:#d50000; color:white; border:none; padding:8px 25px; cursor:pointer; font-family:'Almendra'; font-weight:bold;">LOGOUT</button>
+        <div style="font-size: 22px; color:#ff3131"><span id="userName"></span> (<span id="userRole"></span>)</div>
+        <button onclick="location.reload()" style="background:#d50000; color:white; border:none; padding:8px 25px; cursor:pointer; font-family:'Almendra';">LOGOUT</button>
     </div>
 
     <img src="bulls_dashboard.jpg" id="bg-bull">
     
     <div class="panel" id="personal">
         <h2>Persönlich</h2>
-        <button>Pin ändern</button>
-        <button>Statistiken</button>
-        <button>Tipps</button>
+        <button id="btn-pin">Pin ändern</button>
+        <button id="btn-stats">Statistiken</button>
+        <button id="btn-tipps">Tipps</button>
     </div>
 
     <div class="panel" id="blacklist">
@@ -169,18 +72,18 @@
     <div class="panel" id="blacklistAdmin">
         <h2>Black Liste Pflege</h2>
         <div class="grid">
-            <button style="font-size:14px">Gemeldete Spieler</button>
-            <button>Pflege</button>
-            <button>Eintragen</button>
-            <button>Volle Ansicht</button>
+            <button id="bl-gemeldet" style="font-size:14px">Gemeldete Spieler</button>
+            <button id="bl-pflege">Pflege</button>
+            <button id="bl-eintragen">Eintragen</button>
+            <button id="bl-ansicht">Volle Ansicht</button>
         </div>
     </div>
 
     <div class="panel" id="admin">
         <h2>Admin</h2>
-        <button>Einstellungen</button>
-        <button>Statistiken</button>
-        <button style="background: #ffd600;" onclick="alert('Postfach: Keine neuen Nachrichten.')">Hilfe-Anfragen</button>
+        <button id="adm-einst">Einstellungen</button>
+        <button id="adm-stats">Statistiken</button>
+        <button id="adm-hilfe" style="background: #ffd600;">Hilfe-Anfragen</button>
     </div>
 
     <div class="panel" id="elo">
@@ -193,73 +96,75 @@
 </div>
 
 <script>
-    // DEINE GOOGLE SHEET DATEN
     const SHEET_ID = '1dc3akNMKE9pMP8HCqxleGzBo0kVc5IcYzFQQC2ENiSY';
     const GID = '598251300';
     const URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID}`;
 
     let users = [];
 
-    // Lade die Daten beim Starten der Seite
-    async function loadCloudData() {
+    async function loadData() {
         try {
-            const response = await fetch(URL);
-            const data = await response.text();
+            const res = await fetch(URL);
+            const data = await res.text();
             const rows = data.split('\n').slice(1);
-            
-            users = rows.map(row => {
-                const col = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+            users = rows.map(r => {
+                const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                 const clean = (s) => s ? s.replace(/["']/g, "").trim() : "";
-                return {
-                    name: clean(col[0]),      // Spalte A
-                    allianz: clean(col[1]),   // Spalte B
-                    pin: clean(col[2]),       // Spalte C
-                    role: clean(col[3])       // Spalte D
-                };
+                return { name: clean(c[0]), pin: clean(c[2]), role: clean(c[3]) };
             });
-            console.log("Cloud-Daten geladen!");
-        } catch (error) {
-            console.error("Cloud-Fehler:", error);
-        }
+        } catch (e) { console.error("Cloud-Fehler"); }
     }
-
-    function openLogin() { document.getElementById("pinModal").style.display = "flex"; }
-    function closeLogin() { document.getElementById("pinModal").style.display = "none"; }
-    function openHelp() { document.getElementById("pinModal").style.display = "none"; document.getElementById("helpModal").style.display = "flex"; }
-    function closeHelp() { document.getElementById("helpModal").style.display = "none"; document.getElementById("pinModal").style.display = "flex"; }
-    function sendHelp() { alert("Nachricht an Admin gesendet!"); closeHelp(); }
 
     function login() {
-        let inputName = document.getElementById("nameInput").value.trim();
-        let inputPin = document.getElementById("pinInput").value.trim();
-        
-        // Suche User in den Cloud-Daten
-        let user = users.find(u => u.name.toLowerCase() === inputName.toLowerCase() && u.pin === inputPin);
-        
-        if (user) {
+        let name = document.getElementById("nameInput").value.trim();
+        let pin = document.getElementById("pinInput").value.trim();
+        let u = users.find(user => user.name.toLowerCase() === name.toLowerCase() && user.pin === pin);
+
+        if (u) {
             document.getElementById("start").style.display = "none";
-            closeLogin();
+            document.getElementById("pinModal").style.display = "none";
             document.getElementById("dashboard").style.display = "block";
-            document.getElementById("userName").innerText = user.name;
-            document.getElementById("userRole").innerText = user.role;
+            document.getElementById("userName").innerText = u.name;
+            document.getElementById("userRole").innerText = u.role;
+            applyRules(u.role);
+        } else { alert("Login fehlgeschlagen!"); }
+    }
+
+    function applyRules(role) {
+        // Hilfsfunktion zum Verstecken/Anzeigen
+        const show = (id) => document.getElementById(id).style.display = "block";
+        const hide = (id) => document.getElementById(id).style.display = "none";
+
+        if (role === "Gast") {
+            show("personal"); 
+            hide("btn-stats"); hide("btn-tipps"); // Nur Pin ändern bleibt
+            show("chat-btn");
+        } 
+        else if (role === "Mitglied" || role === "Kampfdivision" || role === "Elo" || role === "Buchhalter" || role === "Ausbilder" || role === "Offizier" || role === "Admin") {
+            show("personal"); show("blacklist"); show("chat-btn");
             
-            // HIER DIE ÄNDERUNG: Wir lassen alle Panels "block" (sichtbar), egal welche Rolle
-            document.getElementById("admin").style.display = "block";
-            document.getElementById("blacklistAdmin").style.display = "block";
-            document.getElementById("elo").style.display = "block";
+            if (role === "Kampfdivision") hide("btn-tipps");
+            if (role === "Elo" || role === "Admin") show("elo");
             
-        } else {
-            alert("Name oder PIN falsch oder Cloud noch nicht geladen!");
+            if (role === "Buchhalter" || role === "Admin") {
+                show("blacklistAdmin");
+            }
+            
+            if (role === "Ausbilder" || role === "Offizier") {
+                show("blacklistAdmin");
+                hide("bl-gemeldet"); hide("bl-pflege"); hide("bl-eintragen"); // Nur volle Ansicht bleibt
+                show("admin");
+                hide("adm-einst"); // Nur Stats und Hilfe bleiben
+            }
+
+            if (role === "Admin") {
+                show("admin"); show("blacklistAdmin"); show("elo");
+                show("adm-einst"); show("bl-gemeldet"); show("bl-pflege"); show("bl-eintragen");
+            }
         }
     }
 
-    function logout() {
-        location.reload(); // Einfachste Art für Logout & Daten-Refresh
-    }
-
-    // Beim Laden der Seite direkt Cloud-Daten holen
-    window.onload = loadCloudData;
+    window.onload = loadData;
 </script>
-
 </body>
 </html>
