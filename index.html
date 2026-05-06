@@ -1,184 +1,32 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <title>Dark Bulls - Admin Control</title>
-    <link href="https://fonts.googleapis.com/css2?family=Almendra:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        body { margin: 0; font-family: 'Almendra', serif; background: black; color: white; overflow: hidden; height: 100vh; }
-        #start { display: flex; align-items: center; justify-content: center; height: 100vh; }
-        #loginBar { position: absolute; left: 0; top: 50%; transform: translateY(-50%); background: #39d353; padding: 60px 15px; font-size: 24px; font-weight: bold; color: black; cursor: pointer; border-radius: 0 15px 15px 0; writing-mode: vertical-rl; text-orientation: upright; z-index: 20; }
-        #logo-container img { width: 700px; max-width: 80vw; filter: drop-shadow(0 0 30px red); }
-        
-        #dashboard { display: none; width: 100vw; height: 100vh; position: relative; background: black; }
-        #bg-bull { position: absolute; left: 50%; top: 45%; transform: translate(-50%, -50%); width: 800px; opacity: 0.4; z-index: 1; }
-        
-        .panel { position: absolute; background: rgba(20, 20, 20, 0.95); border: 1px solid #444; padding: 15px; z-index: 10; width: 240px; }
-        #admin { right: 40px; top: 100px; border-color: #ffd600; }
-        
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; }
-        .modal-box { background: #1a1a1a; padding: 30px; width: 450px; border: 2px solid #333; text-align: center; max-height: 90vh; overflow-y: auto; }
-        input, select { width: 100%; padding: 12px; margin: 8px 0; background: #000; color: #39d353; border: 1px solid #444; font-family: 'Almendra'; font-size: 18px; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; margin: 5px 0; background: #39d353; border: none; font-weight: bold; cursor: pointer; font-family: 'Almendra'; font-size: 16px; }
-        .btn-red { background: #d50000; color: white; }
-        .btn-yellow { background: #ffd600; color: black; }
-        
-        h2 { color: #ff3131; margin-top: 0; text-decoration: underline; }
-        label { display: block; text-align: left; color: #aaa; font-size: 14px; margin-top: 10px; }
-    </style>
-</head>
-<body>
-
-<div id="start">
-    <div id="loginBar" onclick="document.getElementById('loginModal').style.display='flex'">LOGIN</div>
-    <div id="logo-container"><img src="bulls_start.jpg"></div>
-</div>
-
-<div id="loginModal" class="modal">
-    <div class="modal-box">
-        <h1>ANMELDUNG</h1>
-        <input type="text" id="logName" placeholder="Name">
-        <input type="password" id="logPin" placeholder="PIN">
-        <button onclick="doLogin()">DASHBOARD ÖFFNEN</button>
-        <button class="btn-red" onclick="document.getElementById('loginModal').style.display='none'">ABBRECHEN</button>
-    </div>
-</div>
-
-<div id="settingsModal" class="modal">
-    <div class="modal-box">
-        <h2 style="color:#39d353">SPIELER VERWALTUNG</h2>
-        
-        <label>Spieler auswählen:</label>
-        <select id="selPlayer"></select>
-        
-        <label>Neue Rolle zuweisen:</label>
-        <select id="selRole">
-            <option value="Gast">Gast</option>
-            <option value="Mitglied">Mitglied</option>
-            <option value="Kampfdivision">Kampfdivision</option>
-            <option value="Elo">Elo</option>
-            <option value="Buchhalter">Buchhalter</option>
-            <option value="Ausbilder">Ausbilder</option>
-            <option value="Offizier">Offizier</option>
-            <option value="Admin">Admin</option>
-        </select>
-        <button onclick="saveAction('updateRole')">ROLLE AKTUALISIEREN</button>
-        <button class="btn-yellow" onclick="saveAction('resetPin')">PIN AUF 1234 ZURÜCKSETZEN</button>
-        
-        <hr style="border:0; border-top:1px solid #444; margin:20px 0;">
-        
-        <h2 style="color:#39d353">NEUEN SPIELER ANLEGEN</h2>
-        <input type="text" id="newName" placeholder="Name des neuen Spielers">
-        <button onclick="saveAction('newUser')">SPIELER SPEICHERN</button>
-        
-        <button class="btn-red" style="margin-top:20px" onclick="document.getElementById('settingsModal').style.display='none'">SCHLIESSEN</button>
-    </div>
-</div>
-
-<div id="dashboard">
-    <img src="bulls_dashboard.jpg" id="bg-bull">
-    <div id="top-bar" style="position:absolute; top:20px; right:40px; z-index:100;">
-        <span id="displayUser" style="color:#ff3131; font-size:20px; margin-right:20px;"></span>
-        <button onclick="location.reload()" style="width:100px; background:red; color:white; display:inline-block;">LOGOUT</button>
-    </div>
-
-    <div class="panel" id="admin">
-        <h2>Admin</h2>
-        <button onclick="openSettings()">Einstellungen</button>
-        <button onclick="alert('Statistiken folgen...')">Statistiken</button>
-    </div>
-</div>
-
-<script>
-    const SHEET_ID = '1HC3U1u4rMU6eVem-wPL9OVDb2bRQNztlig4FQry78yQ';
-    const GID = '2004474173'; 
-    const READ_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID}`;
-    // Deine neue Web-App URL:
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzPsnss_E2hlpuZWuJe3DB3_92PkUG_IM1ETN10vjOBmEEyDrcLZleOSX0WSOm9DPSV/exec';
-
-    let users = [];
-
-    async function loadData() {
-        try {
-            const res = await fetch(READ_URL);
-            const text = await res.text();
-            const rows = text.split('\n').slice(1);
-            users = rows.map(r => {
-                const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-                const clean = (s) => s ? s.replace(/"/g, "").trim() : "";
-                return { name: clean(c[0]), pin: clean(c[2]), role: clean(c[3]) };
-            });
-            console.log("Daten geladen:", users.length, "Spieler");
-        } catch (e) {
-            alert("Verbindungsfehler zur Tabelle!");
-        }
+function doPost(e) {
+  var ss = SpreadsheetApp.openById("1HC3U1u4rMU6eVem-wPL9OVDb2bRQNztlig4FQry78yQ");
+  var sheet = ss.getSheets()[0]; 
+  var data = JSON.parse(e.postData.contents);
+  var values = sheet.getDataRange().getValues();
+  
+  // 1. ROLLE AKTUALISIEREN
+  if (data.action === "updateRole") {
+    for (var i = 1; i < values.length; i++) {
+      if (values[i][0].toString().toLowerCase() === data.playerName.toLowerCase()) {
+        sheet.getRange(i + 1, 4).setValue(data.newRole); // Spalte D
+        return ContentService.createTextOutput("Rolle geändert");
+      }
     }
-
-    function doLogin() {
-        const n = document.getElementById("logName").value.trim();
-        const p = document.getElementById("logPin").value.trim();
-        const u = users.find(x => x.name.toLowerCase() === n.toLowerCase() && x.pin === p);
-        
-        if(u) {
-            document.getElementById("start").style.display = "none";
-            document.getElementById("loginModal").style.display = "none";
-            document.getElementById("dashboard").style.display = "block";
-            document.getElementById("displayUser").innerText = u.name + " (" + u.role + ")";
-            // Admin Bereich nur für Admins zeigen
-            document.getElementById("admin").style.display = (u.role === "Admin") ? "block" : "none";
-        } else {
-            alert("Name oder PIN falsch!");
-        }
+  }
+  
+  // 2. PIN ZURÜCKSETZEN
+  if (data.action === "updatePin") {
+    for (var i = 1; i < values.length; i++) {
+      if (values[i][0].toString().toLowerCase() === data.playerName.toLowerCase()) {
+        sheet.getRange(i + 1, 3).setValue(data.newPin); // Spalte C
+        return ContentService.createTextOutput("PIN geändert");
+      }
     }
+  }
 
-    function openSettings() {
-        const s = document.getElementById("selPlayer");
-        s.innerHTML = users.map(u => `<option value="${u.name}">${u.name} [${u.role}]</option>`).join('');
-        document.getElementById("settingsModal").style.display = "flex";
-    }
-
-    async function saveAction(action) {
-        let payload = { action: action };
-        
-        if (action === 'updateRole') {
-            payload.playerName = document.getElementById("selPlayer").value;
-            payload.newRole = document.getElementById("selRole").value;
-            if(!confirm(`${payload.playerName} zum ${payload.newRole} machen?`)) return;
-        } 
-        else if (action === 'newUser') {
-            payload.name = document.getElementById("newName").value.trim();
-            payload.role = "Mitglied"; // Standardrolle
-            if(!payload.name) return alert("Bitte Namen eingeben!");
-        }
-        else if (action === 'resetPin') {
-            payload.playerName = document.getElementById("selPlayer").value;
-            payload.action = "updatePin"; // Im Script anpassen oder hier nutzen
-            payload.newPin = "1234";
-            if(!confirm(`PIN für ${payload.playerName} auf 1234 setzen?`)) return;
-        }
-
-        // Animation oder Ladehinweis
-        const btn = event.target;
-        const originalText = btn.innerText;
-        btn.innerText = "SENDET...";
-        btn.disabled = true;
-
-        try {
-            await fetch(SCRIPT_URL, {
-                method: "POST",
-                mode: "no-cors", // Wichtig für Google Scripts
-                body: JSON.stringify(payload)
-            });
-            alert("Befehl gesendet! Die Tabelle wird aktualisiert. Die Seite lädt neu.");
-            location.reload();
-        } catch (e) {
-            alert("Fehler beim Senden!");
-            btn.innerText = originalText;
-            btn.disabled = false;
-        }
-    }
-
-    window.onload = loadData;
-</script>
-</body>
-</html>
+  // 3. NEUER SPIELER
+  if (data.action === "newUser") {
+    sheet.appendRow([data.name, "Dark Bulls", "1234", data.role]); // Name, Allianz, PIN, Rolle
+    return ContentService.createTextOutput("User angelegt");
+  }
+}
