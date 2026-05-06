@@ -9,12 +9,12 @@
         body { margin: 0; padding: 0; font-family: 'Almendra', serif; background: black; color: white; overflow: hidden; height: 100vh; }
         
         /* STARTSEITE */
-        #start { display: flex; align-items: center; justify-content: center; height: 100vh; position: relative; }
+        #start { display: flex; align-items: center; justify-content: center; height: 100vh; position: relative; background: url('bulls_start.jpg') center/cover; }
         #loginBar { position: absolute; left: 0; top: 50%; transform: translateY(-50%); background: #39d353; padding: 60px 15px; font-size: 24px; font-weight: bold; color: black; cursor: pointer; z-index: 20; border-radius: 0 15px 15px 0; writing-mode: vertical-rl; text-orientation: upright; transition: 0.4s; width: 60px; text-align: center; }
         #loginBar:hover { width: 95px; padding-left: 35px; }
         #logo-container img { width: 780px; max-width: 70vw; filter: drop-shadow(0 0 60px rgba(255, 0, 0, 0.9)); }
 
-        /* RECHTE BUTTONS (Wieder da!) */
+        /* RECHTE BUTTONS */
         #menu-rechts { position: absolute; right: 0; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 20px; z-index: 10; }
         .side-btn { padding: 30px 20px; font-size: 20px; font-weight: bold; border: none; cursor: pointer; font-family: 'Almendra'; writing-mode: vertical-rl; text-orientation: upright; border-radius: 15px 0 0 15px; transition: 0.4s; width: 60px; text-align: center; }
         #btn-yt { background: #ff8c00; }
@@ -25,24 +25,30 @@
         /* MODALS */
         .modal-overlay { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; }
         .modal-box { background: #1a1a1a; padding: 40px; width: 450px; border: 2px solid #333; text-align: center; }
-        .modal-box h1 { color: #ff3131; text-decoration: underline; }
-        .modal-box input { width: 100%; padding: 12px; margin-bottom: 20px; background: #000; color: #39d353; border: 1px solid #444; font-size: 20px; font-family: 'Almendra'; }
+        .modal-box h1 { color: #ff3131; text-decoration: underline; margin-top: 0; }
+        .modal-box input { width: 100%; padding: 12px; margin-bottom: 20px; background: #000; color: #39d353; border: 1px solid #444; font-size: 20px; font-family: 'Almendra'; box-sizing: border-box; }
         .btn-row { display: flex; gap: 10px; }
-        .loginBtn { padding: 12px; border: none; cursor: pointer; font-weight: bold; font-family: 'Almendra'; flex: 1; }
+        .loginBtn { padding: 12px; border: none; cursor: pointer; font-weight: bold; font-family: 'Almendra'; flex: 1; font-size: 16px; }
         .green { background: #39d353; color: black; }
         .red { background: #d50000; color: white; }
         .yellow { background: #ffd600; color: black; }
 
         /* DASHBOARD */
         #dashboard { display: none; position: relative; width: 100vw; height: 100vh; background: black; }
-        #bg-bull { position: absolute; left: 50%; top: 45%; transform: translate(-50%, -50%); width: 850px; opacity: 0.3; }
-        .panel { position: absolute; background: rgba(20, 20, 20, 0.9); border: 1px solid #444; padding: 15px; z-index: 10; width: 250px; }
-        .panel h2 { color: #ff3131; margin: 0 0 10px 0; text-decoration: underline; }
-        .panel button { width: 100%; margin: 5px 0; background: #39d353; border: none; padding: 10px; font-family: 'Almendra'; font-weight: bold; cursor: pointer; }
+        #bg-bull { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 850px; opacity: 0.4; z-index: 1; }
+        
+        .panel { position: absolute; background: rgba(20, 20, 20, 0.9); border: 1px solid #444; padding: 20px; z-index: 10; width: 280px; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+        .panel h2 { color: #ff3131; margin: 0 0 15px 0; text-decoration: underline; font-size: 24px; }
+        .panel button { width: 100%; margin: 8px 0; background: #39d353; border: none; padding: 12px; font-family: 'Almendra'; font-weight: bold; cursor: pointer; font-size: 16px; transition: 0.2s; }
+        .panel button:hover { background: #2fb545; transform: scale(1.02); }
+        
         #personal { left: 40px; top: 40px; }
-        #admin { right: 40px; top: 100px; display: none; }
-        #blacklistPanel { left: 40px; bottom: 40px; width: 350px; display: none; }
-        #top-bar { position: absolute; top: 20px; right: 40px; display: flex; gap: 20px; z-index: 100; }
+        #admin-panel { right: 40px; top: 100px; display: none; }
+        #blacklist-panel { left: 40px; bottom: 40px; width: 350px; display: none; }
+        
+        #top-right { position: absolute; top: 20px; right: 40px; display: flex; align-items: center; gap: 20px; z-index: 100; }
+        .user-info { color: #39d353; font-size: 22px; font-weight: bold; }
+        .logout-btn { background: #d50000; color: white; border: none; padding: 8px 20px; cursor: pointer; font-family: 'Almendra'; font-weight: bold; border-radius: 5px; }
     </style>
 </head>
 <body>
@@ -50,7 +56,6 @@
 <div id="start">
     <div id="loginBar" onclick="openLogin()">LOGIN</div>
     <div id="logo-container"><img src="bulls_start.jpg" alt="Dark Bulls"></div>
-    
     <div id="menu-rechts">
         <button id="btn-yt" class="side-btn" onclick="window.open('https://www.youtube.com/@DarkBullsGruppe', '_blank')">YOUTUBE</button>
         <button id="btn-hist" class="side-btn" onclick="alert('Histories folgen!')">HISTORIES</button>
@@ -70,71 +75,61 @@
     </div>
 </div>
 
-<div id="forcePinModal" class="modal-overlay">
-    <div class="modal-box">
-        <h1 style="color: #ffd600;">SICHERHEITS-CHECK</h1>
-        <p>Deine PIN muss geändert werden.</p>
-        <input type="password" id="newPin1" placeholder="Neue PIN">
-        <input type="password" id="newPin2" placeholder="Wiederholen">
-        <button class="loginBtn green" onclick="saveNewPin()">SPEICHERN & STARTEN</button>
-    </div>
-</div>
-
 <div id="dashboard">
-    <div id="top-bar">
-        <div id="statusInfo" style="color:#39d353; font-size: 22px;"></div>
-        <button onclick="location.reload()" style="background:#d50000; color:white; border:none; padding:8px 20px; cursor:pointer;">LOGOUT</button>
+    <div id="top-right">
+        <div id="statusInfo" class="user-info"></div>
+        <button class="logout-btn" onclick="location.reload()">LOGOUT</button>
     </div>
+    
     <img src="bulls_dashboard.jpg" id="bg-bull">
     
     <div class="panel" id="personal">
         <h2>Mein Bereich</h2>
-        <button onclick="alert('Statistik für ' + currentUser.name)">Statistik</button>
-        <button onclick="alert('Allianz: ' + currentUser.allianz)">Meine Allianz</button>
+        <button onclick="alert('Statistik wird geladen...')">Statistik</button>
+        <button id="alliBtn">Meine Allianz</button>
     </div>
 
-    <div class="panel" id="admin">
+    <div class="panel" id="admin-panel">
         <h2>Admin Panel</h2>
-        <button class="yellow" onclick="adminResetAction()">Spieler PIN Reset</button>
+        <button class="yellow" onclick="adminReset()">Spieler PIN Reset</button>
+        <button onclick="alert('Mitgliederliste wird vorbereitet...')">Mitgliederliste</button>
     </div>
 
-    <div class="panel" id="blacklistPanel">
-        <h2>Fairplay Suche</h2>
-        <input type="text" id="searchPlayer" placeholder="Spieler suchen..." style="width:90%; padding:5px; margin-bottom:10px; background:#000; color:#39d353; border:1px solid #444;">
-        <button onclick="alert('Suche läuft...')">Prüfen</button>
+    <div class="panel" id="blacklist-panel">
+        <h2>FairPlay Suche</h2>
+        <input type="text" id="searchPlayer" placeholder="Name eingeben..." style="width:100%; padding:10px; margin-bottom:10px; background:#000; color:#39d353; border:1px solid #444; box-sizing: border-box; font-family:'Almendra';">
+        <button onclick="alert('Spieler-Check läuft...')">Prüfen</button>
     </div>
 </div>
 
 <script>
-    // --- AKTUELLE CLOUD-KONFIGURATION ---
     const SHEET_ID = '1dc3akNMKE9pMP8HCqxleGzBo0kVc5IcYzFQQC2ENiSY';
-    const GID = '598251300'; 
+    const GID = '598251300';
     const URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID}`;
 
     let users = [];
     let currentUser = null;
 
-    async function fetchCloudData() {
+    async function loadData() {
         try {
-            const response = await fetch(URL);
-            if (!response.ok) throw new Error();
-            const data = await response.text();
-            const rows = data.split('\n').slice(1);
+            const res = await fetch(URL);
+            const text = await res.text();
+            const rows = text.split('\n').slice(1);
             
-            users = rows.map(row => {
-                const col = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+            users = rows.map(r => {
+                const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                 const clean = (s) => s ? s.replace(/["']/g, "").trim() : "";
                 return {
-                    name: clean(col[0]),      // Spalte A
-                    allianz: clean(col[1]),   // Spalte B
-                    pin: clean(col[2]),       // Spalte C
-                    role: clean(col[3]),      // Spalte D
-                    needsReset: clean(col[4]) === "TRUE" // Spalte E
+                    name: clean(c[0]),    // Spalte A: Name
+                    allianz: clean(c[1]), // Spalte B: Allianz
+                    pin: clean(c[2]),     // Spalte C: PIN
+                    role: clean(c[3]),    // Spalte D: Rolle
+                    needsReset: clean(c[4]) === "TRUE" // Spalte E: Reset
                 };
             });
-            console.log("Cloud-Synchronisierung aktiv!");
-        } catch (error) {
-            alert("Verbindungsfehler! Bitte prüfe die Freigabe der Google-Tabelle.");
+            console.log("Daten synchronisiert.");
+        } catch (e) {
+            console.error("Cloud-Verbindungsfehler");
         }
     }
 
@@ -142,53 +137,44 @@
     function closeLogin() { document.getElementById("pinModal").style.display = "none"; }
 
     function login() {
-        const nameInput = document.getElementById("nameInput").value.trim().toLowerCase();
-        const pinInput = document.getElementById("pinInput").value.trim();
-        const user = users.find(u => u.name.toLowerCase() === nameInput && u.pin === pinInput);
+        const inputName = document.getElementById("nameInput").value.trim().toLowerCase();
+        const inputPin = document.getElementById("pinInput").value.trim();
+        
+        const user = users.find(u => u.name.toLowerCase() === inputName && u.pin === inputPin);
 
         if (user) {
             currentUser = user;
-            if (user.needsReset) {
-                document.getElementById("pinModal").style.display = "none";
-                document.getElementById("forcePinModal").style.display = "flex";
-            } else {
-                launchDashboard(user);
-            }
+            showDashboard(user);
         } else {
-            alert("Login fehlgeschlagen! Name oder PIN falsch.");
+            alert("Login fehlgeschlagen! Name oder PIN nicht korrekt.");
         }
     }
 
-    function launchDashboard(user) {
+    function showDashboard(user) {
         document.getElementById("start").style.display = "none";
         document.getElementById("pinModal").style.display = "none";
         document.getElementById("dashboard").style.display = "block";
         document.getElementById("statusInfo").innerText = `${user.name} | ${user.role}`;
+        document.getElementById("alliBtn").innerText = `Allianz: ${user.allianz}`;
 
+        // Rechteprüfung
         if (user.role === "Admin") {
-            document.getElementById("admin").style.display = "block";
-            document.getElementById("blacklistPanel").style.display = "block";
+            document.getElementById("admin-panel").style.display = "block";
+            document.getElementById("blacklist-panel").style.display = "block";
         } else if (["Offizier", "Mitglied", "Ausbilder", "Elo"].includes(user.role)) {
-            document.getElementById("blacklistPanel").style.display = "block";
+            document.getElementById("blacklist-panel").style.display = "block";
         }
     }
 
-    function saveNewPin() {
-        if(document.getElementById("newPin1").value === document.getElementById("newPin2").value) {
-            alert("PIN lokal geändert. Bitte trage die neue PIN auch in der Google Tabelle ein!");
-            location.reload();
-        } else { alert("PINs nicht identisch!"); }
-    }
-
-    function adminResetAction() {
-        const target = prompt("Spieler für Reset:");
+    function adminReset() {
+        const target = prompt("Name des Spielers für PIN-Reset:");
         if (target) {
-            const pass = Math.random().toString(36).substring(2, 6).toUpperCase();
-            alert(`Kopie für ${target}:\nHallo, dein PIN wurde auf ${pass} zurückgesetzt. Bitte nach Login ändern!`);
+            const temp = Math.random().toString(36).substring(2, 6).toUpperCase();
+            alert(`Kopiere diesen Text für ${target}:\n\nHallo, dein PIN wurde auf ${temp} zurückgesetzt. Bitte logge dich ein und ändere ihn sofort!`);
         }
     }
 
-    window.onload = fetchCloudData;
+    window.onload = loadData;
 </script>
 </body>
 </html>
