@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dark Bulls - Dashboard V3.0</title>
+    <title>Dark Bulls - Dashboard V3.1</title>
     <link href="https://fonts.googleapis.com/css2?family=Almendra:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body { margin: 0; padding: 0; font-family: 'Almendra', serif; background: black; color: white; overflow: hidden; height: 100vh; }
@@ -12,7 +12,7 @@
         #start { display: flex; align-items: center; justify-content: center; height: 100vh; position: relative; }
         #logo-container img { width: 780px; max-width: 70vw; filter: drop-shadow(0 0 60px rgba(255, 0, 0, 0.9)); }
         
-        /* Der Grüne Login-Balken links */
+        /* Grüner Login-Balken links */
         #loginBar { position: absolute; left: 0; top: 50%; transform: translateY(-50%); background: #39d353; padding: 60px 15px; font-size: 24px; font-weight: bold; color: black; cursor: pointer; z-index: 100; border-radius: 0 15px 15px 0; writing-mode: vertical-rl; text-orientation: upright; width: 60px; text-align: center; box-shadow: 5px 0 15px rgba(0,255,0,0.3); }
 
         /* Die 3 Buttons rechts */
@@ -22,7 +22,7 @@
         #btn-hist { background: #5b5bff; color: white; }
         #btn-web { background: #00cfd1; }
 
-        /* Login Modal (Das Gute) */
+        /* Login Modal */
         .modal-overlay { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); justify-content: center; align-items: center; }
         .modal-box { background: #1a1a1a; padding: 40px; width: 450px; border: 3px solid #333; text-align: center; border-radius: 10px; box-shadow: 0 0 50px rgba(255,0,0,0.5); }
         .modal-box h1 { color: #ff3131; text-decoration: underline; font-size: 35px; margin-bottom: 25px; }
@@ -56,36 +56,8 @@
 
 <div id="start">
     <div id="loginBar" onclick="document.getElementById('pinModal').style.display='flex'">LOGIN</div>
-
-    <div id="logo-container">
-        <img src="bulls_start.jpg">
-    </div>
-    
+    <div id="logo-container"><img src="bulls_start.jpg"></div>
     <div id="side-menu">
         <button id="btn-yt" class="info-btn" onclick="window.open('https://www.youtube.com/@DarkBullsGruppe')">YOUTUBE</button>
         <button id="btn-hist" class="info-btn" onclick="alert('Histories folgen!')">HISTORIES</button>
-        <button id="btn-web" class="info-btn" onclick="window.open('https://darkbulls.jimdofree.com/')">INTERNET</button>
-    </div>
-</div>
-
-<div id="pinModal" class="modal-overlay">
-    <div class="modal-box">
-        <h1>ANMELDUNG</h1>
-        <input type="text" id="nameInput" placeholder="Spielername">
-        <input type="password" id="pinInput" placeholder="PIN">
-        
-        <div class="login-btn-row">
-            <button class="logbtn btn-green" onclick="login()">Anmelden</button>
-            <button class="logbtn btn-yellow" onclick="alert('PIN vergessen? Admin fragen!')">Hilfe</button>
-            <button class="logbtn btn-red" onclick="document.getElementById('pinModal').style.display='none'">Abbruch</button>
-        </div>
-    </div>
-</div>
-
-<div id="dashboard">
-    <div id="top-bar">
-        <div style="font-size: 22px; color:#ff3131"><span id="userName"></span> (<span id="userRole"></span>)</div>
-        <button onclick="location.reload()" style="background:#d50000; color:white; border:none; padding:8px 25px; cursor:pointer; font-family:'Almendra';">LOGOUT</button>
-    </div>
-
-    <img src="
+        <button id="btn-web" class="info-btn" onclick="window.open('
