@@ -3,52 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dark Bulls - Dashboard V3.2</title>
+    <title>Dark Bulls - Allianz System</title>
     <link href="https://fonts.googleapis.com/css2?family=Almendra:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body { margin: 0; padding: 0; font-family: 'Almendra', serif; background: black; color: white; overflow: hidden; height: 100vh; }
         
         /* --- STARTSEITE --- */
-        #start { display: flex; align-items: center; justify-content: center; height: 100vh; position: relative; }
-        #logo-container img { width: 780px; max-width: 70vw; filter: drop-shadow(0 0 60px rgba(255, 0, 0, 0.9)); }
+        #start { display: flex; align-items: center; justify-content: center; height: 100vh; position: relative; background: black; }
+        #logo-container img { width: 780px; max-width: 75vw; filter: drop-shadow(0 0 60px rgba(255, 0, 0, 0.9)); }
         
-        /* Grüner Login-Balken links */
+        /* Login Balken Links */
         #loginBar { position: absolute; left: 0; top: 50%; transform: translateY(-50%); background: #39d353; padding: 40px 10px; font-size: 24px; font-weight: bold; color: black; cursor: pointer; z-index: 100; border-radius: 0 15px 15px 0; writing-mode: vertical-rl; text-orientation: upright; width: 50px; text-align: center; box-shadow: 5px 0 15px rgba(0,255,0,0.3); }
 
-        /* Die 3 Buttons rechts */
-        #side-menu { position: absolute; right: 0; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 10px; z-index: 100; }
-        .info-btn { padding: 30px 10px; font-size: 18px; font-weight: bold; border: none; cursor: pointer; font-family: 'Almendra'; writing-mode: vertical-rl; text-orientation: upright; border-radius: 15px 0 0 15px; width: 55px; text-align: center; color: black; min-height: 120px; }
+        /* Seitenmenü Rechts */
+        #side-menu { position: absolute; right: 0; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 12px; z-index: 100; }
+        .info-btn { padding: 25px 10px; font-size: 18px; font-weight: bold; border: none; cursor: pointer; font-family: 'Almendra'; writing-mode: vertical-rl; text-orientation: upright; border-radius: 15px 0 0 15px; width: 55px; text-align: center; color: black; min-height: 140px; }
         #btn-yt { background: #ff8c00; }
         #btn-hist { background: #5b5bff; color: white; }
         #btn-web { background: #00cfd1; }
 
-        /* Login Modal */
+        /* Login Fenster */
         .modal-overlay { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); justify-content: center; align-items: center; }
-        .modal-box { background: #1a1a1a; padding: 40px; width: 450px; border: 3px solid #333; text-align: center; border-radius: 10px; }
+        .modal-box { background: #1a1a1a; padding: 40px; width: 450px; border: 3px solid #333; text-align: center; border-radius: 12px; box-shadow: 0 0 50px rgba(255,0,0,0.5); }
         .modal-box h1 { color: #ff3131; text-decoration: underline; font-size: 35px; margin-bottom: 25px; }
-        .modal-box input { width: 100%; padding: 15px; margin-bottom: 20px; background: #000; color: #39d353; border: 1px solid #444; font-family: 'Almendra'; font-size: 22px; box-sizing: border-box; }
+        .modal-box input { width: 100%; padding: 15px; margin-bottom: 20px; background: #000; color: #39d353; border: 1px solid #444; font-family: 'Almendra'; font-size: 22px; box-sizing: border-box; outline: none; }
         
         .login-btn-row { display: flex; justify-content: space-between; gap: 10px; }
-        .logbtn { flex: 1; padding: 15px; border: none; cursor: pointer; font-family: 'Almendra'; font-weight: bold; font-size: 18px; border-radius: 5px; }
-        .btn-green { background: #39d353; color: black; }
-        .btn-yellow { background: #ffd600; color: black; }
+        .logbtn { flex: 1; padding: 18px; border: none; cursor: pointer; font-family: 'Almendra'; font-weight: bold; font-size: 18px; border-radius: 5px; color: black; transition: 0.2s; }
+        .logbtn:active { transform: scale(0.95); }
+        .btn-green { background: #39d353; }
+        .btn-yellow { background: #ffd600; }
         .btn-red { background: #d50000; color: white; }
 
-        /* --- DASHBOARD INTERN --- */
+        /* --- DASHBOARD --- */
         #dashboard { display: none; position: relative; width: 100vw; height: 100vh; background: black; }
-        #bg-bull { position: absolute; left: 50%; top: 45%; transform: translate(-50%, -50%); width: 850px; z-index: 1; opacity: 0.5; }
+        #bg-bull { position: absolute; left: 50%; top: 45%; transform: translate(-50%, -50%); width: 850px; z-index: 1; opacity: 0.4; }
         #top-bar { position: absolute; top: 20px; right: 40px; display: flex; align-items: center; gap: 20px; z-index: 100; }
         
-        .panel { position: absolute; background: rgba(20, 20, 20, 0.95); border: 1px solid #444; padding: 15px; z-index: 10; display: none; border-radius: 5px; }
+        .panel { position: absolute; background: rgba(15, 15, 15, 0.95); border: 1px solid #444; padding: 15px; z-index: 10; display: none; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
         .panel h2 { color: #ff3131; margin: 0 0 10px 0; font-size: 24px; text-decoration: underline; }
-        .panel button { display: block; width: 100%; margin: 8px 0; background: #39d353; border: none; padding: 10px; font-family: 'Almendra'; font-weight: bold; cursor: pointer; color: black; }
+        .panel button { display: block; width: 100%; margin: 8px 0; background: #39d353; border: none; padding: 10px; font-family: 'Almendra'; font-weight: bold; cursor: pointer; color: black; border-radius: 4px; }
         
         #personal { left: 40px; top: 40px; width: 240px; }
         #blacklist { left: 40px; top: 350px; width: 240px; }
         #blacklistAdmin { left: 40px; bottom: 40px; width: 440px; }
         #admin { right: 40px; top: 100px; width: 260px; }
         #elo { right: 40px; top: 380px; width: 260px; }
-        #chat-btn { position: absolute; right: 40px; bottom: 40px; background: #ff8c00; padding: 15px 60px; font-size: 28px; font-weight: bold; cursor: pointer; z-index: 10; font-family: 'Almendra'; display: none; color: black; border: none; border-radius: 5px; }
+        #chat-btn { position: absolute; right: 40px; bottom: 40px; background: #ff8c00; padding: 20px 60px; font-size: 28px; font-weight: bold; cursor: pointer; z-index: 10; font-family: 'Almendra'; display: none; color: black; border: none; border-radius: 8px; }
     </style>
 </head>
 <body>
@@ -56,10 +57,9 @@
 <div id="start">
     <div id="loginBar" onclick="document.getElementById('pinModal').style.display='flex'">LOGIN</div>
     <div id="logo-container"><img src="bulls_start.jpg"></div>
-    
     <div id="side-menu">
         <button id="btn-yt" class="info-btn" onclick="window.open('https://www.youtube.com/@DarkBullsGruppe')">YOUTUBE</button>
-        <button id="btn-hist" class="info-btn" onclick="alert('Histories folgen!')">HISTORIES</button>
+        <button id="btn-hist" class="info-btn" onclick="alert('In Arbeit!')">HISTORIES</button>
         <button id="btn-web" class="info-btn" onclick="window.open('https://darkbulls.jimdofree.com/')">INTERNET</button>
     </div>
 </div>
@@ -67,10 +67,10 @@
 <div id="pinModal" class="modal-overlay">
     <div class="modal-box">
         <h1>ANMELDUNG</h1>
-        <input type="text" id="nameInput" placeholder="Spielername">
-        <input type="password" id="pinInput" placeholder="PIN">
+        <input type="text" id="nameInput" placeholder="Name eingeben...">
+        <input type="password" id="pinInput" placeholder="PIN eingeben...">
         <div class="login-btn-row">
-            <button class="logbtn btn-green" onclick="doLogin()">Anmelden</button>
+            <button class="logbtn btn-green" id="finalLoginBtn">Anmelden</button>
             <button class="logbtn btn-yellow" onclick="alert('Frag Julian!')">Hilfe</button>
             <button class="logbtn btn-red" onclick="document.getElementById('pinModal').style.display='none'">Abbruch</button>
         </div>
@@ -79,8 +79,8 @@
 
 <div id="dashboard">
     <div id="top-bar">
-        <div style="font-size: 22px; color:#ff3131"><span id="userName"></span> (<span id="userRole"></span>)</div>
-        <button onclick="location.reload()" style="background:#d50000; color:white; border:none; padding:8px 25px; cursor:pointer; font-family:'Almendra';">LOGOUT</button>
+        <div style="font-size: 22px; color:#ff3131"><span id="userNameDisplay"></span> (<span id="userRoleDisplay"></span>)</div>
+        <button onclick="location.reload()" style="background:#d50000; color:white; border:none; padding:8px 25px; cursor:pointer; font-family:'Almendra'; border-radius:5px;">LOGOUT</button>
     </div>
     <img src="bulls_dashboard.jpg" id="bg-bull">
     <div class="panel" id="personal"><h2>Persönlich</h2><button>Pin ändern</button><button>Statistiken</button></div>
@@ -98,37 +98,60 @@
 
     let users = [];
 
-    async function loadData() {
+    // Daten laden
+    async function loadAllianzData() {
         try {
             const res = await fetch(URL);
-            const data = await res.text();
-            const rows = data.split('\n').slice(1);
+            const text = await res.text();
+            const rows = text.split('\n').slice(1);
             users = rows.map(r => {
                 const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                 const clean = (s) => s ? s.replace(/["']/g, "").trim() : "";
                 return { name: clean(c[0]), pin: clean(c[2]), role: clean(c[3]) };
             });
-        } catch (e) { console.error("Ladefehler"); }
+            console.log("System bereit.");
+        } catch (e) { console.error("Cloud-Fehler!"); }
     }
 
-    function doLogin() {
-        let n = document.getElementById("nameInput").value.trim().toLowerCase();
-        let p = document.getElementById("pinInput").value.trim();
-        let u = users.find(x => x.name.toLowerCase() === n && x.pin === p);
+    // Die Login-Funktion (Extra sauber getrennt)
+    function startLoginProcess() {
+        const inputName = document.getElementById("nameInput").value.trim().toLowerCase();
+        const inputPin = document.getElementById("pinInput").value.trim();
+        
+        const user = users.find(u => u.name.toLowerCase() === inputName && u.pin === inputPin);
 
-        if (u) {
+        if (user) {
             document.getElementById("start").style.display = "none";
             document.getElementById("pinModal").style.display = "none";
             document.getElementById("dashboard").style.display = "block";
-            document.getElementById("userName").innerText = u.name;
-            document.getElementById("userRole").innerText = u.role;
+            
+            document.getElementById("userNameDisplay").innerText = user.name;
+            document.getElementById("userRoleDisplay").innerText = user.role;
 
+            // Rollen-Sichtbarkeit
             const show = (id) => document.getElementById(id).style.display = "block";
             const hide = (id) => document.getElementById(id).style.display = "none";
+            
             hide("personal"); hide("blacklist"); hide("blacklistAdmin"); hide("admin"); hide("elo"); hide("chat-btn");
 
-            if (u.role === "Gast") { show("personal"); show("chat-btn"); } 
-            else {
+            if (user.role === "Gast") { 
+                show("personal"); show("chat-btn"); 
+            } else {
                 show("personal"); show("blacklist"); show("chat-btn");
-                if (u.role === "Admin" || u.role === "Offizier") show("admin");
-                if (u.role === "Admin" || u.
+                if (user.role === "Admin" || user.role === "Offizier") show("admin");
+                if (user.role === "Admin" || user.role === "Elo") show("elo");
+                if (user.role === "Admin" || user.role === "Buchhalter") show("blacklistAdmin");
+            }
+        } else {
+            alert("Name oder PIN sind nicht korrekt!");
+        }
+    }
+
+    // Event-Listener hinzufügen (Verhindert Button-Blockade)
+    document.getElementById("finalLoginBtn").addEventListener("click", startLoginProcess);
+    
+    // Daten beim Start laden
+    window.onload = loadAllianzData;
+</script>
+</body>
+</html>
