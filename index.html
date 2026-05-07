@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dark Bulls - Allianz System</title>
+    <title>Dark Bulls - Allianz System V3.3</title>
     <link href="https://fonts.googleapis.com/css2?family=Almendra:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body { margin: 0; padding: 0; font-family: 'Almendra', serif; background: black; color: white; overflow: hidden; height: 100vh; }
@@ -12,17 +12,15 @@
         #start { display: flex; align-items: center; justify-content: center; height: 100vh; position: relative; background: black; }
         #logo-container img { width: 780px; max-width: 75vw; filter: drop-shadow(0 0 60px rgba(255, 0, 0, 0.9)); }
         
-        /* Login Balken Links */
         #loginBar { position: absolute; left: 0; top: 50%; transform: translateY(-50%); background: #39d353; padding: 40px 10px; font-size: 24px; font-weight: bold; color: black; cursor: pointer; z-index: 100; border-radius: 0 15px 15px 0; writing-mode: vertical-rl; text-orientation: upright; width: 50px; text-align: center; box-shadow: 5px 0 15px rgba(0,255,0,0.3); }
 
-        /* Seitenmenü Rechts */
         #side-menu { position: absolute; right: 0; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 12px; z-index: 100; }
         .info-btn { padding: 25px 10px; font-size: 18px; font-weight: bold; border: none; cursor: pointer; font-family: 'Almendra'; writing-mode: vertical-rl; text-orientation: upright; border-radius: 15px 0 0 15px; width: 55px; text-align: center; color: black; min-height: 140px; }
         #btn-yt { background: #ff8c00; }
         #btn-hist { background: #5b5bff; color: white; }
         #btn-web { background: #00cfd1; }
 
-        /* Login Fenster */
+        /* LOGIN FENSTER */
         .modal-overlay { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); justify-content: center; align-items: center; }
         .modal-box { background: #1a1a1a; padding: 40px; width: 450px; border: 3px solid #333; text-align: center; border-radius: 12px; box-shadow: 0 0 50px rgba(255,0,0,0.5); }
         .modal-box h1 { color: #ff3131; text-decoration: underline; font-size: 35px; margin-bottom: 25px; }
@@ -30,12 +28,11 @@
         
         .login-btn-row { display: flex; justify-content: space-between; gap: 10px; }
         .logbtn { flex: 1; padding: 18px; border: none; cursor: pointer; font-family: 'Almendra'; font-weight: bold; font-size: 18px; border-radius: 5px; color: black; transition: 0.2s; }
-        .logbtn:active { transform: scale(0.95); }
         .btn-green { background: #39d353; }
         .btn-yellow { background: #ffd600; }
         .btn-red { background: #d50000; color: white; }
 
-        /* --- DASHBOARD --- */
+        /* --- DASHBOARD INTERN --- */
         #dashboard { display: none; position: relative; width: 100vw; height: 100vh; background: black; }
         #bg-bull { position: absolute; left: 50%; top: 45%; transform: translate(-50%, -50%); width: 850px; z-index: 1; opacity: 0.4; }
         #top-bar { position: absolute; top: 20px; right: 40px; display: flex; align-items: center; gap: 20px; z-index: 100; }
@@ -50,6 +47,7 @@
         #admin { right: 40px; top: 100px; width: 260px; }
         #elo { right: 40px; top: 380px; width: 260px; }
         #chat-btn { position: absolute; right: 40px; bottom: 40px; background: #ff8c00; padding: 20px 60px; font-size: 28px; font-weight: bold; cursor: pointer; z-index: 10; font-family: 'Almendra'; display: none; color: black; border: none; border-radius: 8px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     </style>
 </head>
 <body>
@@ -67,8 +65,8 @@
 <div id="pinModal" class="modal-overlay">
     <div class="modal-box">
         <h1>ANMELDUNG</h1>
-        <input type="text" id="nameInput" placeholder="Name eingeben...">
-        <input type="password" id="pinInput" placeholder="PIN eingeben...">
+        <input type="text" id="nameInput" placeholder="Name...">
+        <input type="password" id="pinInput" placeholder="PIN...">
         <div class="login-btn-row">
             <button class="logbtn btn-green" id="finalLoginBtn">Anmelden</button>
             <button class="logbtn btn-yellow" onclick="alert('Frag Julian!')">Hilfe</button>
@@ -83,11 +81,43 @@
         <button onclick="location.reload()" style="background:#d50000; color:white; border:none; padding:8px 25px; cursor:pointer; font-family:'Almendra'; border-radius:5px;">LOGOUT</button>
     </div>
     <img src="bulls_dashboard.jpg" id="bg-bull">
-    <div class="panel" id="personal"><h2>Persönlich</h2><button>Pin ändern</button><button>Statistiken</button></div>
-    <div class="panel" id="blacklist"><h2>Black Liste</h2><button>Anschauen</button></div>
-    <div class="panel" id="blacklistAdmin"><h2>Black Liste Pflege</h2><button>Pflege</button></div>
-    <div class="panel" id="admin"><h2>Admin</h2><button>User-Pflege</button></div>
-    <div class="panel" id="elo"><h2>Elo Bereich</h2><button>Rechner</button></div>
+
+    <div class="panel" id="personal">
+        <h2>Persönlich</h2>
+        <button id="btn-pin">Pin ändern</button>
+        <button id="btn-stats">Statistiken</button>
+        <button id="btn-tipps">Tipps</button>
+    </div>
+
+    <div class="panel" id="blacklist">
+        <h2>Black Liste</h2>
+        <button>Sp. Melden</button>
+        <button>Anschauen</button>
+    </div>
+
+    <div class="panel" id="blacklistAdmin">
+        <h2>Black Liste Pflege</h2>
+        <div class="grid">
+            <button id="bl-gemeldet" style="font-size:14px">Gemeldete Spieler</button>
+            <button id="bl-pflege">Pflege</button>
+            <button id="bl-eintragen">Eintragen</button>
+            <button id="bl-ansicht">Volle Ansicht</button>
+        </div>
+    </div>
+
+    <div class="panel" id="admin">
+        <h2>Admin</h2>
+        <button id="adm-einst">Einstellungen</button>
+        <button id="adm-stats">Statistiken</button>
+        <button id="adm-hilfe" style="background: #ffd600;">Hilfe-Anfragen</button>
+    </div>
+
+    <div class="panel" id="elo">
+        <h2>Elo Bereich</h2>
+        <button>Rohstoffrechner</button>
+        <button>Einheitenrechner</button>
+    </div>
+
     <button id="chat-btn">CHAT</button>
 </div>
 
@@ -98,8 +128,7 @@
 
     let users = [];
 
-    // Daten laden
-    async function loadAllianzData() {
+    async function loadData() {
         try {
             const res = await fetch(URL);
             const text = await res.text();
@@ -109,49 +138,51 @@
                 const clean = (s) => s ? s.replace(/["']/g, "").trim() : "";
                 return { name: clean(c[0]), pin: clean(c[2]), role: clean(c[3]) };
             });
-            console.log("System bereit.");
         } catch (e) { console.error("Cloud-Fehler!"); }
     }
 
-    // Die Login-Funktion (Extra sauber getrennt)
-    function startLoginProcess() {
+    function doLogin() {
         const inputName = document.getElementById("nameInput").value.trim().toLowerCase();
         const inputPin = document.getElementById("pinInput").value.trim();
-        
-        const user = users.find(u => u.name.toLowerCase() === inputName && u.pin === inputPin);
+        const u = users.find(user => user.name.toLowerCase() === inputName && user.pin === inputPin);
 
-        if (user) {
+        if (u) {
             document.getElementById("start").style.display = "none";
             document.getElementById("pinModal").style.display = "none";
             document.getElementById("dashboard").style.display = "block";
-            
-            document.getElementById("userNameDisplay").innerText = user.name;
-            document.getElementById("userRoleDisplay").innerText = user.role;
+            document.getElementById("userNameDisplay").innerText = u.name;
+            document.getElementById("userRoleDisplay").innerText = u.role;
 
-            // Rollen-Sichtbarkeit
+            // SICHTBARKEIT DER PANELS
             const show = (id) => document.getElementById(id).style.display = "block";
             const hide = (id) => document.getElementById(id).style.display = "none";
             
+            // Erstmal alles weg
             hide("personal"); hide("blacklist"); hide("blacklistAdmin"); hide("admin"); hide("elo"); hide("chat-btn");
-
-            if (user.role === "Gast") { 
-                show("personal"); show("chat-btn"); 
-            } else {
+            
+            // Logik für Rollen
+            if (u.role === "Gast") {
+                show("personal"); hide("btn-stats"); hide("btn-tipps"); show("chat-btn");
+            } 
+            else if (u.role === "Mitglied" || u.role === "Kampfdivision" || u.role === "Elo" || u.role === "Buchhalter" || u.role === "Ausbilder" || u.role === "Offizier" || u.role === "Admin") {
                 show("personal"); show("blacklist"); show("chat-btn");
-                if (user.role === "Admin" || user.role === "Offizier") show("admin");
-                if (user.role === "Admin" || user.role === "Elo") show("elo");
-                if (user.role === "Admin" || user.role === "Buchhalter") show("blacklistAdmin");
+                if (u.role === "Kampfdivision") hide("btn-tipps");
+                if (u.role === "Elo" || u.role === "Admin") show("elo");
+                if (u.role === "Buchhalter" || u.role === "Admin") show("blacklistAdmin");
+                if (u.role === "Ausbilder" || u.role === "Offizier" || u.role === "Admin") {
+                    show("admin");
+                    if (u.role !== "Admin") { hide("adm-einst"); hide("bl-gemeldet"); hide("bl-pflege"); hide("bl-eintragen"); }
+                }
+                if (u.role === "Admin") {
+                    show("admin"); show("blacklistAdmin"); show("elo");
+                    show("adm-einst"); show("bl-gemeldet"); show("bl-pflege"); show("bl-eintragen");
+                }
             }
-        } else {
-            alert("Name oder PIN sind nicht korrekt!");
-        }
+        } else { alert("Name oder PIN falsch!"); }
     }
 
-    // Event-Listener hinzufügen (Verhindert Button-Blockade)
-    document.getElementById("finalLoginBtn").addEventListener("click", startLoginProcess);
-    
-    // Daten beim Start laden
-    window.onload = loadAllianzData;
+    document.getElementById("finalLoginBtn").addEventListener("click", doLogin);
+    window.onload = loadData;
 </script>
 </body>
 </html>
