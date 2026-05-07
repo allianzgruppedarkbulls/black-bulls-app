@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dark Bulls - Allianz System V4.3</title>
+    <title>Dark Bulls - Allianz System V4.4</title>
     
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#000000">
@@ -13,14 +13,11 @@
     <style>
         body { margin: 0; padding: 0; font-family: 'Almendra', serif; background: black; color: white; overflow: hidden; height: 100vh; }
         
-        /* --- STARTSEITE --- */
+        /* --- STARTSEITE (UNVERÄNDERT PERFEKT) --- */
         #start { display: flex; align-items: center; justify-content: center; height: 100vh; position: relative; background: black; }
-        
-        /* Logo - z-index 1 damit es hinten bleibt */
         #logo-container { position: relative; z-index: 1; pointer-events: none; }
         #logo-container img { width: 750px; max-width: 70vw; filter: drop-shadow(0 0 50px rgba(255, 0, 0, 0.8)); }
         
-        /* Buttons - z-index 100 damit sie IMMER klickbar sind */
         .left-menu { position: absolute; left: 0; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 10px; z-index: 100; }
         .side-btn-left { background: #39d353; padding: 40px 10px; font-size: 20px; font-weight: bold; color: black; cursor: pointer; border-radius: 0 15px 15px 0; writing-mode: vertical-rl; text-orientation: upright; width: 50px; text-align: center; border: none; }
         #regBar { background: #ffd600; padding: 30px 10px; font-size: 16px; }
@@ -37,27 +34,32 @@
         .modal-box h1 { color: #ff3131; text-decoration: underline; margin-bottom: 20px; font-size: 28px; }
         .modal-box input { width: 100%; padding: 12px; margin-bottom: 12px; background: #000; color: #39d353; border: 1px solid #444; font-family: 'Almendra'; font-size: 18px; box-sizing: border-box; outline: none; }
         
-        /* --- DASHBOARD --- */
+        /* --- DASHBOARD (FIXIERT) --- */
         #dashboard { display: none; position: relative; width: 100vw; height: 100vh; background: black; }
-        #bg-bull { position: absolute; left: 50%; top: 45%; transform: translate(-50%, -50%); width: 750px; z-index: 1; opacity: 0.3; pointer-events: none; }
-        #top-bar { position: absolute; top: 20px; right: 40px; display: flex; align-items: center; gap: 20px; z-index: 100; }
+        #bg-bull-dashboard { position: absolute; left: 50%; top: 48%; transform: translate(-50%, -50%); width: 750px; z-index: 1; opacity: 0.35; pointer-events: none; }
         
-        .panel { position: absolute; background: rgba(15, 15, 15, 0.95); border: 1px solid #444; padding: 15px; z-index: 10; display: none; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
-        .panel h2 { color: #ff3131; margin: 0 0 10px 0; font-size: 24px; text-decoration: underline; }
-        .panel button { display: block; width: 100%; margin: 8px 0; background: #39d353; border: none; padding: 10px; font-family: 'Almendra'; font-weight: bold; cursor: pointer; color: black; border-radius: 4px; }
-        
-        #personal { left: 40px; top: 40px; width: 240px; }
-        #blacklist { left: 40px; top: 350px; width: 240px; }
-        #blacklistAdmin { left: 40px; bottom: 40px; width: 440px; }
-        #admin { right: 40px; top: 100px; width: 260px; }
-        #elo { right: 40px; top: 380px; width: 260px; }
+        #top-right-nav { position: absolute; top: 25px; right: 40px; display: flex; align-items: center; gap: 20px; z-index: 100; }
+        .logout-btn { background: #d50000; color: white; border: none; padding: 10px 25px; cursor: pointer; font-family: 'Almendra'; border-radius: 5px; font-weight: bold; }
 
-        #allianz-chat-btn { position: absolute; right: 40px; bottom: 40px; background: #ff8c00; padding: 20px 60px; font-size: 28px; font-weight: bold; cursor: pointer; z-index: 10; font-family: 'Almendra'; display: none; color: black; border: none; border-radius: 8px; }
+        /* Jedes Panel bekommt seinen festen Platz */
+        .panel-fixed { position: absolute; background: rgba(15, 15, 15, 0.95); border: 2px solid #222; padding: 15px; z-index: 10; border-radius: 10px; width: 280px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+        .panel-fixed h2 { color: #ff3131; margin: 0 0 15px 0; font-size: 24px; text-decoration: underline; }
+        .panel-fixed button { display: block; width: 100%; margin: 10px 0; background: #39d353; border: none; padding: 12px; font-family: 'Almendra'; font-weight: bold; cursor: pointer; color: black; border-radius: 5px; font-size: 18px; transition: 0.2s; }
+        .panel-fixed button:hover { background: #fff; transform: scale(1.02); }
+
+        /* Exakte Koordinaten laut Screenshot */
+        #personal { left: 40px; top: 50px; }
+        #blacklist { left: 40px; top: 380px; }
+        #blacklistAdmin { left: 40px; bottom: 50px; width: 500px; } /* Etwas breiter für Pflege */
+        
+        #admin { right: 40px; top: 120px; }
+        #elo { right: 40px; top: 420px; }
+
+        #allianz-chat-btn { position: absolute; right: 40px; bottom: 40px; background: #ff8c00; padding: 20px 60px; font-size: 28px; font-weight: bold; cursor: pointer; z-index: 10; font-family: 'Almendra'; color: black; border: none; border-radius: 8px; box-shadow: 0 0 30px rgba(255,140,0,0.4); }
+        #allianz-chat-btn:hover { background: #fff; }
 
         /* --- CHAT HUB --- */
         #chat-hub { display: none; position: fixed; top: 5%; left: 5%; width: 90%; height: 90%; background: #0a0a0a; border: 2px solid #333; z-index: 6000; flex-direction: row; box-shadow: 0 0 100px black; }
-        .chat-sidebar { width: 280px; background: #151515; border-right: 2px solid #222; display: flex; flex-direction: column; }
-        .chat-main { flex: 1; display: flex; flex-direction: column; }
     </style>
 </head>
 <body>
@@ -81,8 +83,8 @@
         <input type="text" id="nameInput" placeholder="Name...">
         <input type="password" id="pinInput" placeholder="PIN...">
         <div style="display:flex; gap:10px;">
-            <button class="logbtn btn-green" id="finalLoginBtn" style="flex:1; padding:15px; background:#39d353; border:none; font-weight:bold; cursor:pointer;">Anmelden</button>
-            <button onclick="closeM('pinModal')" style="flex:1; background:red; color:white; border:none; cursor:pointer;">Abbruch</button>
+            <button id="finalLoginBtn" style="flex:1; padding:15px; background:#39d353; border:none; font-weight:bold; cursor:pointer;">Anmelden</button>
+            <button onclick="closeM('pinModal')" style="flex:1; background:#d50000; color:white; border:none; cursor:pointer;">Abbruch</button>
         </div>
     </div>
 </div>
@@ -94,42 +96,53 @@
         <input type="password" id="regPin1" placeholder="PIN wählen">
         <input type="password" id="regPin2" placeholder="PIN wiederholen">
         <input type="number" id="regAge" placeholder="Alter">
-        <input type="text" id="regSource" placeholder="Woher kennst du uns?">
         <div style="display:flex; gap:10px;">
-            <button class="logbtn btn-yellow" onclick="registerUser()" style="flex:1; padding:15px; background:#ffd600; border:none; font-weight:bold; cursor:pointer;">Abschicken</button>
-            <button onclick="closeM('regModal')" style="flex:1; background:red; color:white; border:none; cursor:pointer;">Abbruch</button>
+            <button onclick="registerUser()" style="flex:1; padding:15px; background:#ffd600; border:none; font-weight:bold; cursor:pointer;">Abschicken</button>
+            <button onclick="closeM('regModal')" style="flex:1; background:#d50000; color:white; border:none; cursor:pointer;">Abbruch</button>
         </div>
     </div>
 </div>
 
 <div id="dashboard">
-    <div id="top-bar">
+    <div id="top-right-nav">
         <div style="font-size: 22px; color:#ff3131"><span id="userNameDisplay"></span> (<span id="userRoleDisplay"></span>)</div>
-        <button onclick="location.reload()" style="background:#d50000; color:white; border:none; padding:8px 25px; cursor:pointer; font-family:'Almendra'; border-radius:5px;">LOGOUT</button>
+        <button class="logout-btn" onclick="location.reload()">LOGOUT</button>
     </div>
-    <img src="bulls_dashboard.jpg" id="bg-bull">
-    <div class="panel" id="personal"><h2>Persönlich</h2><button onclick="toggleChat()">CHAT</button><button>Pin ändern</button></div>
-    <div class="panel" id="blacklist"><h2>Black Liste</h2><button>Anschauen</button></div>
-    <div class="panel" id="blacklistAdmin"><h2>Black Liste Pflege</h2><button>Bearbeiten</button></div>
-    <div class="panel" id="admin"><h2>Admin</h2><button>User-Pflege</button></div>
-    <div class="panel" id="elo"><h2>Elo Bereich</h2><button>Rechner</button></div>
+    
+    <img src="bulls_dashboard.jpg" id="bg-bull-dashboard">
+
+    <div class="panel-fixed" id="personal" style="display:block;">
+        <h2>Persönlich</h2>
+        <button onclick="toggleChat()">CHAT</button>
+        <button>Pin ändern</button>
+    </div>
+
+    <div class="panel-fixed" id="blacklist" style="display:block;">
+        <h2>Black Liste</h2>
+        <button>Anschauen</button>
+    </div>
+
+    <div class="panel-fixed" id="blacklistAdmin" style="display:none;">
+        <h2>Black Liste Pflege</h2>
+        <button>Bearbeiten</button>
+    </div>
+
+    <div class="panel-fixed" id="admin" style="display:none;">
+        <h2>Admin</h2>
+        <button>User-Pflege</button>
+    </div>
+
+    <div class="panel-fixed" id="elo" style="display:none;">
+        <h2>Elo Bereich</h2>
+        <button>Rechner</button>
+    </div>
+
     <button id="allianz-chat-btn" onclick="toggleChat()">ALLIANZ CHAT</button>
 </div>
 
 <div id="chat-hub">
-    <div class="chat-sidebar">
-        <div style="padding:20px; background:#ff3131; color:black; font-weight:bold; text-align:center;">CHANNELS</div>
-        <div style="padding:15px; background:#222; border-left:4px solid #ff3131;">📢 Plauderecke</div>
-    </div>
-    <div class="chat-main">
-        <div style="padding:15px; background:#111; color:#39d353; font-weight:bold;"># PLAUDERECKE</div>
-        <div id="msg-flow" style="flex:1; padding:20px; overflow-y:auto; color:#aaa;"><i>Willkommen...</i></div>
-        <div style="padding:15px; background:#111; display:flex; gap:10px;">
-            <input type="text" id="msgInput" placeholder="Nachricht..." style="flex:1; background:black; color:#39d353; border:1px solid #444; padding:10px;">
-            <button onclick="alert('Noch keine Webhook URL!')" style="background:#39d353; border:none; padding:10px 20px; font-weight:bold; cursor:pointer;">SENDEN</button>
-        </div>
-    </div>
-    <button onclick="toggleChat()" style="position:absolute; top:-15px; right:-15px; width:40px; height:40px; background:red; color:white; border-radius:50%; border:none; cursor:pointer; font-weight:bold;">X</button>
+    <div style="padding:20px; color:white;">Chat wird geladen...</div>
+    <button onclick="toggleChat()" style="position:absolute; top:10px; right:10px; background:red; color:white; border:none; padding:10px; cursor:pointer;">Schließen</button>
 </div>
 
 <script>
@@ -147,7 +160,7 @@
                 const clean = (s) => s ? s.replace(/["']/g, "").trim() : "";
                 return { name: clean(c[0]), pin: clean(c[2]), role: clean(c[3]) };
             });
-        } catch (e) { console.error("Ladefehler"); }
+        } catch (e) { console.error("Fehler beim Laden"); }
     }
 
     function openM(id) { document.getElementById(id).style.display = 'flex'; }
@@ -160,8 +173,8 @@
     async function registerUser() {
         const p1 = document.getElementById('regPin1').value;
         const p2 = document.getElementById('regPin2').value;
-        if (p1 !== p2) return alert("PINs stimmen nicht überein!");
-        alert("Anfrage gesendet! (Simuliert)");
+        if (p1 !== p2) return alert("PINs nicht identisch!");
+        alert("Registrierung erfolgreich (Simuliert)");
         closeM('regModal');
     }
 
@@ -176,11 +189,12 @@
             document.getElementById("dashboard").style.display = "block";
             document.getElementById("userNameDisplay").innerText = u.name;
             document.getElementById("userRoleDisplay").innerText = u.role;
-            const show = (id) => document.getElementById(id).style.display = "block";
+
+            // Admin Logik
             if (u.role === "Admin") {
-                show("personal"); show("blacklist"); show("blacklistAdmin"); show("admin"); show("elo"); show("allianz-chat-btn");
-            } else {
-                show("personal"); show("allianz-chat-btn");
+                document.getElementById("admin").style.display = "block";
+                document.getElementById("blacklistAdmin").style.display = "block";
+                document.getElementById("elo").style.display = "block";
             }
         } else { alert("Falsche Daten!"); }
     };
