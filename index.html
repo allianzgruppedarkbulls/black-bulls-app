@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>Dark Bulls - Dashboard V2.5</title>
+    <title>Dark Bulls - Dashboard V2.6</title>
     <link href="https://fonts.googleapis.com/css2?family=Almendra:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body { margin: 0; padding: 0; font-family: 'Almendra', serif; background: black; color: white; overflow: hidden; height: 100vh; }
@@ -54,22 +54,23 @@
     <img src="bulls_dashboard.jpg" id="bg-bull">
     <div class="panel" id="adminPanel" style="right:40px; top:100px; border-color:#ffd600; width:260px; display:none;">
         <h2 style="color:#ffd600">Admin Bereich</h2>
-        <button style="width:100%; padding:10px; background:#ffd600; border:none; font-family:'Almendra'; font-weight:bold; cursor:pointer;" onclick="alert('System bereit für Julian & Co!')">Einstellungen</button>
+        <button style="width:100%; padding:10px; background:#ffd600; border:none; font-family:'Almendra'; font-weight:bold; cursor:pointer;" onclick="alert('Verbindung zur Web-App steht!')">Admin-Status: Aktiv</button>
     </div>
 </div>
 
 <script>
-    // --- AKTUELLE DATEN FÜR BLATT 1188820112 ---
+    // --- AKTUELLE DATEN (JETZT SAUBER AUFGERÄUMT) ---
     const SHEET_ID = '1Gjnhol0ou63xW20OnbTo_wugzpOTgBP2yjnx3Qzg4bQ';
     const GID = '1188820112'; 
     const READ_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID}`;
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzk-xY2QN3-BiYRPLiriQnWGILfl3809vFjCvyJMWrKMiTuy4lqtvEJBcnDM7GPzPYnMQ/exec';
+    // Deine neue SCRIPT_URL mit der ID von gerade eben:
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyJX0sj0hbg_b0pKYhb1vVjls4hESN2o5HELOu8cVLXFhxx7ztH957HBbIwXvG80zzo1Q/exec';
 
     let users = [];
 
     async function init() {
         try {
-            console.log("Verbinde zu Blatt 1188820112...");
+            console.log("Verbinde mit dem neuen Master-Blatt...");
             const res = await fetch(READ_URL);
             const data = await res.text();
             
@@ -80,9 +81,9 @@
                 return { name: clean(c[0]), pin: clean(c[2]), role: clean(c[3]) };
             });
             
-            console.log("System bereit! Geladen: " + users.length + " Spieler.");
+            console.log("Erfolg! System bereit. " + users.length + " Spieler geladen.");
         } catch (e) {
-            console.error("Cloud-Verbindungsfehler");
+            console.error("Cloud-Verbindung unterbrochen.");
         }
     }
 
@@ -104,7 +105,7 @@
             document.getElementById("userRole").innerText = u.role;
             if (u.role === "Admin") document.getElementById("adminPanel").style.display = "block";
         } else {
-            alert("Name oder PIN falsch!");
+            alert("Name oder PIN unbekannt!");
         }
     }
 
