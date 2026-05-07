@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dark Bulls - Allianz System V3.3</title>
+    
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#000000">
+    <link rel="apple-touch-icon" href="/192x192icon.png">
     <link href="https://fonts.googleapis.com/css2?family=Almendra:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body { margin: 0; padding: 0; font-family: 'Almendra', serif; background: black; color: white; overflow: hidden; height: 100vh; }
@@ -153,14 +157,11 @@
             document.getElementById("userNameDisplay").innerText = u.name;
             document.getElementById("userRoleDisplay").innerText = u.role;
 
-            // SICHTBARKEIT DER PANELS
             const show = (id) => document.getElementById(id).style.display = "block";
             const hide = (id) => document.getElementById(id).style.display = "none";
             
-            // Erstmal alles weg
             hide("personal"); hide("blacklist"); hide("blacklistAdmin"); hide("admin"); hide("elo"); hide("chat-btn");
             
-            // Logik für Rollen
             if (u.role === "Gast") {
                 show("personal"); hide("btn-stats"); hide("btn-tipps"); show("chat-btn");
             } 
