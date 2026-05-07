@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>Dark Bulls - Unkaputtbar Edition</title>
+    <title>Dark Bulls - Dashboard V2.1</title>
     <link href="https://fonts.googleapis.com/css2?family=Almendra:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body { margin: 0; padding: 0; font-family: 'Almendra', serif; background: black; color: white; overflow: hidden; height: 100vh; }
@@ -70,16 +70,18 @@
 </div>
 
 <script>
-    // DEINE DATEN
-    const SHEET_ID = '1HC3U1u4rMU6eVem-wPL9OVDb2bRQNztlig4FQry78yQ';
-    const GID = '2004474173';
+    // --- DEINE AKTUALISIERTEN DATEN ---
+    const SHEET_ID = '1Gjnhol0ou63xW20OnbTo_wugzpOTgBP2yjnx3Qzg4bQ';
+    const GID = '981562519';
     const READ_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID}`;
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzk-xY2QN3-BiYRPLiriQnWGILfl3809vFjCvyJMWrKMiTuy4lqtvEJBcnDM7GPzPYnMQ/exec';
+    // ----------------------------------
 
     let users = [];
 
-    // Lade Daten, aber blockiere nicht das Design!
     async function init() {
         try {
+            console.log("Lade Daten von Sheet...");
             const res = await fetch(READ_URL);
             const data = await res.text();
             const rows = data.split('\n').slice(1);
@@ -88,9 +90,9 @@
                 const clean = (s) => s ? s.replace(/"/g, "").trim() : "";
                 return { name: clean(c[0]), pin: clean(c[2]), role: clean(c[3]) };
             });
-            console.log("Daten erfolgreich geladen.");
+            console.log("Daten erfolgreich geladen. Spieler gefunden: " + users.length);
         } catch (e) {
-            console.error("Konnte Tabelle nicht laden. Freigabe prüfen!");
+            console.error("Cloud-Fehler: Freigabe prüfen!");
         }
     }
 
@@ -99,7 +101,7 @@
         const p = document.getElementById("pinInput").value.trim();
         
         if (users.length === 0) {
-            alert("Fehler: Keine Daten von Google erhalten. Prüfe, ob die Tabelle auf 'Jeder mit dem Link' freigegeben ist!");
+            alert("Fehler: Keine Daten von Google erhalten. Bitte prüfe, ob die Tabelle auf 'Jeder mit dem Link' freigegeben ist!");
             return;
         }
 
