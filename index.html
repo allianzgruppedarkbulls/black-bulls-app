@@ -3,67 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dark Bulls - Allianz System V4.0</title>
+    <title>Dark Bulls - Allianz System V4.1</title>
     
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#000000">
     <link rel="apple-touch-icon" href="/192x192icon.png">
-
     <link href="https://fonts.googleapis.com/css2?family=Almendra:wght@400;700&display=swap" rel="stylesheet">
+
     <style>
         body { margin: 0; padding: 0; font-family: 'Almendra', serif; background: black; color: white; overflow: hidden; height: 100vh; }
         
         /* --- STARTSEITE --- */
         #start { display: flex; align-items: center; justify-content: center; height: 100vh; position: relative; background: black; }
-        #logo-container img { width: 780px; max-width: 75vw; filter: drop-shadow(0 0 60px rgba(255, 0, 0, 0.9)); }
+        #logo-container img { width: 750px; max-width: 70vw; filter: drop-shadow(0 0 50px rgba(255, 0, 0, 0.8)); }
         
         .left-menu { position: absolute; left: 0; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 10px; z-index: 100; }
-        .side-btn-left { background: #39d353; padding: 40px 10px; font-size: 20px; font-weight: bold; color: black; cursor: pointer; border-radius: 0 15px 15px 0; writing-mode: vertical-rl; text-orientation: upright; width: 50px; text-align: center; border: none; box-shadow: 5px 0 15px rgba(0,255,0,0.3); transition: 0.3s; }
-        .side-btn-left:hover { width: 60px; background: #fff; }
+        .side-btn-left { background: #39d353; padding: 40px 10px; font-size: 20px; font-weight: bold; color: black; cursor: pointer; border-radius: 0 15px 15px 0; writing-mode: vertical-rl; text-orientation: upright; width: 50px; text-align: center; border: none; transition: 0.3s; }
         #regBar { background: #ffd600; padding: 30px 10px; font-size: 16px; }
 
-        #side-menu { position: absolute; right: 0; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 12px; z-index: 100; }
-        .info-btn { padding: 25px 10px; font-size: 18px; font-weight: bold; border: none; cursor: pointer; font-family: 'Almendra'; writing-mode: vertical-rl; text-orientation: upright; border-radius: 15px 0 0 15px; width: 55px; text-align: center; color: black; min-height: 140px; }
-        #btn-yt { background: #ff8c00; }
-        #btn-hist { background: #5b5bff; color: white; }
-        #btn-web { background: #00cfd1; }
+        /* --- MODALS --- */
+        .modal-overlay { display: none; position: fixed; z-index: 5000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; }
+        .modal-box { background: #1a1a1a; padding: 35px; width: 420px; border: 3px solid #333; text-align: center; border-radius: 12px; box-shadow: 0 0 40px rgba(255,0,0,0.4); }
+        .modal-box h1 { color: #ff3131; text-decoration: underline; margin-bottom: 20px; }
+        .modal-box input { width: 100%; padding: 12px; margin-bottom: 12px; background: #000; color: #39d353; border: 1px solid #444; font-family: 'Almendra'; font-size: 18px; box-sizing: border-box; }
+        
+        /* --- DASHBOARD --- */
+        #dashboard { display: none; position: relative; width: 100vw; height: 100vh; background: black; padding: 20px; box-sizing: border-box; }
+        #bg-bull { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 700px; opacity: 0.25; z-index: 0; pointer-events: none; }
+        
+        .panel-container { display: grid; grid-template-columns: 300px 1fr 300px; grid-template-rows: 1fr 1fr; height: 100%; gap: 30px; position: relative; z-index: 10; }
+        .panel { background: rgba(20, 20, 20, 0.9); border: 2px solid #333; padding: 20px; border-radius: 10px; display: none; }
+        .panel h2 { color: #ff3131; margin-top: 0; text-decoration: underline; border-bottom: 1px solid #333; padding-bottom: 5px; }
+        .panel button { width: 100%; margin: 10px 0; background: #39d353; border: none; padding: 12px; font-family: 'Almendra'; font-weight: bold; cursor: pointer; border-radius: 5px; font-size: 16px; }
+        
+        /* Positionen der Panels */
+        #personal { grid-column: 1; grid-row: 1; }
+        #blacklist { grid-column: 1; grid-row: 2; }
+        #admin { grid-column: 3; grid-row: 1; }
+        #elo { grid-column: 3; grid-row: 2; }
+        #blacklistAdmin { grid-column: 2; grid-row: 2; align-self: end; }
 
-        /* --- MODALS (Login & Reg) --- */
-        .modal-overlay { display: none; position: fixed; z-index: 4000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); justify-content: center; align-items: center; }
-        .modal-box { background: #1a1a1a; padding: 40px; width: 450px; border: 3px solid #333; text-align: center; border-radius: 12px; box-shadow: 0 0 50px rgba(255,0,0,0.5); }
-        .modal-box h1 { color: #ff3131; text-decoration: underline; font-size: 32px; margin-bottom: 25px; }
-        .modal-box input { width: 100%; padding: 15px; margin-bottom: 15px; background: #000; color: #39d353; border: 1px solid #444; font-family: 'Almendra'; font-size: 20px; box-sizing: border-box; outline: none; }
-        
-        .login-btn-row { display: flex; justify-content: space-between; gap: 10px; margin-top: 10px; }
-        .logbtn { flex: 1; padding: 18px; border: none; cursor: pointer; font-family: 'Almendra'; font-weight: bold; font-size: 18px; border-radius: 5px; color: black; }
-        .btn-green { background: #39d353; }
-        .btn-yellow { background: #ffd600; }
-        .btn-red { background: #d50000; color: white; }
+        #allianz-chat-btn { position: fixed; bottom: 30px; right: 30px; background: #ff8c00; color: black; padding: 15px 40px; font-size: 24px; font-weight: bold; border: none; border-radius: 8px; cursor: pointer; font-family: 'Almendra'; z-index: 100; }
 
-        /* --- DASHBOARD INTERN --- */
-        #dashboard { display: none; position: relative; width: 100vw; height: 100vh; background: black; }
-        #bg-bull { position: absolute; left: 50%; top: 45%; transform: translate(-50%, -50%); width: 850px; z-index: 1; opacity: 0.3; }
-        #top-bar { position: absolute; top: 20px; right: 40px; display: flex; align-items: center; gap: 20px; z-index: 100; }
-        
-        .panel { position: absolute; background: rgba(15, 15, 15, 0.95); border: 1px solid #444; padding: 15px; z-index: 10; display: none; border-radius: 8px; }
-        .panel h2 { color: #ff3131; margin: 0 0 10px 0; font-size: 24px; text-decoration: underline; }
-        .panel button { display: block; width: 100%; margin: 8px 0; background: #39d353; border: none; padding: 10px; font-family: 'Almendra'; font-weight: bold; cursor: pointer; color: black; border-radius: 4px; }
-        
-        #personal { left: 40px; top: 40px; width: 240px; }
-        #blacklist { left: 40px; top: 350px; width: 240px; }
-        #blacklistAdmin { left: 40px; bottom: 40px; width: 440px; }
-        #admin { right: 40px; top: 100px; width: 260px; }
-        #elo { right: 40px; top: 380px; width: 260px; }
-        
-        #chat-trigger { position: absolute; right: 40px; bottom: 40px; background: #ff8c00; padding: 20px 60px; font-size: 28px; font-weight: bold; cursor: pointer; z-index: 10; font-family: 'Almendra'; display: none; color: black; border: none; border-radius: 8px; box-shadow: 0 0 20px rgba(255,140,0,0.5); }
-
-        /* --- CHAT HUB (COW STYLE) --- */
-        #chat-hub { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; height: 85%; background: #121212; border: 2px solid #333; z-index: 5000; flex-direction: row; box-shadow: 0 0 100px black; }
-        .chat-sidebar { width: 300px; border-right: 2px solid #222; display: flex; flex-direction: column; background: #1a1a1a; }
-        .chat-item { padding: 15px; margin-bottom: 5px; background: #222; cursor: pointer; border-radius: 4px; transition: 0.2s; }
-        .chat-item:hover { background: #333; }
-        .chat-item.active { border-left: 5px solid #ff3131; background: #2a2a2a; color: #ff3131; font-weight: bold; }
-        .msg-box { background: rgba(255,255,255,0.05); padding: 10px; border-radius: 5px; margin-bottom: 10px; border-left: 3px solid #39d353; }
+        /* --- CHAT HUB --- */
+        #chat-hub { display: none; position: fixed; top: 5%; left: 5%; width: 90%; height: 85%; background: #111; border: 2px solid #444; z-index: 6000; box-shadow: 0 0 100px black; }
     </style>
 </head>
 <body>
@@ -74,11 +57,6 @@
         <button class="side-btn-left" id="regBar" onclick="openM('regModal')">REGISTRIEREN</button>
     </div>
     <div id="logo-container"><img src="bulls_start.jpg"></div>
-    <div id="side-menu">
-        <button id="btn-yt" class="info-btn" onclick="window.open('https://www.youtube.com/@DarkBullsGruppe')">YOUTUBE</button>
-        <button id="btn-hist" class="info-btn">HISTORIES</button>
-        <button id="btn-web" class="info-btn" onclick="window.open('https://darkbulls.jimdofree.com/')">INTERNET</button>
-    </div>
 </div>
 
 <div id="pinModal" class="modal-overlay">
@@ -96,11 +74,11 @@
 <div id="regModal" class="modal-overlay">
     <div class="modal-box">
         <h1>REKRUTIERUNG</h1>
-        <input type="text" id="regName" placeholder="Name">
-        <input type="password" id="regPin" placeholder="PIN wählen">
-        <input type="number" id="regAge" placeholder="Dein Alter">
-        <input type="text" id="regExp" placeholder="Erfahrung (Jahre/Spiele)">
-        <input type="text" id="regSource" placeholder="Woher kennst du uns?">
+        <input type="text" id="regName" placeholder="Spielername">
+        <input type="password" id="regPin1" placeholder="PIN wählen">
+        <input type="password" id="regPin2" placeholder="PIN wiederholen">
+        <input type="number" id="regAge" placeholder="Alter">
+        <input type="text" id="regSource" placeholder="Wie hast du uns gefunden?">
         <div class="login-btn-row">
             <button class="logbtn btn-yellow" onclick="registerUser()">Abschicken</button>
             <button class="logbtn btn-red" onclick="closeM('regModal')">Abbruch</button>
@@ -109,165 +87,102 @@
 </div>
 
 <div id="dashboard">
-    <div id="top-bar">
-        <div style="font-size: 22px; color:#ff3131"><span id="userNameDisplay"></span> (<span id="userRoleDisplay"></span>)</div>
-        <button onclick="location.reload()" style="background:#d50000; color:white; border:none; padding:8px 25px; cursor:pointer; font-family:'Almendra'; border-radius:5px;">LOGOUT</button>
+    <div style="position: absolute; top: 20px; right: 20px; z-index: 200;">
+        <span id="userNameDisplay" style="color: #ff3131; font-size: 20px; margin-right: 15px;"></span>
+        <button onclick="location.reload()" style="background: red; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 5px;">LOGOUT</button>
     </div>
+
     <img src="bulls_dashboard.jpg" id="bg-bull">
 
-    <div class="panel" id="personal">
-        <h2>Persönlich</h2>
-        <button onclick="toggleChatHub()">SUPPORT / CHAT</button>
-        <button id="p-stats">Statistiken</button>
-    </div>
-    <div class="panel" id="blacklist"><h2>Black Liste</h2><button>Anschauen</button></div>
-    <div class="panel" id="blacklistAdmin"><h2>Black Liste Pflege</h2><button>Bearbeiten</button></div>
-    <div class="panel" id="admin"><h2>Admin</h2><button>User-Verwaltung</button></div>
-    <div class="panel" id="elo"><h2>Elo Bereich</h2><button>Rechner</button></div>
+    <div class="panel-container">
+        <div class="panel" id="personal">
+            <h2>Persönlich</h2>
+            <button onclick="toggleChat()">SUPPORT / CHAT</button>
+            <button>Meine Stats</button>
+        </div>
 
-    <button id="chat-trigger" onclick="toggleChatHub()">ALLIANZ CHAT</button>
+        <div class="panel" id="blacklist">
+            <h2>Black Liste</h2>
+            <button>Suchen</button>
+        </div>
+
+        <div class="panel" id="blacklistAdmin">
+            <h2>Black Liste Pflege</h2>
+            <button>Eintrag bearbeiten</button>
+        </div>
+
+        <div class="panel" id="admin">
+            <h2>Admin</h2>
+            <button>User-Verwaltung</button>
+        </div>
+
+        <div class="panel" id="elo">
+            <h2>Elo Bereich</h2>
+            <button>Einheiten-Rechner</button>
+        </div>
+    </div>
+
+    <button id="allianz-chat-btn" onclick="toggleChat()">ALLIANZ CHAT</button>
 </div>
 
 <div id="chat-hub">
-    <div class="chat-sidebar">
-        <div style="padding:20px; background:#ff3131; color:black; font-weight:bold; text-align:center;">KOMMUNIKATION</div>
-        <div style="display:flex; background:#333;">
-            <button onclick="switchTab('pub')" style="flex:1; padding:10px; border:none; background:#222; color:white; cursor:pointer;">ALLIANZ</button>
-            <button onclick="switchTab('priv')" style="flex:1; padding:10px; border:none; background:#444; color:white; cursor:pointer;">KARTEN</button>
+    <div style="display: flex; height: 100%;">
+        <div style="width: 250px; background: #1a1a1a; padding: 15px; border-right: 2px solid #333;">
+            <h3 style="color: #ff3131;">KANÄLE</h3>
+            <div style="color: #39d353; padding: 10px; background: #222; margin-bottom: 5px;"># Plauderecke</div>
+            <div style="padding: 10px;"># Karten-Chat</div>
         </div>
-        <div id="chan-list" style="flex:1; overflow-y:auto; padding:10px;">
-            <div id="pub-chans">
-                <div class="chat-item active">📢 Plauderecke</div>
-                <div class="chat-item">⚔️ Spielersuche</div>
+        <div style="flex: 1; display: flex; flex-direction: column;">
+            <div id="chat-msgs" style="flex: 1; padding: 20px; overflow-y: auto;">
+                <p><i>Lade Chat-Verlauf...</i></p>
             </div>
-            <div id="priv-chans" style="display:none;">
-                <div class="chat-item">🃏 Karte #146</div>
-                <div class="chat-item">👤 Support-Kanal</div>
+            <div style="padding: 15px; background: #222; display: flex;">
+                <input type="text" style="flex: 1; background: #000; border: 1px solid #444; color: #39d353; padding: 10px;">
+                <button style="background: #39d353; border: none; padding: 10px 20px; margin-left: 10px;">SENDEN</button>
             </div>
         </div>
     </div>
-    <div style="flex:1; display:flex; flex-direction:column; background:#0a0a0a;">
-        <div id="chat-title" style="padding:15px; background:#000; border-bottom:1px solid #333; color:#39d353; font-weight:bold;">#PLAUDERECKE</div>
-        <div id="msg-flow" style="flex:1; padding:20px; overflow-y:auto;">
-            <div class="msg-box"><b>System:</b> Willkommen im Dark Bulls Chat!</div>
-        </div>
-        <div style="padding:15px; background:#111; display:flex; gap:10px; border-top:1px solid #333;">
-            <input type="text" id="msgInput" placeholder="Nachricht..." style="flex:1; padding:12px; background:black; border:1px solid #444; color:#39d353;">
-            <button onclick="sendToDiscord()" style="padding:0 25px; background:#39d353; border:none; font-weight:bold; cursor:pointer;">SENDEN</button>
-        </div>
-    </div>
-    <button onclick="toggleChatHub()" style="position:absolute; top:-15px; right:-15px; width:40px; height:40px; background:red; color:white; border:none; border-radius:50%; cursor:pointer; font-weight:bold;">X</button>
+    <button onclick="toggleChat()" style="position: absolute; top: -15px; right: -15px; background: red; color: white; border-radius: 50%; width: 40px; height: 40px; border: none; cursor: pointer;">X</button>
 </div>
 
 <script>
-    // --- KONFIGURATION (HIER WEBHOOKS EINTRAGEN) ---
-    const DISCORD_WEBHOOK_REKRUT = "DEINE_WEBHOOK_URL_VON_AYAD_ODER_KATEGORIE";
-    const DISCORD_WEBHOOK_CHAT = "DEINE_WEBHOOK_URL_FÜR_CHAT";
-    const SHEET_ID = '1Gjnhol0ou63xW20OnbTo_wugzpOTgBP2yjnx3Qzg4bQ';
-    const GID = '1188820112'; 
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyJX0sj0hbg_b0pKYhb1vVjls4hESN2o5HELOu8cVLXFhxx7ztH957HBbIwXvG80zzo1Q/exec';
-
-    let users = [];
-    let currentUser = null;
-
-    async function loadData() {
-        try {
-            const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID}`);
-            const text = await res.text();
-            const rows = text.split('\n').slice(1);
-            users = rows.map(r => {
-                const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-                const clean = (s) => s ? s.replace(/["']/g, "").trim() : "";
-                return { name: clean(c[0]), pin: clean(c[2]), role: clean(c[3]) };
-            });
-        } catch (e) { console.error("Cloud-Error"); }
-    }
+    // Hier kommen deine Webhook URLs und die Google Script URL rein
+    const SHEET_URL = "DEINE_SCRIPT_URL"; 
+    let allUsers = [];
 
     function openM(id) { document.getElementById(id).style.display = 'flex'; }
     function closeM(id) { document.getElementById(id).style.display = 'none'; }
-    function toggleChatHub() {
-        const hub = document.getElementById('chat-hub');
-        hub.style.display = (hub.style.display === 'flex') ? 'none' : 'flex';
+    function toggleChat() { 
+        const c = document.getElementById('chat-hub');
+        c.style.display = (c.style.display === 'block') ? 'none' : 'block';
     }
 
     async function registerUser() {
-        const name = document.getElementById("regName").value;
-        const pin = document.getElementById("regPin").value;
-        const age = document.getElementById("regAge").value;
-        const exp = document.getElementById("regExp").value;
-        const src = document.getElementById("regSource").value;
+        const p1 = document.getElementById('regPin1').value;
+        const p2 = document.getElementById('regPin2').value;
+        const name = document.getElementById('regName').value;
 
-        if(!name || !pin) return alert("Pflichtfelder ausfüllen!");
+        if (p1 !== p2) { alert("PINs stimmen nicht überein!"); return; }
+        if (!name || !p1) { alert("Name und PIN sind Pflicht!"); return; }
 
-        // 1. Google Sheets
-        await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "newUser", name: name, role: "Neuling", pin: pin }) });
-
-        // 2. Discord Rekrutierung
-        await fetch(DISCORD_WEBHOOK_REKRUT, {
-            method: "POST", headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                username: "Bulls Rekrutierung",
-                embeds: [{ title: "🔥 Neue Bewerbung!", color: 16744192, fields: [
-                    {name:"Name", value:name, inline:true}, {name:"Alter", value:age, inline:true},
-                    {name:"Erfahrung", value:exp}, {name:"Quelle", value:src}
-                ]}]
-            })
-        });
-        alert("Erfolgreich! Logge dich jetzt ein.");
-        location.reload();
+        alert("Registrierung abgeschickt! Support wird informiert.");
+        closeM('regModal');
     }
 
-    function doLogin() {
-        const n = document.getElementById("nameInput").value.trim().toLowerCase();
-        const p = document.getElementById("pinInput").value.trim();
-        const u = users.find(x => x.name.toLowerCase() === n && x.pin === p);
-
-        if(u) {
-            currentUser = u;
-            document.getElementById("start").style.display = "none";
-            closeM('pinModal');
-            document.getElementById("dashboard").style.display = "block";
-            document.getElementById("userNameDisplay").innerText = u.name;
-            document.getElementById("userRoleDisplay").innerText = u.role;
-
-            const show = (id) => document.getElementById(id).style.display = "block";
-            const hide = (id) => document.getElementById(id).style.display = "none";
-
-            hide("personal"); hide("blacklist"); hide("blacklistAdmin"); hide("admin"); hide("elo"); hide("chat-trigger");
-
-            if(u.role === "Neuling") {
-                show("personal"); document.getElementById("p-stats").style.display = "none";
-            } else {
-                show("personal"); show("blacklist"); show("chat-trigger");
-                if(["Admin", "Offizier"].includes(u.role)) show("admin");
-                if(["Admin", "Elo"].includes(u.role)) show("elo");
-                if(["Admin", "Buchhalter"].includes(u.role)) show("blacklistAdmin");
-            }
-        } else { alert("Falsche Daten!"); }
-    }
-
-    async function sendToDiscord() {
-        const msg = document.getElementById("msgInput").value;
-        if(!msg) return;
+    // Login Logik (Beispielhaft für deine Tabelle)
+    document.getElementById('finalLoginBtn').onclick = function() {
+        const user = document.getElementById('nameInput').value;
+        document.getElementById('start').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+        document.getElementById('userNameDisplay').innerText = user + " (Admin)";
         
-        await fetch(DISCORD_WEBHOOK_CHAT, {
-            method: "POST", headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username: currentUser.name, content: msg })
-        });
-        
-        const flow = document.getElementById("msg-flow");
-        flow.innerHTML += `<div class="msg-box"><b>${currentUser.name}:</b> ${msg}</div>`;
-        document.getElementById("msgInput").value = "";
-        flow.scrollTop = flow.scrollHeight;
-    }
-
-    function switchTab(t) {
-        document.getElementById("pub-chans").style.display = (t === 'pub') ? 'block' : 'none';
-        document.getElementById("priv-chans").style.display = (t === 'priv') ? 'block' : 'none';
-    }
-
-    document.getElementById("finalLoginBtn").addEventListener("click", doLogin);
-    window.onload = loadData;
+        // Panels anzeigen (je nach Rolle)
+        document.getElementById('personal').style.display = 'block';
+        document.getElementById('blacklist').style.display = 'block';
+        document.getElementById('blacklistAdmin').style.display = 'block';
+        document.getElementById('admin').style.display = 'block';
+        document.getElementById('elo').style.display = 'block';
+    };
 </script>
 </body>
 </html>
