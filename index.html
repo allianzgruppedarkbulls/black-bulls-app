@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>Dark Bulls - Dashboard V2.3</title>
+    <title>Dark Bulls - Dashboard V2.4</title>
     <link href="https://fonts.googleapis.com/css2?family=Almendra:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body { margin: 0; padding: 0; font-family: 'Almendra', serif; background: black; color: white; overflow: hidden; height: 100vh; }
@@ -59,37 +59,44 @@
 </div>
 
 <script>
-    // DEINE AKTUELLEN CLOUD-DATEN
     const SHEET_ID = '1Gjnhol0ou63xW20OnbTo_wugzpOTgBP2yjnx3Qzg4bQ';
     const GID = '981562519'; 
-    const READ_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${GID}`;
+    // Wir nutzen den tq-Link, der ist oft resistenter gegen Browser-Sperren
+    const READ_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID}`;
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzk-xY2QN3-BiYRPLiriQnWGILfl3809vFjCvyJMWrKMiTuy4lqtvEJBcnDM7GPzPYnMQ/exec';
 
     let users = [];
 
     async function init() {
         try {
-            console.log("Verbinde zur Dark Bulls Datenbank...");
+            console.log("Verbindungsversuch...");
             const res = await fetch(READ_URL);
-            if (!res.ok) throw new Error("Zugriff verweigert");
-            const data = await res.text();
-            const rows = data.split('\n').slice(1);
+            const text = await res.text();
+            
+            // CSV Parsing verbessern
+            const rows = text.split('\n').slice(1);
             users = rows.map(r => {
                 const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                 const clean = (s) => s ? s.replace(/["']/g, "").trim() : "";
                 return { name: clean(c[0]), pin: clean(c[2]), role: clean(c[3]) };
             });
-            console.log("Daten geladen! Spieler im System: " + users.length);
+            
+            console.log("System bereit! Spieler geladen: " + users.length);
         } catch (e) {
-            console.error("Cloud-Fehler: " + e.message);
-            alert("Verbindung zur Cloud fehlgeschlagen! Bitte Freigabe der Tabelle prüfen.");
+            console.error("Fehler beim Laden:", e);
+            alert("Die Cloud blockiert noch. Bitte stelle sicher, dass du in der Tabelle auf 'Freigeben' -> 'Jeder' geklickt hast!");
         }
     }
 
     function login() {
         const n = document.getElementById("nameInput").value.trim().toLowerCase();
         const p = document.getElementById("pinInput").value.trim();
-        if (users.length === 0) { alert("Daten laden noch..."); return; }
+        
+        if (users.length === 0) {
+            alert("Daten laden noch oder Cloud-Zugriff wurde verweigert!");
+            return;
+        }
+
         const u = users.find(x => x.name.toLowerCase() === n && x.pin === p);
         if (u) {
             document.getElementById("start").style.display = "none";
