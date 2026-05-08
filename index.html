@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dark Bulls - Allianz System V4.5</title>
+    <title>Dark Bulls - Allianz System V5.1</title>
     
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#000000">
@@ -51,8 +51,32 @@
         #chat-btn { position: absolute; right: 40px; bottom: 40px; background: #ff8c00; padding: 20px 60px; font-size: 28px; font-weight: bold; cursor: pointer; z-index: 10; font-family: 'Almendra'; display: none; color: black; border: none; border-radius: 8px; }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
-        /* CHAT HUB */
-        #chat-hub { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; height: 85%; background: #121212; border: 2px solid #333; z-index: 6000; flex-direction: row; box-shadow: 0 0 100px black; }
+        /* --- NEUER CHAT HUB (OVERLAY) --- */
+        #chat-hub { 
+            display: none; position: fixed; z-index: 6000; left: 50%; top: 50%; transform: translate(-50%, -50%); 
+            width: 1000px; height: 650px; background: #1a1a1a; border: 2px solid #333; flex-direction: row; box-shadow: 0 0 100px black; border-radius: 10px; overflow: hidden;
+        }
+        .chat-sidebar { width: 300px; background: #111; border-right: 2px solid #333; display: flex; flex-direction: column; }
+        .chat-sidebar-tabs { display: flex; background: #333; }
+        .chat-sidebar-tabs button { flex: 1; padding: 15px; background: #222; color: white; border: none; cursor: pointer; font-family: 'Almendra'; border-bottom: 2px solid transparent; }
+        .chat-sidebar-tabs button.active { background: #1a1a1a; border-bottom: 2px solid #ff3131; }
+        .chat-sidebar-content { padding: 15px; flex: 1; overflow-y: auto; }
+        .chat-sidebar-content h3 { color: #ff3131; text-decoration: underline; margin-bottom: 15px; }
+        .chat-sidebar-item { padding: 10px; border-bottom: 1px solid #222; cursor: pointer; }
+        .chat-sidebar-item:hover { background: #222; color: #39d353; }
+
+        .chat-main { flex: 1; display: flex; flex-direction: column; padding: 20px; background: rgba(0,0,0,0.3); }
+        .chat-main h1 { text-align: center; color: #ff3131; text-decoration: underline; font-size: 30px; margin-bottom: 30px; }
+        .chat-field-group { margin-bottom: 25px; }
+        .chat-field-group label { display: block; color: #ff3131; font-size: 24px; margin-bottom: 10px; }
+        .chat-input-cow { width: 100%; background: #000; border: 1px solid #555; color: #39d353; padding: 15px; font-family: 'Almendra'; font-size: 20px; box-sizing: border-box; border-radius: 4px; }
+        .chat-area-cow { height: 180px; resize: none; }
+
+        .chat-actions { display: flex; justify-content: space-between; gap: 10px; margin-top: auto; }
+        .chat-btn-cow { flex: 1; padding: 15px; font-family: 'Almendra'; font-weight: bold; font-size: 18px; border: none; border-radius: 5px; cursor: pointer; color: black; }
+        .btn-cow-green { background: #39d353; }
+        .btn-cow-yellow { background: #ffd600; }
+        .btn-cow-red { background: #d50000; color: white; }
     </style>
 </head>
 <body>
@@ -65,32 +89,6 @@
         <button id="btn-yt" class="info-btn" onclick="window.open('https://www.youtube.com/@DarkBullsGruppe')">YOUTUBE</button>
         <button id="btn-hist" class="info-btn">HISTORIES</button>
         <button id="btn-web" class="info-btn" onclick="window.open('https://darkbulls.jimdofree.com/')">INTERNET</button>
-    </div>
-</div>
-
-<div id="pinModal" class="modal-overlay">
-    <div class="modal-box">
-        <h1>ANMELDUNG</h1>
-        <input type="text" id="nameInput" placeholder="Name...">
-        <input type="password" id="pinInput" placeholder="PIN...">
-        <div class="login-btn-row">
-            <button class="logbtn btn-green" id="finalLoginBtn">Anmelden</button>
-            <button class="logbtn btn-red" onclick="document.getElementById('pinModal').style.display='none'">Abbruch</button>
-        </div>
-    </div>
-</div>
-
-<div id="regModal" class="modal-overlay">
-    <div class="modal-box">
-        <h1>REKRUTIERUNG</h1>
-        <input type="text" id="regName" placeholder="Name">
-        <input type="password" id="regPin1" placeholder="PIN wählen">
-        <input type="password" id="regPin2" placeholder="PIN wiederholen">
-        <input type="number" id="regAge" placeholder="Alter">
-        <div class="login-btn-row">
-            <button class="logbtn btn-yellow" onclick="registerUser()">Abschicken</button>
-            <button class="logbtn btn-red" onclick="document.getElementById('regModal').style.display='none'">Abbruch</button>
-        </div>
     </div>
 </div>
 
@@ -141,80 +139,67 @@
 </div>
 
 <div id="chat-hub">
-    <div style="padding:40px; width:100%; text-align:center;">
-        <h2 style="color:#39d353;">Bulls Chat-System</h2>
-        <p>Verbindung zu Discord wird hergestellt...</p>
-        <button onclick="toggleChat()" style="background:red; color:white; padding:15px; border:none; cursor:pointer;">Schließen</button>
+    <div class="chat-sidebar">
+        <div class="chat-sidebar-tabs">
+            <button class="active">ALLIANZ CHAT</button>
+            <button>PN CHAT</button>
+        </div>
+        <div class="chat-sidebar-content">
+            <h3>Kommunikations</h3>
+            <div class="chat-sidebar-item"># plauderecke</div>
+            <div class="chat-sidebar-item"># spielersuche</div>
+            <div class="chat-sidebar-item"># karte-holland</div>
+            <div class="chat-sidebar-item"># support</div>
+        </div>
+    </div>
+    <div class="chat-main">
+        <h1>DIPLOMATIE / CHAT HUB</h1>
+        
+        <div class="chat-field-group">
+            <label>Kanal Name / User...</label>
+            <input type="text" class="chat-input-cow" placeholder="...">
+        </div>
+
+        <div class="chat-field-group">
+            <label>Nachricht...</label>
+            <textarea class="chat-input-cow chat-area-cow" placeholder="Schreibe deine Nachricht..."></textarea>
+        </div>
+
+        <div class="chat-actions">
+            <button class="chat-btn-cow btn-cow-green" onclick="alert('Senden...')">Nachricht Bestätigen</button>
+            <button class="chat-btn-cow btn-cow-yellow">Hilfe</button>
+            <button class="chat-btn-cow btn-cow-red" onclick="toggleChat()">Abbruch</button>
+        </div>
+    </div>
+    <button onclick="toggleChat()" style="position:absolute; top:10px; right:10px; background:red; color:white; border:none; padding:5px 10px; cursor:pointer; border-radius:4px;">X</button>
+</div>
+
+<div id="pinModal" class="modal-overlay">
+    <div class="modal-box">
+        <h1>ANMELDUNG</h1>
+        <input type="text" id="nameInput" placeholder="Name...">
+        <input type="password" id="pinInput" placeholder="PIN...">
+        <div class="login-btn-row">
+            <button class="logbtn btn-green" id="finalLoginBtn">Anmelden</button>
+            <button class="logbtn btn-red" onclick="document.getElementById('pinModal').style.display='none'">Abbruch</button>
+        </div>
+    </div>
+</div>
+
+<div id="regModal" class="modal-overlay">
+    <div class="modal-box">
+        <h1>REKRUTIERUNG</h1>
+        <input type="text" id="regName" placeholder="Name">
+        <input type="password" id="regPin1" placeholder="PIN wählen">
+        <input type="password" id="regPin2" placeholder="PIN wiederholen">
+        <input type="number" id="regAge" placeholder="Alter">
+        <div class="login-btn-row">
+            <button class="logbtn btn-yellow" onclick="registerUser()">Abschicken</button>
+            <button class="logbtn btn-red" onclick="document.getElementById('regModal').style.display='none'">Abbruch</button>
+        </div>
     </div>
 </div>
 
 <script>
-    const SHEET_ID = '1Gjnhol0ou63xW20OnbTo_wugzpOTgBP2yjnx3Qzg4bQ';
-    const GID = '1188820112'; 
-    const SCRIPT_URL = 'DEIN_SCRIPT_URL_VON_AYAD'; 
-
-    let users = [];
-
-    async function loadData() {
-        try {
-            const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID}`);
-            const text = await res.text();
-            const rows = text.split('\n').slice(1);
-            users = rows.map(r => {
-                const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-                const clean = (s) => s ? s.replace(/["']/g, "").trim() : "";
-                return { name: clean(c[0]), pin: clean(c[2]), role: clean(c[3]) };
-            });
-        } catch (e) { console.error("Cloud-Fehler!"); }
-    }
-
-    function toggleChat() {
-        const hub = document.getElementById('chat-hub');
-        hub.style.display = (hub.style.display === 'flex') ? 'none' : 'flex';
-    }
-
-    async function registerUser() {
-        const p1 = document.getElementById('regPin1').value;
-        const p2 = document.getElementById('regPin2').value;
-        const name = document.getElementById('regName').value;
-        if (p1 !== p2) return alert("PINs nicht identisch!");
-        if (!name || !p1) return alert("Bitte Name und PIN eingeben!");
-        alert("Anfrage gesendet! Ayads Bot erstellt nun einen Kanal.");
-        document.getElementById('regModal').style.display = 'none';
-    }
-
-    function doLogin() {
-        const inputName = document.getElementById("nameInput").value.trim().toLowerCase();
-        const inputPin = document.getElementById("pinInput").value.trim();
-        const u = users.find(user => user.name.toLowerCase() === inputName && user.pin === inputPin);
-
-        if (u) {
-            document.getElementById("start").style.display = "none";
-            document.getElementById("pinModal").style.display = "none";
-            document.getElementById("dashboard").style.display = "block";
-            document.getElementById("userNameDisplay").innerText = u.name;
-            document.getElementById("userRoleDisplay").innerText = u.role;
-
-            const show = (id) => document.getElementById(id).style.display = "block";
-            const hide = (id) => document.getElementById(id).style.display = "none";
-            
-            hide("personal"); hide("blacklist"); hide("blacklistAdmin"); hide("admin"); hide("elo"); hide("chat-btn");
-            
-            if (u.role === "Gast") {
-                show("personal"); hide("btn-stats"); hide("btn-tipps"); show("chat-btn");
-            } else if (u.role === "Neuling") {
-                show("personal"); hide("btn-stats"); hide("btn-tipps");
-            } else {
-                show("personal"); show("blacklist"); show("chat-btn");
-                if (u.role === "Admin" || u.role === "Offizier") show("admin");
-                if (u.role === "Admin" || u.role === "Elo") show("elo");
-                if (u.role === "Admin" || u.role === "Buchhalter") show("blacklistAdmin");
-            }
-        } else { alert("Name oder PIN falsch!"); }
-    }
-
-    document.getElementById("finalLoginBtn").addEventListener("click", doLogin);
-    window.onload = loadData;
-</script>
-</body>
-</html>
+    const SHEET_ID = '1Gjnhol0ou63xW20OnbTo_wugzpOTgBP2yjnx3Qzg
+        
