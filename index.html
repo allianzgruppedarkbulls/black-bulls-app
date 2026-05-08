@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dark Bulls - Allianz System V5.9</title>
+    <title>Dark Bulls - Allianz System V8.0</title>
 
     <link rel="icon" type="image/png" href="192x192icon.png">
     <link rel="apple-touch-icon" href="192x192icon.png">
@@ -25,46 +25,54 @@
         #btn-hist { background: #5b5bff; color: white; }
         #btn-web { background: #00cfd1; }
 
-        /* MODALS */
+        /* MODALS BASIS */
         .modal-overlay { display: none; position: fixed; z-index: 5000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); justify-content: center; align-items: center; }
-        .modal-box { background: #1a1a1a; padding: 30px; width: 400px; max-width: 85vw; border: 3px solid #333; text-align: center; border-radius: 12px; }
-        .modal-box input { width: 100%; padding: 12px; margin-bottom: 12px; background: #000; color: #39d353; border: 1px solid #444; font-family: 'Almendra'; font-size: 18px; box-sizing: border-box; outline: none; }
+        .dark-modal { background: #1a1a1a; padding: 30px; width: 450px; max-width: 90vw; border: 3px solid #333; text-align: center; border-radius: 12px; box-shadow: 0 0 50px rgba(255,0,0,0.4); }
+        .dark-modal h1 { color: #ff3131; text-decoration: underline; font-size: 35px; margin-bottom: 20px; text-transform: uppercase; }
+        .dark-modal input { width: 100%; padding: 12px; margin-bottom: 12px; background: #000; color: #39d353; border: 1px solid #444; font-family: 'Almendra'; font-size: 18px; box-sizing: border-box; outline: none; border-radius: 4px; }
+
+        /* BUTTONS */
+        .logbtn { padding: 15px; border: none; cursor: pointer; font-family: 'Almendra'; font-weight: bold; font-size: 18px; border-radius: 5px; color: black; }
+        .btn-green { background: #39d353; }
+        .btn-red { background: #d50000; color: white; }
+        .btn-yellow { background: #ffbd00; color: black; }
 
         /* --- DASHBOARD --- */
         #dashboard { display: none; position: relative; width: 100vw; min-height: 100vh; background: black; }
         #bg-bull { position: fixed; left: 50%; top: 45%; transform: translate(-50%, -50%); width: 850px; z-index: 1; opacity: 0.4; pointer-events: none; }
-        
         #top-bar { position: fixed; top: 0; width: 100%; display: flex; justify-content: flex-end; padding: 10px 20px; z-index: 100; box-sizing: border-box; background: rgba(0,0,0,0.8); }
         
-        /* Animation für Panels */
         .panel { opacity: 0; transform: translateY(20px); transition: all 0.6s ease-out; background: rgba(15, 15, 15, 0.95); border: 1px solid #444; padding: 12px; z-index: 10; border-radius: 8px; width: 240px; }
         .panel.visible { opacity: 1; transform: translateY(0); }
-        
         .panel h2 { color: #ff3131; margin: 0 0 8px 0; font-size: 20px; text-decoration: underline; }
-        .panel button { display: block; width: 100%; margin: 5px 0; background: #39d353; border: none; padding: 8px; font-family: 'Almendra'; font-weight: bold; cursor: pointer; color: black; border-radius: 4px; font-size: 14px; }
+        .panel button { display: block; width: 100%; margin: 5px 0; background: #39d353; border: none; padding: 10px; font-family: 'Almendra'; font-weight: bold; cursor: pointer; color: black; border-radius: 4px; font-size: 14px; }
 
         #chat-btn { position: fixed; bottom: 0; right: 0; background: #ff8c00; padding: 15px; font-size: 22px; font-weight: bold; cursor: pointer; z-index: 200; font-family: 'Almendra'; width: 100%; display: none; color: black; border: none; opacity: 0; transition: opacity 1s; }
 
-        /* PC Postitionen */
+        /* PC Positionen */
         @media (min-width: 801px) {
             .panel { position: absolute; }
             #personal { left: 40px; top: 80px; }
-            #blacklist { left: 40px; top: 380px; }
+            #blacklistPanel { left: 40px; top: 380px; }
             #blacklistAdmin { left: 40px; bottom: 40px; width: 440px; }
             #admin { right: 40px; top: 120px; width: 260px; }
             #elo { right: 40px; top: 420px; width: 260px; }
             #chat-btn { width: auto; right: 40px; bottom: 40px; border-radius: 8px; padding: 20px 60px; font-size: 28px; }
         }
 
-        /* --- HANDY FIX --- */
+        /* Handy Fix */
         @media (max-width: 800px) {
-            #loginBar, #regBar, .info-btn { width: 35px; padding: 15px 3px; font-size: 14px; }
-            #side-menu { gap: 5px; }
-            
             #dashboard { overflow-y: auto; display: none; flex-direction: column; align-items: center; padding-top: 70px; padding-bottom: 100px; }
             .panel { position: relative !important; width: 92% !important; left: auto !important; top: auto !important; margin: 10px auto !important; }
-            .panel button { padding: 12px; font-size: 16px; } /* Etwas größer zum Tippen, aber Box kleiner */
         }
+
+        /* BLACKLIST MODAL SPEZIAL */
+        .bl-box { width: 95%; max-width: 1100px; background: #0c0c0c; border: 1px solid #333; padding: 25px; border-radius: 15px; font-family: 'Almendra'; }
+        .bl-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; text-align: left; }
+        .bl-grid p { margin: 5px 0; font-size: 18px; font-weight: bold; }
+        .bl-grid span { color: #39d353; margin-left: 5px; }
+        .story-box { background: #000; border: 1px solid #333; min-height: 120px; padding: 15px; color: #39d353; font-size: 20px; line-height: 1.4; margin-top: 10px; border-radius: 5px; }
+        @media (max-width: 800px) { .bl-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -81,13 +89,83 @@
 </div>
 
 <div id="pinModal" class="modal-overlay">
-    <div class="modal-box">
-        <h1>ANMELDUNG</h1>
+    <div class="dark-modal">
+        <h1>Anmeldung</h1>
         <input type="text" id="nameInput" placeholder="Name...">
         <input type="password" id="pinInput" placeholder="PIN...">
         <div style="display:flex; gap:10px;">
-            <button class="logbtn" style="flex:1; background:#39d353; padding:15px; border:none; font-family:'Almendra'; font-weight:bold;" id="finalLoginBtn">Anmelden</button>
-            <button class="logbtn" style="flex:1; background:#d50000; color:white; border:none; font-family:'Almendra';" onclick="document.getElementById('pinModal').style.display='none'">Abbruch</button>
+            <button class="logbtn btn-green" style="flex:1" onclick="doLogin()">Anmelden</button>
+            <button class="logbtn btn-red" style="flex:1" onclick="document.getElementById('pinModal').style.display='none'">Abbruch</button>
+        </div>
+    </div>
+</div>
+
+<div id="regModal" class="modal-overlay">
+    <div class="dark-modal">
+        <h1>Rekrutierung</h1>
+        <input type="text" id="regName" placeholder="Dein Name">
+        <input type="password" id="regPin1" placeholder="PIN wählen">
+        <input type="number" id="regAge" placeholder="Dein Alter">
+        <div style="display:flex; gap:10px;">
+            <button class="logbtn btn-yellow" style="flex:1" onclick="alert('Anfrage gesendet!')">Abschicken</button>
+            <button class="logbtn btn-red" style="flex:1" onclick="document.getElementById('regModal').style.display='none'">Abbruch</button>
+        </div>
+    </div>
+</div>
+
+<div id="pinChangeModal" class="modal-overlay">
+    <div class="dark-modal">
+        <h1>Pin Ändern</h1>
+        <div id="pinChangeForm">
+            <p style="color: #39d353;">Benutzer: <span id="pinUser"></span></p>
+            <input type="password" id="newPin1" placeholder="Neue PIN">
+            <input type="password" id="newPin2" placeholder="Wiederholen">
+            <div style="display:flex; gap:10px;">
+                <button class="logbtn btn-green" style="flex:1" onclick="submitPinChange()">Speichern</button>
+                <button class="logbtn btn-red" style="flex:1" onclick="closePinModal()">Abbruch</button>
+            </div>
+        </div>
+        <div id="pinSuccessMessage" style="display: none;">
+            <p style="color: #ffd600; font-size: 24px;">✓ PIN geändert!</p>
+            <p id="displayNewPin" style="color: #39d353; font-size: 32px;"></p>
+            <button class="logbtn btn-green" style="width:100%" onclick="closePinModal()">Verstanden</button>
+        </div>
+    </div>
+</div>
+
+<div id="blacklistModal" class="modal-overlay">
+    <div class="bl-box">
+        <h1 style="color: #ff3131; text-align: center; text-decoration: underline;">DARK BULLS BLACK LISTE</h1>
+        <div style="display: flex; gap: 10px; margin-bottom: 20px; background: #1a1a1a; padding: 10px; border-radius: 8px;">
+            <input list="playerList" id="blSearchInput" placeholder="Name oder ID suchen..." style="flex:1; padding:10px; background:black; color:#39d353; border:1px solid #555; font-family:'Almendra';">
+            <datalist id="playerList"></datalist>
+            <button class="logbtn btn-green" onclick="loadBlacklistPlayer()">Laden</button>
+        </div>
+        <div class="bl-grid">
+            <div>
+                <p style="color:#5b9bd5; border-bottom:1px solid #5b9bd5">Spielerdaten</p>
+                <p>ID: <span id="outID"></span></p>
+                <p>Allianz: <span id="outAllianz"></span></p>
+                <p>Verstoß: <span id="outVerstoss"></span></p>
+                <p>Fall: <span id="outFall"></span></p>
+            </div>
+            <div>
+                <p style="color:transparent">.</p>
+                <p>Name: <span id="outName"></span></p>
+                <p>Punkte: <span id="outPunkte"></span></p>
+            </div>
+            <div>
+                <p style="color:transparent">.</p>
+                <p>Reg: <span id="outDateReg"></span></p>
+                <p>Map: <span id="outMap"></span></p>
+                <p>Beweis: <span id="outBeweis"></span></p>
+                <p>Datum: <span id="outDateEvent"></span></p>
+            </div>
+        </div>
+        <p style="color: #ffbd00; font-weight: bold; margin-top: 15px;">Was ist passiert / Beschreibung:</p>
+        <div id="outStory" class="story-box"></div>
+        <div style="display: flex; justify-content: center; gap: 20px; margin-top: 20px;">
+            <button class="logbtn btn-yellow" style="min-width:150px" onclick="document.getElementById('blacklistModal').style.display='none'">Zurück</button>
         </div>
     </div>
 </div>
@@ -95,54 +173,51 @@
 <div id="dashboard">
     <div id="top-bar">
         <div style="font-size: 18px; color:#ff3131"><span id="userNameDisplay"></span> (<span id="userRoleDisplay"></span>)</div>
-        <button onclick="location.reload()" style="background:#d50000; color:white; border:none; padding:8px 15px; cursor:pointer; margin-left:10px; border-radius:5px; font-family:'Almendra';">LOGOUT</button>
+        <button onclick="location.reload()" style="background:#d50000; color:white; border:none; padding:8px 15px; cursor:pointer; margin-left:15px; border-radius:5px; font-family:'Almendra';">LOGOUT</button>
     </div>
     <img src="bulls_dashboard.jpg" id="bg-bull">
 
     <div class="panel" id="personal">
         <h2>Persönlich</h2>
-        <button>Pin ändern</button>
+        <button onclick="openChangePin()">Pin ändern</button>
         <button>Statistiken</button>
         <button>Tipps</button>
     </div>
 
-    <div class="panel" id="blacklist">
+    <div class="panel" id="blacklistPanel">
         <h2>Black Liste</h2>
-        <button>Sp. Melden</button>
-        <button>Anschauen</button>
+        <button onclick="alert('Melde-System folgt')">Sp. Melden</button>
+        <button onclick="openBlacklist()">Anschauen</button>
     </div>
 
     <div class="panel" id="blacklistAdmin">
         <h2>Pflege Admin</h2>
-        <button>Gemeldete Spieler</button>
-        <button>Pflege</button>
-        <button>Eintragen</button>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:5px;">
+            <button style="font-size:12px">Gemeldete</button>
+            <button>Pflege</button>
+            <button>Eintragen</button>
+            <button>Volle Ansicht</button>
+        </div>
     </div>
 
-    <div class="panel" id="admin">
-        <h2>Admin</h2>
-        <button>User-Verwaltung</button>
-        <button>Einstellungen</button>
-        <button style="background:#ffd600">Hilfe-Anfragen</button>
-    </div>
+    <div class="panel" id="admin"><h2>Admin</h2><button>User-Verwaltung</button><button>Einstellungen</button><button style="background:#ffd600">Hilfe-Anfragen</button></div>
+    <div class="panel" id="elo"><h2>Elo Bereich</h2><button>Rohstoffrechner</button><button>Einheitenrechner</button></div>
 
-    <div class="panel" id="elo">
-        <h2>Elo Bereich</h2>
-        <button>Rohstoffrechner</button>
-        <button>Einheitenrechner</button>
-    </div>
-
-    <button id="chat-btn">ALLIANZ CHAT</button>
+    <button id="chat-btn" onclick="alert('Chat folgt')">ALLIANZ CHAT</button>
 </div>
 
 <script>
     const SHEET_ID = '1Gjnhol0ou63xW20OnbTo_wugzpOTgBP2yjnx3Qzg4bQ';
-    const GID = '1188820112'; 
+    const GID_USERS = '1188820112';
+    const GID_BLACKLIST = '1767725514';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzLm15M-C9GmMlCqYO63C9_T4942ZT19WMA_RkwASCzZptaSyNeZ_brizzGqjs6JAmf3Q/exec';
+
     let users = [];
+    let blacklistData = [];
 
     async function loadData() {
         try {
-            const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID}`);
+            const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_USERS}`);
             const text = await res.text();
             const rows = text.split('\n').slice(1);
             users = rows.map(r => {
@@ -150,49 +225,101 @@
                 const clean = (s) => s ? s.replace(/["']/g, "").trim() : "";
                 return { name: clean(c[0]), pin: clean(c[2]), role: clean(c[3]) };
             });
-        } catch (e) { console.error("Datenfehler!"); }
+        } catch (e) { console.error("Cloud-Fehler!"); }
     }
 
     function doLogin() {
-        const inputName = document.getElementById("nameInput").value.trim().toLowerCase();
-        const inputPin = document.getElementById("pinInput").value.trim();
-        const u = users.find(user => user.name.toLowerCase() === inputName && user.pin === inputPin);
+        const n = document.getElementById("nameInput").value.trim().toLowerCase();
+        const p = document.getElementById("pinInput").value.trim();
+        const u = users.find(user => user.name.toLowerCase() === n && user.pin === p);
 
         if (u) {
             document.getElementById("pinModal").style.display = "none";
             document.getElementById("start").style.display = "none";
-            
             const dash = document.getElementById("dashboard");
             dash.style.display = window.innerWidth <= 800 ? "flex" : "block";
-            
             document.getElementById("userNameDisplay").innerText = u.name;
             document.getElementById("userRoleDisplay").innerText = u.role;
 
-            // --- ANIMATIONS LOGIK ---
-            // Zuerst nur Hintergrund, dann Buttons einblenden
             setTimeout(() => {
                 const panels = document.querySelectorAll('.panel');
-                panels.forEach((p, index) => {
-                    // Prüfen, ob User das Panel sehen darf
-                    let darfSehen = false;
-                    if (u.role === "Admin") darfSehen = true;
-                    else if (p.id === "personal") darfSehen = true;
-                    else if (p.id === "blacklist" && u.role !== "Gast" && u.role !== "Neuling") darfSehen = true;
-                    
+                panels.forEach((panel, index) => {
+                    let darfSehen = (u.role === "Admin" || panel.id === "personal" || (panel.id === "blacklistPanel" && u.role !== "Gast"));
                     if (darfSehen) {
-                        p.style.display = "block";
-                        setTimeout(() => p.classList.add('visible'), index * 150); // Sanftes Nacheinander-Einblenden
+                        panel.style.display = "block";
+                        setTimeout(() => panel.classList.add('visible'), index * 120);
                     }
                 });
-                const chatBtn = document.getElementById("chat-btn");
-                chatBtn.style.display = "block";
-                setTimeout(() => chatBtn.style.opacity = "1", 500);
-            }, 800); // 0,8 Sekunden warten (nur Hintergrund zeigen)
-
+                const chat = document.getElementById("chat-btn");
+                chat.style.display = "block";
+                setTimeout(() => chat.style.opacity = "1", 500);
+            }, 600);
         } else { alert("Login falsch!"); }
     }
 
-    document.getElementById("finalLoginBtn").onclick = doLogin;
+    function openChangePin() {
+        document.getElementById("pinUser").innerText = document.getElementById("userNameDisplay").innerText;
+        document.getElementById("pinChangeModal").style.display = "flex";
+    }
+
+    function closePinModal() {
+        document.getElementById('pinChangeModal').style.display = 'none';
+        document.getElementById('pinChangeForm').style.display = 'block';
+        document.getElementById('pinSuccessMessage').style.display = 'none';
+    }
+
+    async function submitPinChange() {
+        const n1 = document.getElementById("newPin1").value;
+        const player = document.getElementById("pinUser").innerText;
+        const payload = { action: "updatePin", playerName: player, newPin: n1 };
+        try {
+            const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) });
+            const result = await res.text();
+            if (result === "PIN geändert") {
+                document.getElementById('pinChangeForm').style.display = 'none';
+                document.getElementById('displayNewPin').innerText = n1;
+                document.getElementById('pinSuccessMessage').style.display = 'block';
+                loadData();
+            }
+        } catch (e) { alert("Übertrag fehlgeschlagen!"); }
+    }
+
+    async function openBlacklist() {
+        document.getElementById('blacklistModal').style.display = 'flex';
+        const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_BLACKLIST}`);
+        const text = await res.text();
+        const rows = text.split('\n').slice(1);
+        const listEl = document.getElementById('playerList');
+        listEl.innerHTML = ""; blacklistData = [];
+        rows.forEach(r => {
+            const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/"/g,"").trim());
+            if(c[1]) {
+                blacklistData.push(c);
+                let opt = document.createElement('option');
+                opt.value = c[1] + " | " + c[2];
+                listEl.appendChild(opt);
+            }
+        });
+    }
+
+    function loadBlacklistPlayer() {
+        const search = document.getElementById('blSearchInput').value.split(" | ")[0];
+        const p = blacklistData.find(row => row[1] === search);
+        if(p) {
+            document.getElementById('outID').innerText = p[1];
+            document.getElementById('outName').innerText = p[2];
+            document.getElementById('outDateReg').innerText = p[3];
+            document.getElementById('outMap').innerText = p[4];
+            document.getElementById('outAllianz').innerText = p[5];
+            document.getElementById('outVerstoss').innerText = p[6];
+            document.getElementById('outFall').innerText = p[12];
+            document.getElementById('outStory').innerText = p[13];
+            document.getElementById('outDateEvent').innerText = p[14];
+            document.getElementById('outBeweis').innerText = p[15];
+            document.getElementById('outPunkte').innerText = p[16];
+        }
+    }
+
     window.onload = loadData;
 </script>
 </body>
