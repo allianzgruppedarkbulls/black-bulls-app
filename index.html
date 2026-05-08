@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dark Bulls System V7.6</title>
+    <title>Dark Bulls System V7.7</title>
     <link href="https://fonts.googleapis.com/css2?family=Almendra:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body { margin: 0; padding: 0; font-family: 'Almendra', serif; background: black; color: white; overflow-x: hidden; }
@@ -11,42 +11,34 @@
         /* --- STARTSEITE --- */
         #start { display: flex; align-items: center; justify-content: center; height: 100vh; position: relative; background: black; }
         #logo-container img { width: 780px; max-width: 75vw; filter: drop-shadow(0 0 60px rgba(255, 0, 0, 0.9)); }
-        
         #loginBar { position: absolute; left: 0; top: 40%; transform: translateY(-50%); background: #39d353; padding: 40px 10px; font-size: 24px; font-weight: bold; color: black; cursor: pointer; z-index: 100; border-radius: 0 15px 15px 0; writing-mode: vertical-rl; text-orientation: upright; width: 50px; text-align: center; }
 
-        /* --- GRAU-SCHWARZES MODAL DESIGN --- */
+        /* --- MODALS --- */
         .modal-overlay { display: none; position: fixed; z-index: 5000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; }
-        
-        .dark-modal { 
-            background: #1c1c1c; border: 2px solid #333; border-radius: 15px; padding: 40px; width: 450px; 
-            box-shadow: 0 0 40px rgba(255, 0, 0, 0.4); text-align: center;
-        }
+        .dark-modal { background: #1c1c1c; border: 2px solid #333; border-radius: 15px; padding: 40px; width: 450px; box-shadow: 0 0 40px rgba(255, 0, 0, 0.4); text-align: center; }
         .dark-modal h1 { color: #ff3131; font-size: 42px; margin-bottom: 20px; text-decoration: underline; text-transform: uppercase; }
-        .dark-modal input { 
-            width: 100%; padding: 15px; margin-bottom: 15px; background: #000; color: #39d353; border: 1px solid #444; 
-            font-family: 'Almendra'; font-size: 22px; box-sizing: border-box; border-radius: 5px; outline: none;
-        }
+        .dark-modal input { width: 100%; padding: 15px; margin-bottom: 15px; background: #000; color: #39d353; border: 1px solid #444; font-family: 'Almendra'; font-size: 22px; box-sizing: border-box; border-radius: 5px; outline: none; }
 
-        .btn-cow-green { background: #39d353; color: black; font-weight: bold; border: none; padding: 15px; border-radius: 8px; cursor: pointer; font-family: 'Almendra'; font-size: 20px; flex: 1; }
-        .btn-cow-red { background: #d50000; color: white; font-weight: bold; border: none; padding: 15px; border-radius: 8px; cursor: pointer; font-family: 'Almendra'; font-size: 20px; flex: 1; }
-        .btn-cow-yellow { background: #ffbd00; color: black; font-weight: bold; border: none; padding: 15px; border-radius: 5px; cursor: pointer; font-family: 'Almendra'; font-size: 24px; min-width: 200px; }
+        .btn-cow-green { background: #39d353; color: black; font-weight: bold; border: none; padding: 15px; border-radius: 8px; cursor: pointer; font-family: 'Almendra'; font-size: 20px; }
+        .btn-cow-red { background: #d50000; color: white; font-weight: bold; border: none; padding: 15px; border-radius: 8px; cursor: pointer; font-family: 'Almendra'; font-size: 20px; }
+        .btn-cow-yellow { background: #ffbd00; color: black; font-weight: bold; border: none; padding: 12px; border-radius: 5px; cursor: pointer; font-family: 'Almendra'; font-size: 24px; min-width: 180px; }
 
-        /* --- BLACK LISTE OPTIK --- */
-        .bl-box { width: 95%; max-width: 1200px; background: #111; border: 2px solid #333; padding: 30px; border-radius: 10px; box-shadow: 0 0 50px black; }
-        .bl-header { color: #ff3131; font-size: 55px; text-align: center; margin: 0 0 20px 0; font-weight: bold; text-decoration: underline; }
+        /* --- BLACK LISTE (image_1d2512.png Optik) --- */
+        .bl-box { width: 95%; max-width: 1100px; background: #0c0c0c; border: 1px solid #333; padding: 30px; border-radius: 15px; position: relative; box-shadow: 0 0 50px black; }
+        .bl-header { color: #ff0000; font-size: 50px; text-align: center; margin: 0 0 20px 0; font-weight: bold; text-decoration: underline; letter-spacing: 2px; }
         
-        .bl-search-row { display: flex; gap: 20px; align-items: center; margin-bottom: 30px; background: #1a1a1a; padding: 15px; border-radius: 10px; }
-        .bl-search-row label { font-size: 28px; font-weight: bold; }
-        .bl-search-row input { flex: 1; background: black; border: 1px solid #555; color: #39d353; padding: 12px; font-size: 22px; font-family: 'Almendra'; outline: none; }
+        .bl-search-container { background: #151515; border-radius: 10px; padding: 15px; display: flex; align-items: center; gap: 15px; margin-bottom: 20px; border: 1px solid #222; }
+        .bl-search-container label { font-size: 24px; font-weight: bold; }
+        .bl-search-container select, .bl-search-container input { flex: 1; background: black; border: 1px solid #333; color: #39d353; padding: 10px; font-size: 20px; font-family: 'Almendra'; outline: none; border-radius: 5px; }
 
-        .bl-section-title { color: #5b9bd5; font-size: 26px; border-bottom: 1px solid #5b9bd5; margin: 25px 0 15px 0; font-style: italic; }
-        .bl-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; text-align: left; }
-        .bl-grid p { margin: 8px 0; font-size: 20px; font-weight: bold; }
-        .bl-grid span { color: #39d353; margin-left: 10px; }
+        .bl-section-title { color: #5b9bd5; font-size: 22px; border-bottom: 1px solid #5b9bd5; margin: 20px 0 10px 0; font-style: italic; }
+        .bl-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; text-align: left; }
+        .bl-grid p { margin: 5px 0; font-size: 18px; font-weight: bold; color: white; }
+        .bl-grid span { color: #39d353; margin-left: 5px; }
 
-        /* GROSSE STORY BOX */
-        .story-container { grid-column: span 3; background: #000; border: 1px solid #444; padding: 20px; margin-top: 10px; border-radius: 5px; }
-        .story-text { color: #39d353; font-size: 22px; line-height: 1.4; min-height: 100px; white-space: pre-wrap; }
+        /* Die Story Box */
+        .story-label { color: #ffbd00; font-size: 20px; font-weight: bold; margin: 15px 0 5px 0; }
+        .story-box { background: #000; border: 1px solid #333; border-radius: 5px; min-height: 150px; padding: 15px; color: #39d353; font-size: 20px; line-height: 1.4; white-space: pre-wrap; }
 
         /* --- DASHBOARD --- */
         #dashboard { display: none; position: relative; width: 100vw; min-height: 100vh; background: black; }
@@ -73,8 +65,8 @@
         <input type="text" id="nameInput" placeholder="Name...">
         <input type="password" id="pinInput" placeholder="PIN...">
         <div style="display:flex; gap:15px;">
-            <button class="btn-cow-green" onclick="doLogin()">Anmelden</button>
-            <button class="btn-cow-red" onclick="document.getElementById('loginModal').style.display='none'">Abbruch</button>
+            <button class="btn-cow-green" style="flex:1" onclick="doLogin()">Anmelden</button>
+            <button class="btn-cow-red" style="flex:1" onclick="document.getElementById('loginModal').style.display='none'">Abbruch</button>
         </div>
     </div>
 </div>
@@ -83,12 +75,12 @@
     <div class="dark-modal">
         <h1>Pin Ändern</h1>
         <p>Benutzer: <span id="pinUser">Julian</span></p>
-        <input type="password" id="oldPin" placeholder="Alte PIN">
-        <input type="password" id="newPin1" placeholder="Neue PIN">
-        <input type="password" id="newPin2" placeholder="Wiederholen">
+        <input type="password" id="oldPin" placeholder="****">
+        <input type="password" id="newPin1" placeholder="****">
+        <input type="password" id="newPin2" placeholder="****">
         <div style="display:flex; gap:15px; margin-top:10px;">
-            <button class="btn-cow-green" onclick="submitPinChange()">Speichern</button>
-            <button class="btn-cow-red" onclick="closePinModal()">Abbruch</button>
+            <button class="btn-cow-green" style="flex:1" onclick="submitPinChange()">Speichern</button>
+            <button class="btn-cow-red" style="flex:1" onclick="closePinModal()">Abbruch</button>
         </div>
     </div>
 </div>
@@ -97,11 +89,11 @@
     <div class="bl-box">
         <div class="bl-header">DARK BULLS BLACK LISTE</div>
         
-        <div class="bl-search-row">
+        <div class="bl-search-container">
             <label>Spieler auswählen</label>
-            <input list="playerList" id="blSearchInput" placeholder="Suchen...">
+            <input list="playerList" id="blSearchInput" placeholder="ID | Name">
             <datalist id="playerList"></datalist>
-            <button class="btn-cow-green" style="max-width: 200px;" onclick="loadBlacklistPlayer()">Laden</button>
+            <button class="btn-cow-green" style="min-width:120px;" onclick="loadBlacklistPlayer()">Laden</button>
         </div>
 
         <div class="bl-section-title">Spielerdaten vom gemeldeten Spieler</div>
@@ -122,21 +114,27 @@
                 <p>Beweise? <span id="outBeweis"></span></p>
                 <p>Meldung: <span id="outDateEvent"></span></p>
             </div>
+        </div>
 
-            <div class="story-container">
-                <p style="color: #ffbd00; margin-bottom: 10px;">Was ist passiert / Beschreibung:</p>
-                <div id="outStory" class="story-text">Hier erscheint die Fallbeschreibung...</div>
+        <div class="story-label">Was ist passiert / Beschreibung:</div>
+        <div id="outStory" class="story-box"></div>
+
+        <div class="bl-section-title">Zeugen</div>
+        <div class="bl-grid" style="grid-template-columns: 1fr 1fr 1fr;">
+            <div>
+                <p>Melder: <span id="outMelder"></span></p>
+            </div>
+            <div>
+                <p>Zeuge 1: <span id="outZ1"></span></p>
+                <p>Zeuge 2: <span id="outZ2"></span></p>
+            </div>
+            <div>
+                <p>Zeuge 3: <span id="outZ3"></span></p>
+                <p>Zeuge 4: <span id="outZ4"></span></p>
             </div>
         </div>
 
-        <div class="bl-section-title">Zeugen</div>
-        <div class="bl-grid">
-            <div><p>Melder: <span id="outMelder"></span></p></div>
-            <div><p>Zeuge 1: <span id="outZ1"></span></p><p>Zeuge 2: <span id="outZ2"></span></p></div>
-            <div><p>Zeuge 3: <span id="outZ3"></span></p><p>Zeuge 4: <span id="outZ4"></span></p></div>
-        </div>
-
-        <div style="display: flex; justify-content: center; gap: 40px; margin-top: 40px;">
+        <div style="display: flex; justify-content: center; gap: 40px; margin-top: 30px;">
             <button class="btn-cow-yellow" onclick="document.getElementById('blacklistModal').style.display='none'">Zurück</button>
             <button class="btn-cow-yellow" onclick="alert('Hilfe wird gerufen...')">Hilfe</button>
         </div>
@@ -240,6 +238,11 @@
     }
 
     async function openBlacklist() {
+        // Felder leeren beim Öffnen
+        const fields = ["outID","outName","outDateReg","outMap","outAllianz","outVerstoss","outMelder","outZ1","outZ2","outZ3","outZ4","outFall","outStory","outDateEvent","outBeweis","outPunkte"];
+        fields.forEach(f => document.getElementById(f).innerText = "");
+        document.getElementById('blSearchInput').value = "";
+        
         document.getElementById('blacklistModal').style.display = 'flex';
         const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_BLACKLIST}`);
         const text = await res.text();
