@@ -201,5 +201,68 @@
 </div>
 
 <script>
-    const SHEET_ID = '1Gjnhol0ou63xW20OnbTo_wugzpOTgBP2yjnx3Qzg
-        
+    const SHEET_ID = '1Gjnhol0ou63xW20OnbTo_wugzpOTgBP2yjnx3Qzg4bQ';
+    const GID = '1188820112'; 
+    let users = [];
+
+    async function loadData() {
+        try {
+            const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID}`);
+            const text = await res.text();
+            const rows = text.split('\n').slice(1);
+            users = rows.map(r => {
+                const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                const clean = (s) => s ? s.replace(/["']/g, "").trim() : "";
+                return { name: clean(c[0]), pin: clean(c[2]), role: clean(c[3]) };
+            });
+        } catch (e) { console.error("Cloud-Fehler!"); }
+    }
+
+    function toggleChat() {
+        const hub = document.getElementById('chat-hub');
+        hub.style.display = (hub.style.display === 'flex') ? 'none' : 'flex';
+    }
+
+    async function registerUser() {
+        const p1 = document.getElementById('regPin1').value;
+        const p2 = document.getElementById('regPin2').value;
+        if (p1 !== p2) return alert("PINs nicht identisch!");
+        alert("Anfrage gesendet!");
+        document.getElementById('regModal').style.display = 'none';
+    }
+
+    function doLogin() {
+        const inputName = document.getElementById("nameInput").value.trim().toLowerCase();
+        const inputPin = document.getElementById("pinInput").value.trim();
+        const u = users.find(user => user.name.toLowerCase() === inputName && user.pin === inputPin);
+
+        if (u) {
+            document.getElementById("start").style.display = "none";
+            document.getElementById("pinModal").style.display = "none";
+            document.getElementById("dashboard").style.display = "block";
+            document.getElementById("userNameDisplay").innerText = u.name;
+            document.getElementById("userRoleDisplay").innerText = u.role;
+
+            const show = (id) => document.getElementById(id).style.display = "block";
+            const hide = (id) => document.getElementById(id).style.display = "none";
+            
+            hide("personal"); hide("blacklist"); hide("blacklistAdmin"); hide("admin"); hide("elo"); hide("chat-btn");
+            
+            if (u.role === "Gast") {
+                show("personal"); hide("btn-stats"); hide("btn-tipps"); show("chat-btn");
+            } else if (u.role === "Neuling") {
+                show("personal"); hide("btn-stats"); hide("btn-tipps");
+            } else {
+                show("personal"); show("blacklist"); show("chat-btn");
+                if (u.role === "Admin" || u.role === "Offizier") show("admin");
+                if (u.role === "Admin" || u.role === "Elo") show("elo");
+                if (u.role === "Admin" || u.role === "Buchhalter") show("blacklistAdmin");
+            }
+        } else { alert("Name oder PIN falsch!"); }
+    }
+
+    document.getElementById("finalLoginBtn").addEventListener("click", doLogin);
+    window.onload = loadData;
+</script>
+</body>
+</html>
