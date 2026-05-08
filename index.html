@@ -3,62 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dark Bulls - Allianz System V5.8</title>
-    
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#000000">
-    <link rel="apple-touch-icon" href="/192x192icon.png">
+    <title>Dark Bulls - Allianz System V5.9</title>
     <link href="https://fonts.googleapis.com/css2?family=Almendra:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body { margin: 0; padding: 0; font-family: 'Almendra', serif; background: black; color: white; overflow: hidden; height: 100vh; }
-        
-        /* --- STARTSEITE --- */
         #start { display: flex; align-items: center; justify-content: center; height: 100vh; position: relative; background: black; }
         #logo-container img { width: 780px; max-width: 75vw; filter: drop-shadow(0 0 60px rgba(255, 0, 0, 0.9)); }
-        
-        #loginBar { position: absolute; left: 0; top: 40%; transform: translateY(-50%); background: #39d353; padding: 40px 10px; font-size: 24px; font-weight: bold; color: black; cursor: pointer; z-index: 100; border-radius: 0 15px 15px 0; writing-mode: vertical-rl; text-orientation: upright; width: 50px; text-align: center; box-shadow: 5px 0 15px rgba(0,255,0,0.3); }
-        #regBar { position: absolute; left: 0; top: 70%; transform: translateY(-50%); background: #ffd600; padding: 30px 10px; font-size: 16px; font-weight: bold; color: black; cursor: pointer; z-index: 100; border-radius: 0 15px 15px 0; writing-mode: vertical-rl; text-orientation: upright; width: 50px; text-align: center; box-shadow: 5px 0 15px rgba(255,214,0,0.3); }
-
+        #loginBar { position: absolute; left: 0; top: 40%; transform: translateY(-50%); background: #39d353; padding: 40px 10px; font-size: 24px; font-weight: bold; color: black; cursor: pointer; z-index: 100; border-radius: 0 15px 15px 0; writing-mode: vertical-rl; text-orientation: upright; width: 50px; text-align: center; }
+        #regBar { position: absolute; left: 0; top: 70%; transform: translateY(-50%); background: #ffd600; padding: 30px 10px; font-size: 16px; font-weight: bold; color: black; cursor: pointer; z-index: 100; border-radius: 0 15px 15px 0; writing-mode: vertical-rl; text-orientation: upright; width: 50px; text-align: center; }
         #side-menu { position: absolute; right: 0; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 12px; z-index: 100; }
         .info-btn { padding: 25px 10px; font-size: 18px; font-weight: bold; border: none; cursor: pointer; font-family: 'Almendra'; writing-mode: vertical-rl; text-orientation: upright; border-radius: 15px 0 0 15px; width: 55px; text-align: center; color: black; min-height: 140px; }
         #btn-yt { background: #ff8c00; }
         #btn-hist { background: #5b5bff; color: white; }
         #btn-web { background: #00cfd1; }
-
-        /* MODALS */
         .modal-overlay { display: none; position: fixed; z-index: 5000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); justify-content: center; align-items: center; }
-        .modal-box { background: #1a1a1a; padding: 40px; width: 450px; border: 3px solid #333; text-align: center; border-radius: 12px; box-shadow: 0 0 50px rgba(255,0,0,0.5); }
+        .modal-box { background: #1a1a1a; padding: 40px; width: 450px; border: 3px solid #333; text-align: center; border-radius: 12px; }
         .modal-box h1 { color: #ff3131; text-decoration: underline; font-size: 35px; margin-bottom: 25px; }
-        .modal-box input { width: 100%; padding: 15px; margin-bottom: 15px; background: #000; color: #39d353; border: 1px solid #444; font-family: 'Almendra'; font-size: 22px; box-sizing: border-box; outline: none; border-radius: 4px; }
-        
-        .login-btn-row { display: flex; justify-content: space-between; gap: 10px; }
-        .logbtn { flex: 1; padding: 18px; border: none; cursor: pointer; font-family: 'Almendra'; font-weight: bold; font-size: 18px; border-radius: 5px; color: black; }
+        .modal-box input { width: 100%; padding: 15px; margin-bottom: 15px; background: #000; color: #39d353; border: 1px solid #444; font-family: 'Almendra'; font-size: 22px; box-sizing: border-box; outline: none; }
+        .logbtn { padding: 18px; border: none; cursor: pointer; font-family: 'Almendra'; font-weight: bold; font-size: 18px; border-radius: 5px; color: black; flex: 1; }
         .btn-green { background: #39d353; }
         .btn-yellow { background: #ffd600; }
         .btn-red { background: #d50000; color: white; }
-
-        /* --- DASHBOARD INTERN --- */
         #dashboard { display: none; position: relative; width: 100vw; height: 100vh; background: black; }
-        #bg-bull { position: absolute; left: 50%; top: 45%; transform: translate(-50%, -50%); width: 850px; z-index: 1; opacity: 0.4; pointer-events: none; }
+        #bg-bull { position: absolute; left: 50%; top: 45%; transform: translate(-50%, -50%); width: 850px; opacity: 0.4; z-index: 1; pointer-events: none; }
         #top-bar { position: absolute; top: 20px; right: 40px; display: flex; align-items: center; gap: 20px; z-index: 100; }
-        
         .panel { position: absolute; background: rgba(15, 15, 15, 0.95); border: 1px solid #444; padding: 15px; z-index: 10; display: none; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
         .panel h2 { color: #ff3131; margin: 0 0 10px 0; font-size: 24px; text-decoration: underline; }
-        .panel button { display: block; width: 100%; margin: 8px 0; background: #39d353; border: none; padding: 10px; font-family: 'Almendra'; font-weight: bold; cursor: pointer; color: black; border-radius: 4px; transition: 0.2s; }
-        .panel button:hover { background: #fff; }
-
+        .panel button { display: block; width: 100%; margin: 8px 0; background: #39d353; border: none; padding: 10px; font-family: 'Almendra'; font-weight: bold; cursor: pointer; color: black; border-radius: 4px; }
         #personal { left: 40px; top: 40px; width: 240px; }
         #blacklistPanel { left: 40px; top: 350px; width: 240px; }
         #blacklistAdmin { left: 40px; bottom: 40px; width: 440px; }
         #adminPanel { right: 40px; top: 100px; width: 260px; }
         #eloPanel { right: 40px; top: 380px; width: 260px; }
-        
-        #chat-btn { position: absolute; right: 40px; bottom: 40px; background: #ff8c00; padding: 20px 60px; font-size: 28px; font-weight: bold; cursor: pointer; z-index: 10; font-family: 'Almendra'; display: none; color: black; border: none; border-radius: 8px; box-shadow: 0 0 20px rgba(255,140,0,0.5); }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-
-        /* BLACK LISTE MODAL */
+        #chat-btn { position: absolute; right: 40px; bottom: 40px; background: #ff8c00; padding: 20px 60px; font-size: 28px; font-weight: bold; cursor: pointer; z-index: 10; font-family: 'Almendra'; display: none; color: black; border: none; border-radius: 8px; }
         .bl-box { width: 95%; max-width: 1150px; background: #111; border: 2px solid #333; padding: 30px; border-radius: 10px; font-family: 'Almendra'; box-shadow: 0 0 100px black; }
-        .bl-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; text-align: left; }
+        .bl-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 25px; text-align: left; }
         .bl-grid span { color: #39d353; font-weight: bold; }
     </style>
 </head>
@@ -80,7 +59,7 @@
         <h1>ANMELDUNG</h1>
         <input type="text" id="nameInput" placeholder="Name...">
         <input type="password" id="pinInput" placeholder="PIN...">
-        <div class="login-btn-row">
+        <div style="display:flex; gap:10px;">
             <button class="logbtn btn-green" id="finalLoginBtn">Anmelden</button>
             <button class="logbtn btn-red" onclick="document.getElementById('pinModal').style.display='none'">Abbruch</button>
         </div>
@@ -94,47 +73,60 @@
         <input type="password" id="regPin1" placeholder="PIN wählen">
         <input type="password" id="regPin2" placeholder="PIN wiederholen">
         <input type="number" id="regAge" placeholder="Alter">
-        <div class="login-btn-row">
-            <button class="logbtn btn-yellow" onclick="registerUser()">Abschicken</button>
+        <div style="display:flex; gap:10px;">
+            <button class="logbtn btn-yellow" onclick="alert('Rekrutierung gesendet!')">Abschicken</button>
             <button class="logbtn btn-red" onclick="document.getElementById('regModal').style.display='none'">Abbruch</button>
-        </div>
-    </div>
-</div>
-
-<div id="pinChangeModal" class="modal-overlay">
-    <div class="modal-box">
-        <h1>PIN ÄNDERN</h1>
-        <div id="pinChangeForm">
-            <p style="color: #39d353;">Benutzer: <span id="pinUser"></span></p>
-            <input type="password" id="newPin1" placeholder="Neue PIN">
-            <input type="password" id="newPin2" placeholder="Neue PIN wiederholen">
-            <div class="login-btn-row">
-                <button class="logbtn btn-green" onclick="submitPinChange()">Speichern</button>
-                <button class="logbtn btn-red" onclick="closePinModal()">Abbruch</button>
-            </div>
-        </div>
-        <div id="pinSuccessMessage" style="display: none;">
-            <p style="color: #ffd600; font-size: 24px;">✓ PIN geändert!</p>
-            <p id="displayNewPin" style="color: #39d353; font-size: 32px;"></p>
-            <button class="logbtn btn-green" onclick="closePinModal()">Verstanden</button>
         </div>
     </div>
 </div>
 
 <div id="blacklistModal" class="modal-overlay">
     <div class="bl-box">
-        <h1 style="color: #ff3131; text-align: center;">DARK BULLS BLACK LISTE</h1>
-        <div style="display: flex; gap: 10px; margin: 20px 0;">
-            <input list="playerList" id="blSearchInput" placeholder="Suchen..." style="flex:1; padding:10px; background:black; color:#39d353; border:1px solid #555;">
+        <h1 style="color: #ff3131; text-align: center; font-size: 35px; margin-bottom: 20px;">DARK BULLS BLACK LISTE</h1>
+        <div style="display: flex; gap: 10px; margin-bottom: 20px; background: #1a1a1a; padding: 15px; border-radius: 8px;">
+            <input list="playerList" id="blSearchInput" placeholder="Spieler ID oder Name..." style="flex:1; padding:12px; background:black; color:#39d353; border:1px solid #555; font-family:'Almendra'; font-size: 18px;">
             <datalist id="playerList"></datalist>
-            <button class="logbtn btn-green" onclick="loadBlacklistPlayer()">Laden</button>
+            <button class="logbtn btn-green" style="flex:0.3;" onclick="loadBlacklistPlayer()">Laden</button>
         </div>
+        
         <div class="bl-grid">
-            <div><p>ID: <span id="outID"></span></p><p>Allianz: <span id="outAllianz"></span></p><p>Verstoß: <span id="outVerstoss"></span></p></div>
-            <div><p>Name: <span id="outName"></span></p><p>Punkte: <span id="outPunkte"></span></p><p>Story: <div id="outStory" style="height:60px; overflow:auto; border:1px solid #333; color:#39d353"></div></p></div>
-            <div><p>Reg: <span id="outDateReg"></span></p><p>Map: <span id="outMap"></span></p><p>Beweis: <span id="outBeweis"></span></p></div>
+            <div>
+                <h3 style="color: #5b5bff; border-bottom: 1px solid #5b5bff;">Spielerdaten</h3>
+                <p>Spieler ID: <span id="outID"></span></p>
+                <p>Spielername: <span id="outName"></span></p>
+                <p>Allianz: <span id="outAllianz"></span></p>
+                <p>Punkte: <span id="outPunkte"></span></p>
+            </div>
+            <div>
+                <h3 style="color: #5b5bff; border-bottom: 1px solid #5b5bff;">Details</h3>
+                <p>Verstoß: <span id="outVerstoss"></span></p>
+                <p>Fallnummer: <span id="outFall"></span></p>
+                <p>Angemeldet am: <span id="outDateReg"></span></p>
+                <p>Map: <span id="outMap"></span></p>
+            </div>
+            <div>
+                <h3 style="color: #5b5bff; border-bottom: 1px solid #5b5bff;">Status</h3>
+                <p>Beweise: <span id="outBeweis"></span></p>
+                <p>Meldung am: <span id="outDateEvent"></span></p>
+                <p>Melder: <span id="outMelder"></span></p>
+            </div>
         </div>
-        <button class="logbtn btn-yellow" onclick="document.getElementById('blacklistModal').style.display='none'">Zurück</button>
+
+        <div style="margin-top: 20px; border-top: 1px solid #333; padding-top: 15px;">
+            <h3 style="color: #ffd600; margin-bottom: 5px;">Was ist passiert?</h3>
+            <div id="outStory" style="background: #000; padding: 15px; border: 1px solid #444; color: #39d353; min-height: 80px; font-size: 18px; line-height: 1.4;"></div>
+        </div>
+
+        <div style="margin-top: 20px; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px;">
+            <p style="font-size:14px;">Z1: <span id="outZ1"></span></p>
+            <p style="font-size:14px;">Z2: <span id="outZ2"></span></p>
+            <p style="font-size:14px;">Z3: <span id="outZ3"></span></p>
+            <p style="font-size:14px;">Z4: <span id="outZ4"></span></p>
+        </div>
+
+        <div style="text-align: center; margin-top: 25px;">
+            <button class="logbtn btn-yellow" style="max-width: 200px;" onclick="document.getElementById('blacklistModal').style.display='none'">Schließen</button>
+        </div>
     </div>
 </div>
 
@@ -144,66 +136,56 @@
         <button onclick="location.reload()" style="background:#d50000; color:white; border:none; padding:8px 25px; cursor:pointer; font-family:'Almendra'; border-radius:5px;">LOGOUT</button>
     </div>
     <img src="bulls_dashboard.jpg" id="bg-bull">
-
     <div class="panel" id="personal">
         <h2>Persönlich</h2>
-        <button onclick="alert('Support kommt')">CHAT / SUPPORT</button>
-        <button onclick="openChangePin()">PIN ÄNDERN</button>
+        <button onclick="alert('Support folgt')">CHAT / SUPPORT</button>
+        <button onclick="alert('PIN folgt')">PIN ÄNDERN</button>
         <button>Statistiken</button>
     </div>
-
     <div class="panel" id="blacklistPanel">
         <h2>Black Liste</h2>
-        <button onclick="alert('Eintrag-System kommt')">Sp. Melden</button>
+        <button>Sp. Melden</button>
         <button onclick="openBlacklist()">Anschauen</button>
     </div>
-
     <div class="panel" id="blacklistAdmin">
         <h2>Black Liste Pflege</h2>
-        <div class="grid">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
             <button style="font-size:12px">Gemeldete Spieler</button>
             <button>Pflege</button>
             <button>Eintragen</button>
             <button>Volle Ansicht</button>
         </div>
     </div>
-
     <div class="panel" id="adminPanel">
         <h2>Admin</h2>
         <button>Einstellungen</button>
         <button>Statistiken</button>
-        <button style="background: #ffd600;">Hilfe-Anfragen</button>
+        <button style="background:#ffd600;">Hilfe-Anfragen</button>
     </div>
-
     <div class="panel" id="eloPanel">
         <h2>Elo Bereich</h2>
         <button>Rohstoffrechner</button>
         <button>Einheitenrechner</button>
     </div>
-
-    <button id="chat-btn" onclick="alert('Allianz Chat kommt')">ALLIANZ CHAT</button>
+    <button id="chat-btn" style="display:block;" onclick="alert('Allianz Chat kommt')">ALLIANZ CHAT</button>
 </div>
 
 <script>
     const SHEET_ID = '1Gjnhol0ou63xW20OnbTo_wugzpOTgBP2yjnx3Qzg4bQ';
     const GID_USERS = '1188820112';
     const GID_BLACKLIST = '1767725514';
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzLm15M-C9GmMlCqYO63C9_T4942ZT19WMA_RkwASCzZptaSyNeZ_brizzGqjs6JAmf3Q/exec';
-
     let users = [];
     let blacklistData = [];
 
     async function loadData() {
-        try {
-            const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_USERS}`);
-            const text = await res.text();
-            const rows = text.split('\n').slice(1);
-            users = rows.map(r => {
-                const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-                const clean = (s) => s ? s.replace(/["']/g, "").trim() : "";
-                return { name: clean(c[0]), pin: clean(c[2]), role: clean(c[3]) };
-            });
-        } catch (e) { console.error("Cloud-Fehler!"); }
+        const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_USERS}`);
+        const text = await res.text();
+        const rows = text.split('\n').slice(1);
+        users = rows.map(r => {
+            const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+            const clean = (s) => s ? s.replace(/["']/g, "").trim() : "";
+            return { name: clean(c[0]), pin: clean(c[2]), role: clean(c[3]) };
+        });
     }
 
     async function openBlacklist() {
@@ -216,7 +198,7 @@
         blacklistData = [];
         rows.forEach(r => {
             const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/"/g,"").trim());
-            if(c[1]) { 
+            if(c[1]) {
                 blacklistData.push(c);
                 let opt = document.createElement('option');
                 opt.value = c[1] + " | " + c[2];
@@ -235,58 +217,35 @@
             document.getElementById('outMap').innerText = p[4];
             document.getElementById('outAllianz').innerText = p[5];
             document.getElementById('outVerstoss').innerText = p[6];
-            document.getElementById('outPunkte').innerText = p[16];
+            document.getElementById('outMelder').innerText = p[7];
+            document.getElementById('outZ1').innerText = p[8];
+            document.getElementById('outZ2').innerText = p[9];
+            document.getElementById('outZ3').innerText = p[10];
+            document.getElementById('outZ4').innerText = p[11];
+            document.getElementById('outFall').innerText = p[12];
             document.getElementById('outStory').innerText = p[13];
+            document.getElementById('outDateEvent').innerText = p[14];
             document.getElementById('outBeweis').innerText = p[15];
+            document.getElementById('outPunkte').innerText = p[16];
         }
     }
 
-    function openChangePin() {
-        document.getElementById("pinUser").innerText = document.getElementById("userNameDisplay").innerText;
-        document.getElementById("pinChangeModal").style.display = "flex";
-    }
-
-    function closePinModal() {
-        document.getElementById('pinChangeModal').style.display = 'none';
-        document.getElementById('pinChangeForm').style.display = 'block';
-        document.getElementById('pinSuccessMessage').style.display = 'none';
-    }
-
-    async function submitPinChange() {
-        const n1 = document.getElementById("newPin1").value;
-        const player = document.getElementById("pinUser").innerText;
-        const payload = { action: "updatePin", playerName: player, newPin: n1 };
-        const response = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) });
-        const result = await response.text();
-        if (result === "PIN geändert") {
-            document.getElementById('pinChangeForm').style.display = 'none';
-            document.getElementById('displayNewPin').innerText = n1;
-            document.getElementById('pinSuccessMessage').style.display = 'block';
-            loadData();
-        }
-    }
-
-    async function registerUser() { alert("Rekrutierung gesendet!"); document.getElementById('regModal').style.display = 'none'; }
-
-    function doLogin() {
+    document.getElementById("finalLoginBtn").onclick = function() {
         const n = document.getElementById("nameInput").value.trim().toLowerCase();
         const p = document.getElementById("pinInput").value.trim();
         const u = users.find(x => x.name.toLowerCase() === n && x.pin === p);
         if (u) {
             document.getElementById("start").style.display = "none";
-            document.getElementById("pinModal").style.display = "none";
             document.getElementById("dashboard").style.display = "block";
             document.getElementById("userNameDisplay").innerText = u.name;
             document.getElementById("userRoleDisplay").innerText = u.role;
             const s = (id) => document.getElementById(id).style.display = "block";
             const h = (id) => document.getElementById(id).style.display = "none";
-            h("personal"); h("blacklistPanel"); h("blacklistAdmin"); h("adminPanel"); h("eloPanel"); h("chat-btn");
-            if (u.role === "Admin") { s("personal"); s("blacklistPanel"); s("blacklistAdmin"); s("adminPanel"); s("eloPanel"); s("chat-btn"); }
-            else { s("personal"); s("blacklistPanel"); s("chat-btn"); }
-        } else { alert("Falsch!"); }
+            h("personal"); h("blacklistPanel"); h("blacklistAdmin"); h("adminPanel"); h("eloPanel");
+            if (u.role === "Admin") { s("personal"); s("blacklistPanel"); s("blacklistAdmin"); s("adminPanel"); s("eloPanel"); }
+            else { s("personal"); s("blacklistPanel"); }
+        } else { alert("Login falsch!"); }
     }
-
-    document.getElementById("finalLoginBtn").addEventListener("click", doLogin);
     window.onload = loadData;
 </script>
 </body>
