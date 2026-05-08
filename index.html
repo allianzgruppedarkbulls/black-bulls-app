@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dark Bulls - Allianz System V4.5</title>
+    <title>Dark Bulls - Allianz System V5.3</title>
     
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#000000">
     <link rel="apple-touch-icon" href="/192x192icon.png">
     <link href="https://fonts.googleapis.com/css2?family=Almendra:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { margin: 0; padding: 0; font-family: 'Almendra', serif; background: black; color: white; overflow: hidden; height: 100vh; }
+        body { margin: 0; padding: 0; font-family: 'Almendra', serif; background: black; color: white; overflow-x: hidden; height: 100vh; }
         
         /* --- STARTSEITE --- */
         #start { display: flex; align-items: center; justify-content: center; height: 100vh; position: relative; background: black; }
@@ -35,8 +35,8 @@
         .logbtn { flex: 1; padding: 18px; border: none; cursor: pointer; font-family: 'Almendra'; font-weight: bold; font-size: 18px; border-radius: 5px; color: black; }
 
         /* --- DASHBOARD INTERN --- */
-        #dashboard { display: none; position: relative; width: 100vw; height: 100vh; background: black; }
-        #bg-bull { position: absolute; left: 50%; top: 45%; transform: translate(-50%, -50%); width: 850px; z-index: 1; opacity: 0.4; }
+        #dashboard { display: none; position: relative; width: 100vw; min-height: 100vh; background: black; }
+        #bg-bull { position: fixed; left: 50%; top: 45%; transform: translate(-50%, -50%); width: 850px; z-index: 1; opacity: 0.4; pointer-events: none; }
         #top-bar { position: absolute; top: 20px; right: 40px; display: flex; align-items: center; gap: 20px; z-index: 100; }
         
         .panel { position: absolute; background: rgba(15, 15, 15, 0.95); border: 1px solid #444; padding: 15px; z-index: 10; display: none; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
@@ -51,8 +51,27 @@
         #chat-btn { position: absolute; right: 40px; bottom: 40px; background: #ff8c00; padding: 20px 60px; font-size: 28px; font-weight: bold; cursor: pointer; z-index: 10; font-family: 'Almendra'; display: none; color: black; border: none; border-radius: 8px; }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
-        /* CHAT HUB */
         #chat-hub { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; height: 85%; background: #121212; border: 2px solid #333; z-index: 6000; flex-direction: row; box-shadow: 0 0 100px black; }
+
+        /* --- HANDY FIX (NUR AKTIV AUF SCHMALEN DISPLAYS) --- */
+        @media (max-width: 800px) {
+            #dashboard { overflow-y: auto; display: none; padding-bottom: 120px; }
+            .panel { 
+                position: relative !important; 
+                left: 0 !important; top: 0 !important; right: 0 !important; bottom: 0 !important;
+                width: 90% !important; 
+                margin: 20px auto !important; 
+                display: none; /* Wird per JS auf block gesetzt bei Login */
+            }
+            #bg-bull { width: 120%; opacity: 0.2; }
+            #chat-btn { 
+                position: fixed !important; 
+                bottom: 0 !important; left: 0 !important; right: 0 !important; 
+                width: 100% !important; border-radius: 0 !important; 
+                padding: 15px !important; font-size: 22px !important;
+            }
+            #top-bar { position: relative; top: 10px; right: 10px; justify-content: flex-end; margin-bottom: 20px; }
+        }
     </style>
 </head>
 <body>
@@ -151,7 +170,6 @@
 <script>
     const SHEET_ID = '1Gjnhol0ou63xW20OnbTo_wugzpOTgBP2yjnx3Qzg4bQ';
     const GID = '1188820112'; 
-    const SCRIPT_URL = 'DEIN_SCRIPT_URL_VON_AYAD'; 
 
     let users = [];
 
@@ -176,10 +194,8 @@
     async function registerUser() {
         const p1 = document.getElementById('regPin1').value;
         const p2 = document.getElementById('regPin2').value;
-        const name = document.getElementById('regName').value;
         if (p1 !== p2) return alert("PINs nicht identisch!");
-        if (!name || !p1) return alert("Bitte Name und PIN eingeben!");
-        alert("Anfrage gesendet! Ayads Bot erstellt nun einen Kanal.");
+        alert("Anfrage gesendet!");
         document.getElementById('regModal').style.display = 'none';
     }
 
@@ -189,9 +205,13 @@
         const u = users.find(user => user.name.toLowerCase() === inputName && user.pin === inputPin);
 
         if (u) {
-            document.getElementById("start").style.display = "none";
+            // FIX: Login Fenster schließen
             document.getElementById("pinModal").style.display = "none";
-            document.getElementById("dashboard").style.display = "block";
+            document.getElementById("start").style.display = "none";
+            
+            const dash = document.getElementById("dashboard");
+            dash.style.display = "block"; // Am Handy wird es durch CSS gesteuert
+            
             document.getElementById("userNameDisplay").innerText = u.name;
             document.getElementById("userRoleDisplay").innerText = u.role;
 
