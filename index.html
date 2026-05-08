@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dark Bulls - Allianz System V5.2</title>
+    <title>Dark Bulls - Allianz System V5.4</title>
     
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#000000">
@@ -25,7 +25,7 @@
         #btn-hist { background: #5b5bff; color: white; }
         #btn-web { background: #00cfd1; }
 
-        /* MODALS (Login, Reg, Pin-Ändern) */
+        /* MODALS */
         .modal-overlay { display: none; position: fixed; z-index: 5000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); justify-content: center; align-items: center; }
         .modal-box { background: #1a1a1a; padding: 40px; width: 450px; border: 3px solid #333; text-align: center; border-radius: 12px; box-shadow: 0 0 50px rgba(255,0,0,0.5); }
         .modal-box h1 { color: #ff3131; text-decoration: underline; font-size: 35px; margin-bottom: 25px; }
@@ -55,7 +55,7 @@
         #chat-btn { position: absolute; right: 40px; bottom: 40px; background: #ff8c00; padding: 20px 60px; font-size: 28px; font-weight: bold; cursor: pointer; z-index: 10; font-family: 'Almendra'; display: none; color: black; border: none; border-radius: 8px; box-shadow: 0 0 20px rgba(255,140,0,0.5); }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
-        /* --- CHAT HUB (OVERLAY) --- */
+        /* --- CHAT HUB --- */
         #chat-hub { 
             display: none; position: fixed; z-index: 6000; left: 50%; top: 50%; transform: translate(-50%, -50%); 
             width: 1000px; height: 650px; background: #1a1a1a; border: 2px solid #333; flex-direction: row; box-shadow: 0 0 100px black; border-radius: 10px; overflow: hidden;
@@ -196,8 +196,12 @@
 
 <script>
     const SHEET_ID = '1Gjnhol0ou63xW20OnbTo_wugzpOTgBP2yjnx3Qzg4bQ';
-    const GID = '1188820112'; 
+    const GID = '1188820112';
+    // DEINE NEUE SCRIPT URL:
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzLm15M-C9GmMlCqYO63C9_T4942ZT19WMA_RkwASCzZptaSyNeZ_brizzGqjs6JAmf3Q/exec';
+
     let users = [];
+    let currentUserName = "";
 
     async function loadData() {
         try {
@@ -223,12 +227,35 @@
     }
 
     async function submitPinChange() {
-        const oldP = document.getElementById("oldPin").value;
         const n1 = document.getElementById("newPin1").value;
         const n2 = document.getElementById("newPin2").value;
+        const player = document.getElementById("pinUser").innerText;
+
         if (n1 !== n2) return alert("Neue PINs nicht identisch!");
-        alert("Übertrag bereit. Warte auf Script-URL.");
-        document.getElementById('pinChangeModal').style.display = 'none';
+        if (n1.length < 4) return alert("Die PIN muss mindestens 4 Zeichen haben!");
+
+        const payload = {
+            action: "updatePin",
+            playerName: player,
+            newPin: n1
+        };
+
+        try {
+            const response = await fetch(SCRIPT_URL, {
+                method: "POST",
+                body: JSON.stringify(payload)
+            });
+            const result = await response.text();
+            if (result === "PIN geändert") {
+                alert("Erfolg: Deine PIN wurde in der Tabelle geändert!");
+                document.getElementById('pinChangeModal').style.display = 'none';
+                loadData(); // Daten neu laden für den nächsten Login
+            } else {
+                alert("Fehler vom Server: " + result);
+            }
+        } catch (e) {
+            alert("Übertrag fehlgeschlagen! Verbindung prüfen.");
+        }
     }
 
     async function registerUser() {
@@ -243,17 +270,26 @@
         const inputName = document.getElementById("nameInput").value.trim().toLowerCase();
         const inputPin = document.getElementById("pinInput").value.trim();
         const u = users.find(user => user.name.toLowerCase() === inputName && user.pin === inputPin);
+        
         if (u) {
+            currentUserName = u.name;
             document.getElementById("start").style.display = "none";
             document.getElementById("pinModal").style.display = "none";
             document.getElementById("dashboard").style.display = "block";
             document.getElementById("userNameDisplay").innerText = u.name;
             document.getElementById("userRoleDisplay").innerText = u.role;
+            
             const show = (id) => document.getElementById(id).style.display = "block";
             const hide = (id) => document.getElementById(id).style.display = "none";
+            
             hide("personal"); hide("blacklist"); hide("blacklistAdmin"); hide("admin"); hide("elo"); hide("chat-btn");
-            if (u.role === "Admin") { show("personal"); show("blacklist"); show("blacklistAdmin"); show("admin"); show("elo"); show("chat-btn"); }
-            else { show("personal"); show("chat-btn"); }
+            
+            if (u.role === "Admin") { 
+                show("personal"); show("blacklist"); show("blacklistAdmin"); show("admin"); show("elo"); show("chat-btn"); 
+            }
+            else { 
+                show("personal"); show("chat-btn"); 
+            }
         } else { alert("Login falsch!"); }
     }
 
