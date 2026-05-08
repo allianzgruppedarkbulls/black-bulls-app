@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dark Bulls - Allianz System V5.1</title>
+    <title>Dark Bulls - Allianz System V5.2</title>
     
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#000000">
@@ -17,7 +17,7 @@
         #logo-container img { width: 780px; max-width: 75vw; filter: drop-shadow(0 0 60px rgba(255, 0, 0, 0.9)); }
         
         #loginBar { position: absolute; left: 0; top: 40%; transform: translateY(-50%); background: #39d353; padding: 40px 10px; font-size: 24px; font-weight: bold; color: black; cursor: pointer; z-index: 100; border-radius: 0 15px 15px 0; writing-mode: vertical-rl; text-orientation: upright; width: 50px; text-align: center; box-shadow: 5px 0 15px rgba(0,255,0,0.3); }
-        #regBar { position: absolute; left: 0; top: 70%; transform: translateY(-50%); background: #ffd600; padding: 30px 10px; font-size: 16px; font-weight: bold; color: black; cursor: pointer; z-index: 100; border-radius: 0 15px 15px 0; writing-mode: vertical-rl; text-orientation: upright; width: 50px; text-align: center; box-shadow: 5px 0 15px rgba(255,255,0,0.3); }
+        #regBar { position: absolute; left: 0; top: 70%; transform: translateY(-50%); background: #ffd600; padding: 30px 10px; font-size: 16px; font-weight: bold; color: black; cursor: pointer; z-index: 100; border-radius: 0 15px 15px 0; writing-mode: vertical-rl; text-orientation: upright; width: 50px; text-align: center; box-shadow: 5px 0 15px rgba(255,214,0,0.3); }
 
         #side-menu { position: absolute; right: 0; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 12px; z-index: 100; }
         .info-btn { padding: 25px 10px; font-size: 18px; font-weight: bold; border: none; cursor: pointer; font-family: 'Almendra'; writing-mode: vertical-rl; text-orientation: upright; border-radius: 15px 0 0 15px; width: 55px; text-align: center; color: black; min-height: 140px; }
@@ -25,58 +25,50 @@
         #btn-hist { background: #5b5bff; color: white; }
         #btn-web { background: #00cfd1; }
 
-        /* MODALS */
+        /* MODALS (Login, Reg, Pin-Ändern) */
         .modal-overlay { display: none; position: fixed; z-index: 5000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); justify-content: center; align-items: center; }
         .modal-box { background: #1a1a1a; padding: 40px; width: 450px; border: 3px solid #333; text-align: center; border-radius: 12px; box-shadow: 0 0 50px rgba(255,0,0,0.5); }
         .modal-box h1 { color: #ff3131; text-decoration: underline; font-size: 35px; margin-bottom: 25px; }
-        .modal-box input { width: 100%; padding: 15px; margin-bottom: 15px; background: #000; color: #39d353; border: 1px solid #444; font-family: 'Almendra'; font-size: 22px; box-sizing: border-box; outline: none; }
+        .modal-box input { width: 100%; padding: 15px; margin-bottom: 15px; background: #000; color: #39d353; border: 1px solid #444; font-family: 'Almendra'; font-size: 22px; box-sizing: border-box; outline: none; border-radius: 4px; }
         
         .login-btn-row { display: flex; justify-content: space-between; gap: 10px; }
         .logbtn { flex: 1; padding: 18px; border: none; cursor: pointer; font-family: 'Almendra'; font-weight: bold; font-size: 18px; border-radius: 5px; color: black; }
+        .btn-green { background: #39d353; }
+        .btn-yellow { background: #ffd600; }
+        .btn-red { background: #d50000; color: white; }
 
         /* --- DASHBOARD INTERN --- */
         #dashboard { display: none; position: relative; width: 100vw; height: 100vh; background: black; }
-        #bg-bull { position: absolute; left: 50%; top: 45%; transform: translate(-50%, -50%); width: 850px; z-index: 1; opacity: 0.4; }
+        #bg-bull { position: absolute; left: 50%; top: 45%; transform: translate(-50%, -50%); width: 850px; z-index: 1; opacity: 0.4; pointer-events: none; }
         #top-bar { position: absolute; top: 20px; right: 40px; display: flex; align-items: center; gap: 20px; z-index: 100; }
         
         .panel { position: absolute; background: rgba(15, 15, 15, 0.95); border: 1px solid #444; padding: 15px; z-index: 10; display: none; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
         .panel h2 { color: #ff3131; margin: 0 0 10px 0; font-size: 24px; text-decoration: underline; }
-        .panel button { display: block; width: 100%; margin: 8px 0; background: #39d353; border: none; padding: 10px; font-family: 'Almendra'; font-weight: bold; cursor: pointer; color: black; border-radius: 4px; }
-        
+        .panel button { display: block; width: 100%; margin: 8px 0; background: #39d353; border: none; padding: 10px; font-family: 'Almendra'; font-weight: bold; cursor: pointer; color: black; border-radius: 4px; transition: 0.2s; }
+        .panel button:hover { background: #fff; }
+
         #personal { left: 40px; top: 40px; width: 240px; }
         #blacklist { left: 40px; top: 350px; width: 240px; }
         #blacklistAdmin { left: 40px; bottom: 40px; width: 440px; }
         #admin { right: 40px; top: 100px; width: 260px; }
         #elo { right: 40px; top: 380px; width: 260px; }
-        #chat-btn { position: absolute; right: 40px; bottom: 40px; background: #ff8c00; padding: 20px 60px; font-size: 28px; font-weight: bold; cursor: pointer; z-index: 10; font-family: 'Almendra'; display: none; color: black; border: none; border-radius: 8px; }
+        #chat-btn { position: absolute; right: 40px; bottom: 40px; background: #ff8c00; padding: 20px 60px; font-size: 28px; font-weight: bold; cursor: pointer; z-index: 10; font-family: 'Almendra'; display: none; color: black; border: none; border-radius: 8px; box-shadow: 0 0 20px rgba(255,140,0,0.5); }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
-        /* --- NEUER CHAT HUB (OVERLAY) --- */
+        /* --- CHAT HUB (OVERLAY) --- */
         #chat-hub { 
             display: none; position: fixed; z-index: 6000; left: 50%; top: 50%; transform: translate(-50%, -50%); 
             width: 1000px; height: 650px; background: #1a1a1a; border: 2px solid #333; flex-direction: row; box-shadow: 0 0 100px black; border-radius: 10px; overflow: hidden;
         }
         .chat-sidebar { width: 300px; background: #111; border-right: 2px solid #333; display: flex; flex-direction: column; }
         .chat-sidebar-tabs { display: flex; background: #333; }
-        .chat-sidebar-tabs button { flex: 1; padding: 15px; background: #222; color: white; border: none; cursor: pointer; font-family: 'Almendra'; border-bottom: 2px solid transparent; }
-        .chat-sidebar-tabs button.active { background: #1a1a1a; border-bottom: 2px solid #ff3131; }
+        .chat-sidebar-tabs button { flex: 1; padding: 15px; background: #222; color: white; border: none; cursor: pointer; font-family: 'Almendra'; }
         .chat-sidebar-content { padding: 15px; flex: 1; overflow-y: auto; }
-        .chat-sidebar-content h3 { color: #ff3131; text-decoration: underline; margin-bottom: 15px; }
         .chat-sidebar-item { padding: 10px; border-bottom: 1px solid #222; cursor: pointer; }
-        .chat-sidebar-item:hover { background: #222; color: #39d353; }
-
-        .chat-main { flex: 1; display: flex; flex-direction: column; padding: 20px; background: rgba(0,0,0,0.3); }
-        .chat-main h1 { text-align: center; color: #ff3131; text-decoration: underline; font-size: 30px; margin-bottom: 30px; }
-        .chat-field-group { margin-bottom: 25px; }
-        .chat-field-group label { display: block; color: #ff3131; font-size: 24px; margin-bottom: 10px; }
-        .chat-input-cow { width: 100%; background: #000; border: 1px solid #555; color: #39d353; padding: 15px; font-family: 'Almendra'; font-size: 20px; box-sizing: border-box; border-radius: 4px; }
-        .chat-area-cow { height: 180px; resize: none; }
-
-        .chat-actions { display: flex; justify-content: space-between; gap: 10px; margin-top: auto; }
-        .chat-btn-cow { flex: 1; padding: 15px; font-family: 'Almendra'; font-weight: bold; font-size: 18px; border: none; border-radius: 5px; cursor: pointer; color: black; }
-        .btn-cow-green { background: #39d353; }
-        .btn-cow-yellow { background: #ffd600; }
-        .btn-cow-red { background: #d50000; color: white; }
+        .chat-sidebar-item:hover { color: #39d353; }
+        .chat-main { flex: 1; display: flex; flex-direction: column; padding: 20px; }
+        .chat-main h1 { text-align: center; color: #ff3131; text-decoration: underline; }
+        .chat-input-cow { width: 100%; background: #000; border: 1px solid #555; color: #39d353; padding: 15px; font-family: 'Almendra'; font-size: 20px; box-sizing: border-box; margin-bottom: 20px; }
     </style>
 </head>
 <body>
@@ -92,6 +84,46 @@
     </div>
 </div>
 
+<div id="pinModal" class="modal-overlay">
+    <div class="modal-box">
+        <h1>ANMELDUNG</h1>
+        <input type="text" id="nameInput" placeholder="Name...">
+        <input type="password" id="pinInput" placeholder="PIN...">
+        <div class="login-btn-row">
+            <button class="logbtn btn-green" id="finalLoginBtn">Anmelden</button>
+            <button class="logbtn btn-red" onclick="document.getElementById('pinModal').style.display='none'">Abbruch</button>
+        </div>
+    </div>
+</div>
+
+<div id="regModal" class="modal-overlay">
+    <div class="modal-box">
+        <h1>REKRUTIERUNG</h1>
+        <input type="text" id="regName" placeholder="Name">
+        <input type="password" id="regPin1" placeholder="PIN wählen">
+        <input type="password" id="regPin2" placeholder="PIN wiederholen">
+        <input type="number" id="regAge" placeholder="Alter">
+        <div class="login-btn-row">
+            <button class="logbtn btn-yellow" onclick="registerUser()">Abschicken</button>
+            <button class="logbtn btn-red" onclick="document.getElementById('regModal').style.display='none'">Abbruch</button>
+        </div>
+    </div>
+</div>
+
+<div id="pinChangeModal" class="modal-overlay">
+    <div class="modal-box">
+        <h1>PIN ÄNDERN</h1>
+        <p style="color: #39d353;">Benutzer: <span id="pinUser"></span></p>
+        <input type="password" id="oldPin" placeholder="Alte PIN">
+        <input type="password" id="newPin1" placeholder="Neue PIN">
+        <input type="password" id="newPin2" placeholder="Neue PIN wiederholen">
+        <div class="login-btn-row">
+            <button class="logbtn btn-green" onclick="submitPinChange()">Speichern</button>
+            <button class="logbtn btn-red" onclick="document.getElementById('pinChangeModal').style.display='none'">Abbruch</button>
+        </div>
+    </div>
+</div>
+
 <div id="dashboard">
     <div id="top-bar">
         <div style="font-size: 22px; color:#ff3131"><span id="userNameDisplay"></span> (<span id="userRoleDisplay"></span>)</div>
@@ -102,6 +134,7 @@
     <div class="panel" id="personal">
         <h2>Persönlich</h2>
         <button onclick="toggleChat()">CHAT / SUPPORT</button>
+        <button onclick="openChangePin()">PIN ÄNDERN</button>
         <button id="btn-stats">Statistiken</button>
         <button id="btn-tipps">Tipps</button>
     </div>
@@ -140,62 +173,23 @@
 
 <div id="chat-hub">
     <div class="chat-sidebar">
-        <div class="chat-sidebar-tabs">
-            <button class="active">ALLIANZ CHAT</button>
-            <button>PN CHAT</button>
-        </div>
+        <div class="chat-sidebar-tabs"><button>ALLIANZ CHAT</button><button>PN CHAT</button></div>
         <div class="chat-sidebar-content">
-            <h3>Kommunikations</h3>
             <div class="chat-sidebar-item"># plauderecke</div>
             <div class="chat-sidebar-item"># spielersuche</div>
-            <div class="chat-sidebar-item"># karte-holland</div>
             <div class="chat-sidebar-item"># support</div>
         </div>
     </div>
     <div class="chat-main">
         <h1>DIPLOMATIE / CHAT HUB</h1>
-        
-        <div class="chat-field-group">
-            <label>Kanal Name / User...</label>
-            <input type="text" class="chat-input-cow" placeholder="...">
-        </div>
-
-        <div class="chat-field-group">
-            <label>Nachricht...</label>
-            <textarea class="chat-input-cow chat-area-cow" placeholder="Schreibe deine Nachricht..."></textarea>
-        </div>
-
-        <div class="chat-actions">
-            <button class="chat-btn-cow btn-cow-green" onclick="alert('Senden...')">Nachricht Bestätigen</button>
-            <button class="chat-btn-cow btn-cow-yellow">Hilfe</button>
-            <button class="chat-btn-cow btn-cow-red" onclick="toggleChat()">Abbruch</button>
-        </div>
-    </div>
-    <button onclick="toggleChat()" style="position:absolute; top:10px; right:10px; background:red; color:white; border:none; padding:5px 10px; cursor:pointer; border-radius:4px;">X</button>
-</div>
-
-<div id="pinModal" class="modal-overlay">
-    <div class="modal-box">
-        <h1>ANMELDUNG</h1>
-        <input type="text" id="nameInput" placeholder="Name...">
-        <input type="password" id="pinInput" placeholder="PIN...">
+        <label style="color:#ff3131; font-size:20px;">Kanal Name / User...</label>
+        <input type="text" class="chat-input-cow" placeholder="...">
+        <label style="color:#ff3131; font-size:20px;">Nachricht...</label>
+        <textarea class="chat-input-cow" style="height:150px; resize:none;" placeholder="Deine Nachricht..."></textarea>
         <div class="login-btn-row">
-            <button class="logbtn btn-green" id="finalLoginBtn">Anmelden</button>
-            <button class="logbtn btn-red" onclick="document.getElementById('pinModal').style.display='none'">Abbruch</button>
-        </div>
-    </div>
-</div>
-
-<div id="regModal" class="modal-overlay">
-    <div class="modal-box">
-        <h1>REKRUTIERUNG</h1>
-        <input type="text" id="regName" placeholder="Name">
-        <input type="password" id="regPin1" placeholder="PIN wählen">
-        <input type="password" id="regPin2" placeholder="PIN wiederholen">
-        <input type="number" id="regAge" placeholder="Alter">
-        <div class="login-btn-row">
-            <button class="logbtn btn-yellow" onclick="registerUser()">Abschicken</button>
-            <button class="logbtn btn-red" onclick="document.getElementById('regModal').style.display='none'">Abbruch</button>
+            <button class="logbtn btn-green">Nachricht Bestätigen</button>
+            <button class="logbtn btn-yellow">Hilfe</button>
+            <button class="logbtn btn-red" onclick="toggleChat()">Abbruch</button>
         </div>
     </div>
 </div>
@@ -223,11 +217,25 @@
         hub.style.display = (hub.style.display === 'flex') ? 'none' : 'flex';
     }
 
+    function openChangePin() {
+        document.getElementById("pinUser").innerText = document.getElementById("userNameDisplay").innerText;
+        document.getElementById("pinChangeModal").style.display = "flex";
+    }
+
+    async function submitPinChange() {
+        const oldP = document.getElementById("oldPin").value;
+        const n1 = document.getElementById("newPin1").value;
+        const n2 = document.getElementById("newPin2").value;
+        if (n1 !== n2) return alert("Neue PINs nicht identisch!");
+        alert("Übertrag bereit. Warte auf Script-URL.");
+        document.getElementById('pinChangeModal').style.display = 'none';
+    }
+
     async function registerUser() {
         const p1 = document.getElementById('regPin1').value;
         const p2 = document.getElementById('regPin2').value;
         if (p1 !== p2) return alert("PINs nicht identisch!");
-        alert("Anfrage gesendet!");
+        alert("Rekrutierung gesendet!");
         document.getElementById('regModal').style.display = 'none';
     }
 
@@ -235,30 +243,18 @@
         const inputName = document.getElementById("nameInput").value.trim().toLowerCase();
         const inputPin = document.getElementById("pinInput").value.trim();
         const u = users.find(user => user.name.toLowerCase() === inputName && user.pin === inputPin);
-
         if (u) {
             document.getElementById("start").style.display = "none";
             document.getElementById("pinModal").style.display = "none";
             document.getElementById("dashboard").style.display = "block";
             document.getElementById("userNameDisplay").innerText = u.name;
             document.getElementById("userRoleDisplay").innerText = u.role;
-
             const show = (id) => document.getElementById(id).style.display = "block";
             const hide = (id) => document.getElementById(id).style.display = "none";
-            
             hide("personal"); hide("blacklist"); hide("blacklistAdmin"); hide("admin"); hide("elo"); hide("chat-btn");
-            
-            if (u.role === "Gast") {
-                show("personal"); hide("btn-stats"); hide("btn-tipps"); show("chat-btn");
-            } else if (u.role === "Neuling") {
-                show("personal"); hide("btn-stats"); hide("btn-tipps");
-            } else {
-                show("personal"); show("blacklist"); show("chat-btn");
-                if (u.role === "Admin" || u.role === "Offizier") show("admin");
-                if (u.role === "Admin" || u.role === "Elo") show("elo");
-                if (u.role === "Admin" || u.role === "Buchhalter") show("blacklistAdmin");
-            }
-        } else { alert("Name oder PIN falsch!"); }
+            if (u.role === "Admin") { show("personal"); show("blacklist"); show("blacklistAdmin"); show("admin"); show("elo"); show("chat-btn"); }
+            else { show("personal"); show("chat-btn"); }
+        } else { alert("Login falsch!"); }
     }
 
     document.getElementById("finalLoginBtn").addEventListener("click", doLogin);
