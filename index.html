@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dark Bulls - Allianz System V5.5</title>
+    <title>Dark Bulls - Allianz System V5.7</title>
     
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#000000">
@@ -18,12 +18,6 @@
         
         #loginBar { position: absolute; left: 0; top: 40%; transform: translateY(-50%); background: #39d353; padding: 40px 10px; font-size: 24px; font-weight: bold; color: black; cursor: pointer; z-index: 100; border-radius: 0 15px 15px 0; writing-mode: vertical-rl; text-orientation: upright; width: 50px; text-align: center; box-shadow: 5px 0 15px rgba(0,255,0,0.3); }
         #regBar { position: absolute; left: 0; top: 70%; transform: translateY(-50%); background: #ffd600; padding: 30px 10px; font-size: 16px; font-weight: bold; color: black; cursor: pointer; z-index: 100; border-radius: 0 15px 15px 0; writing-mode: vertical-rl; text-orientation: upright; width: 50px; text-align: center; box-shadow: 5px 0 15px rgba(255,214,0,0.3); }
-
-        #side-menu { position: absolute; right: 0; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 12px; z-index: 100; }
-        .info-btn { padding: 25px 10px; font-size: 18px; font-weight: bold; border: none; cursor: pointer; font-family: 'Almendra'; writing-mode: vertical-rl; text-orientation: upright; border-radius: 15px 0 0 15px; width: 55px; text-align: center; color: black; min-height: 140px; }
-        #btn-yt { background: #ff8c00; }
-        #btn-hist { background: #5b5bff; color: white; }
-        #btn-web { background: #00cfd1; }
 
         /* MODALS */
         .modal-overlay { display: none; position: fixed; z-index: 5000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); justify-content: center; align-items: center; }
@@ -53,22 +47,13 @@
         #admin { right: 40px; top: 100px; width: 260px; }
         #elo { right: 40px; top: 380px; width: 260px; }
         #chat-btn { position: absolute; right: 40px; bottom: 40px; background: #ff8c00; padding: 20px 60px; font-size: 28px; font-weight: bold; cursor: pointer; z-index: 10; font-family: 'Almendra'; display: none; color: black; border: none; border-radius: 8px; box-shadow: 0 0 20px rgba(255,140,0,0.5); }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
-        /* --- CHAT HUB --- */
-        #chat-hub { 
-            display: none; position: fixed; z-index: 6000; left: 50%; top: 50%; transform: translate(-50%, -50%); 
-            width: 1000px; height: 650px; background: #1a1a1a; border: 2px solid #333; flex-direction: row; box-shadow: 0 0 100px black; border-radius: 10px; overflow: hidden;
-        }
-        .chat-sidebar { width: 300px; background: #111; border-right: 2px solid #333; display: flex; flex-direction: column; }
-        .chat-sidebar-tabs { display: flex; background: #333; }
-        .chat-sidebar-tabs button { flex: 1; padding: 15px; background: #222; color: white; border: none; cursor: pointer; font-family: 'Almendra'; }
-        .chat-sidebar-content { padding: 15px; flex: 1; overflow-y: auto; }
-        .chat-sidebar-item { padding: 10px; border-bottom: 1px solid #222; cursor: pointer; }
-        .chat-sidebar-item:hover { color: #39d353; }
-        .chat-main { flex: 1; display: flex; flex-direction: column; padding: 20px; }
-        .chat-main h1 { text-align: center; color: #ff3131; text-decoration: underline; }
-        .chat-input-cow { width: 100%; background: #000; border: 1px solid #555; color: #39d353; padding: 15px; font-family: 'Almendra'; font-size: 20px; box-sizing: border-box; margin-bottom: 20px; }
+        /* BLACKLIST MODAL CONTENT */
+        .bl-box { width: 95%; max-width: 1150px; background: #111; border: 2px solid #333; padding: 30px; border-radius: 10px; font-family: 'Almendra'; box-shadow: 0 0 100px black; }
+        .bl-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; text-align: left; margin-top: 15px; }
+        .bl-grid p { margin: 8px 0; font-size: 19px; }
+        .bl-grid span { color: #39d353; font-weight: bold; }
+        .bl-story-box { background: #000; padding: 10px; border: 1px solid #444; height: 120px; color: #39d353; overflow-y: auto; font-size: 15px; margin-top: 5px; }
     </style>
 </head>
 <body>
@@ -77,11 +62,6 @@
     <div id="loginBar" onclick="document.getElementById('pinModal').style.display='flex'">LOGIN</div>
     <div id="regBar" onclick="document.getElementById('regModal').style.display='flex'">REGISTRIEREN</div>
     <div id="logo-container"><img src="bulls_start.jpg"></div>
-    <div id="side-menu">
-        <button id="btn-yt" class="info-btn" onclick="window.open('https://www.youtube.com/@DarkBullsGruppe')">YOUTUBE</button>
-        <button id="btn-hist" class="info-btn">HISTORIES</button>
-        <button id="btn-web" class="info-btn" onclick="window.open('https://darkbulls.jimdofree.com/')">INTERNET</button>
-    </div>
 </div>
 
 <div id="pinModal" class="modal-overlay">
@@ -92,20 +72,6 @@
         <div class="login-btn-row">
             <button class="logbtn btn-green" id="finalLoginBtn">Anmelden</button>
             <button class="logbtn btn-red" onclick="document.getElementById('pinModal').style.display='none'">Abbruch</button>
-        </div>
-    </div>
-</div>
-
-<div id="regModal" class="modal-overlay">
-    <div class="modal-box">
-        <h1>REKRUTIERUNG</h1>
-        <input type="text" id="regName" placeholder="Name">
-        <input type="password" id="regPin1" placeholder="PIN wählen">
-        <input type="password" id="regPin2" placeholder="PIN wiederholen">
-        <input type="number" id="regAge" placeholder="Alter">
-        <div class="login-btn-row">
-            <button class="logbtn btn-yellow" onclick="registerUser()">Abschicken</button>
-            <button class="logbtn btn-red" onclick="document.getElementById('regModal').style.display='none'">Abbruch</button>
         </div>
     </div>
 </div>
@@ -132,6 +98,60 @@
     </div>
 </div>
 
+<div id="blacklistModal" class="modal-overlay">
+    <div class="bl-box">
+        <h1 style="color: #ff3131; text-align: center; font-size: 40px; margin: 0; letter-spacing: 3px;">DARK BULLS BLACK LISTE</h1>
+        
+        <div style="display: flex; gap: 20px; align-items: center; margin: 20px 0; background: #1a1a1a; padding: 15px; border-radius: 8px;">
+            <label style="font-size: 24px;">Spieler suchen:</label>
+            <input list="playerList" id="blSearchInput" placeholder="Name oder ID eingeben..." style="flex: 1; padding: 12px; background: #000; border: 1px solid #555; color: #39d353; font-size: 18px; font-family: 'Almendra';">
+            <datalist id="playerList"></datalist>
+            <button class="logbtn btn-green" style="max-width: 150px;" onclick="loadBlacklistPlayer()">Laden</button>
+        </div>
+
+        <div class="bl-grid">
+            <div>
+                <h3 style="color: #5b5bff; border-bottom: 1px solid #5b5bff; font-style: italic; margin-bottom: 10px;">Spielerdaten</h3>
+                <p>Spieler ID: <span id="outID"></span></p>
+                <p>Allianz Erstkontakt: <span id="outAllianz"></span></p>
+                <p>Verstoß: <span id="outVerstoss"></span></p>
+                <p>Fallnummer: <span id="outFall"></span></p>
+            </div>
+            <div>
+                <h3 style="color: transparent;">.</h3>
+                <p>Spielername: <span id="outName"></span></p>
+                <p>Punktestand: <span id="outPunkte"></span></p>
+                <p>Was ist passiert?</p>
+                <div id="outStory" class="bl-story-box"></div>
+            </div>
+            <div>
+                <h3 style="color: transparent;">.</h3>
+                <p>Angemeldet am: <span id="outDateReg"></span></p>
+                <p>Meistgespielte Map: <span id="outMap"></span></p>
+                <p>Beweise: <span id="outBeweis"></span></p>
+                <p>Gemeldet am: <span id="outDateEvent"></span></p>
+            </div>
+        </div>
+
+        <div style="margin-top: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 30px; border-top: 1px solid #333; padding-top: 15px;">
+            <div>
+                <h3 style="color: #5b5bff; font-style: italic; margin-bottom: 5px;">Zeugen</h3>
+                <p>Melder: <span id="outMelder"></span></p>
+                <p>Zeuge 2: <span id="outZ2"></span></p>
+                <p>Zeuge 4: <span id="outZ4"></span></p>
+            </div>
+            <div style="padding-top: 30px;">
+                <p>Zeuge 1: <span id="outZ1"></span></p>
+                <p>Zeuge 3: <span id="outZ3"></span></p>
+            </div>
+        </div>
+
+        <div style="display: flex; justify-content: center; margin-top: 25px;">
+            <button class="logbtn btn-yellow" style="max-width: 300px;" onclick="document.getElementById('blacklistModal').style.display='none'">Zurück zum Dashboard</button>
+        </div>
+    </div>
+</div>
+
 <div id="dashboard">
     <div id="top-bar">
         <div style="font-size: 22px; color:#ff3131"><span id="userNameDisplay"></span> (<span id="userRoleDisplay"></span>)</div>
@@ -141,16 +161,14 @@
 
     <div class="panel" id="personal">
         <h2>Persönlich</h2>
-        <button onclick="toggleChat()">CHAT / SUPPORT</button>
+        <button onclick="alert('Support folgt')">CHAT / SUPPORT</button>
         <button onclick="openChangePin()">PIN ÄNDERN</button>
         <button id="btn-stats">Statistiken</button>
-        <button id="btn-tipps">Tipps</button>
     </div>
 
     <div class="panel" id="blacklist">
         <h2>Black Liste</h2>
-        <button>Sp. Melden</button>
-        <button>Anschauen</button>
+        <button onclick="openBlacklist()">Anschauen</button>
     </div>
 
     <div class="panel" id="blacklistAdmin">
@@ -163,65 +181,73 @@
         </div>
     </div>
 
-    <div class="panel" id="admin">
-        <h2>Admin</h2>
-        <button id="adm-einst">Einstellungen</button>
-        <button id="adm-stats">Statistiken</button>
-        <button id="adm-hilfe" style="background: #ffd600;">Hilfe-Anfragen</button>
-    </div>
-
-    <div class="panel" id="elo">
-        <h2>Elo Bereich</h2>
-        <button>Rohstoffrechner</button>
-        <button>Einheitenrechner</button>
-    </div>
-
-    <button id="chat-btn" onclick="toggleChat()">ALLIANZ CHAT</button>
-</div>
-
-<div id="chat-hub">
-    <div class="chat-sidebar">
-        <div class="chat-sidebar-tabs"><button>ALLIANZ CHAT</button><button>PN CHAT</button></div>
-        <div class="chat-sidebar-content">
-            <div class="chat-sidebar-item"># plauderecke</div>
-            <div class="chat-sidebar-item"># spielersuche</div>
-            <div class="chat-sidebar-item"># support</div>
-        </div>
-    </div>
-    <div class="chat-main">
-        <h1>DIPLOMATIE / CHAT HUB</h1>
-        <label style="color:#ff3131; font-size:20px;">Nachricht...</label>
-        <textarea class="chat-input-cow" style="height:150px; resize:none;" placeholder="Deine Nachricht..."></textarea>
-        <div class="login-btn-row">
-            <button class="logbtn btn-green">Nachricht Bestätigen</button>
-            <button class="logbtn btn-red" onclick="toggleChat()">Abbruch</button>
-        </div>
-    </div>
+    <div class="panel" id="admin"><h2>Admin</h2><button>User-Verwaltung</button></div>
+    <div class="panel" id="elo"><h2>Elo Bereich</h2><button>Rechner</button></div>
+    <button id="chat-btn">ALLIANZ CHAT</button>
 </div>
 
 <script>
     const SHEET_ID = '1Gjnhol0ou63xW20OnbTo_wugzpOTgBP2yjnx3Qzg4bQ';
-    const GID = '1188820112';
+    const GID_USERS = '1188820112';
+    const GID_BLACKLIST = '1767725514';
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzLm15M-C9GmMlCqYO63C9_T4942ZT19WMA_RkwASCzZptaSyNeZ_brizzGqjs6JAmf3Q/exec';
 
     let users = [];
+    let blacklistData = [];
 
     async function loadData() {
-        try {
-            const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID}`);
-            const text = await res.text();
-            const rows = text.split('\n').slice(1);
-            users = rows.map(r => {
-                const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-                const clean = (s) => s ? s.replace(/["']/g, "").trim() : "";
-                return { name: clean(c[0]), pin: clean(c[2]), role: clean(c[3]) };
-            });
-        } catch (e) { console.error("Cloud-Fehler!"); }
+        const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_USERS}`);
+        const text = await res.text();
+        const rows = text.split('\n').slice(1);
+        users = rows.map(r => {
+            const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+            const clean = (s) => s ? s.replace(/["']/g, "").trim() : "";
+            return { name: clean(c[0]), pin: clean(c[2]), role: clean(c[3]) };
+        });
     }
 
-    function toggleChat() {
-        const hub = document.getElementById('chat-hub');
-        hub.style.display = (hub.style.display === 'flex') ? 'none' : 'flex';
+    async function openBlacklist() {
+        document.getElementById('blacklistModal').style.display = 'flex';
+        const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_BLACKLIST}`);
+        const text = await res.text();
+        const rows = text.split('\n').slice(1);
+        
+        const listEl = document.getElementById('playerList');
+        listEl.innerHTML = "";
+        blacklistData = [];
+
+        rows.forEach(r => {
+            const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/"/g,"").trim());
+            if(c[1]) { // B = ID
+                blacklistData.push(c);
+                let opt = document.createElement('option');
+                opt.value = c[1] + " | " + c[2]; // ID | Name
+                listEl.appendChild(opt);
+            }
+        });
+    }
+
+    function loadBlacklistPlayer() {
+        const search = document.getElementById('blSearchInput').value.split(" | ")[0];
+        const p = blacklistData.find(row => row[1] === search);
+        if(p) {
+            document.getElementById('outID').innerText = p[1];      // B
+            document.getElementById('outName').innerText = p[2];    // C
+            document.getElementById('outDateReg').innerText = p[3];  // D
+            document.getElementById('outMap').innerText = p[4];     // E
+            document.getElementById('outAllianz').innerText = p[5];  // F
+            document.getElementById('outVerstoss').innerText = p[6]; // G
+            document.getElementById('outMelder').innerText = p[7];   // H
+            document.getElementById('outZ1').innerText = p[8];       // I
+            document.getElementById('outZ2').innerText = p[9];       // J
+            document.getElementById('outZ3').innerText = p[10];      // K
+            document.getElementById('outZ4').innerText = p[11];      // L
+            document.getElementById('outFall').innerText = p[12];    // M
+            document.getElementById('outStory').innerText = p[13];   // N
+            document.getElementById('outDateEvent').innerText = p[14]; // O
+            document.getElementById('outBeweis').innerText = p[15];   // P
+            document.getElementById('outPunkte').innerText = p[16];   // Q
+        } else { alert("Spieler nicht gefunden!"); }
     }
 
     function openChangePin() {
@@ -239,12 +265,8 @@
         const n1 = document.getElementById("newPin1").value;
         const n2 = document.getElementById("newPin2").value;
         const player = document.getElementById("pinUser").innerText;
-
-        if (n1 !== n2) return alert("Neue PINs nicht identisch!");
-        if (n1.length < 4) return alert("PIN zu kurz!");
-
+        if (n1 !== n2) return alert("PINs nicht gleich!");
         const payload = { action: "updatePin", playerName: player, newPin: n1 };
-
         try {
             const response = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) });
             const result = await response.text();
@@ -253,16 +275,8 @@
                 document.getElementById('displayNewPin').innerText = n1;
                 document.getElementById('pinSuccessMessage').style.display = 'block';
                 loadData();
-            } else { alert("Server-Fehler: " + result); }
+            } else { alert("Fehler: " + result); }
         } catch (e) { alert("Übertrag fehlgeschlagen!"); }
-    }
-
-    async function registerUser() {
-        const p1 = document.getElementById('regPin1').value;
-        const p2 = document.getElementById('regPin2').value;
-        if (p1 !== p2) return alert("PINs nicht identisch!");
-        alert("Rekrutierung gesendet!");
-        document.getElementById('regModal').style.display = 'none';
     }
 
     function doLogin() {
@@ -277,9 +291,9 @@
             document.getElementById("userRoleDisplay").innerText = u.role;
             const show = (id) => document.getElementById(id).style.display = "block";
             const hide = (id) => document.getElementById(id).style.display = "none";
-            hide("personal"); hide("blacklist"); hide("blacklistAdmin"); hide("admin"); hide("elo"); hide("chat-btn");
-            if (u.role === "Admin") { show("personal"); show("blacklist"); show("blacklistAdmin"); show("admin"); show("elo"); show("chat-btn"); }
-            else { show("personal"); show("chat-btn"); }
+            hide("personal"); hide("blacklist"); hide("blacklistAdmin"); hide("admin"); hide("elo");
+            if (u.role === "Admin") { show("personal"); show("blacklist"); show("blacklistAdmin"); show("admin"); show("elo"); }
+            else { show("personal"); show("blacklist"); }
         } else { alert("Login falsch!"); }
     }
 
