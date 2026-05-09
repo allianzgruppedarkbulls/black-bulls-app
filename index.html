@@ -1,12 +1,9 @@
-09.05.26   20:16
-
-
 <!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dark Bulls - Allianz System V8.2</title>
+    <title>Dark Bulls - Allianz System V10.0</title>
 
     <link rel="icon" type="image/png" href="192x192icon.png">
     <link rel="apple-touch-icon" href="192x192icon.png">
@@ -31,14 +28,13 @@
         /* MODALS */
         .modal-overlay { display: none; position: fixed; z-index: 5000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); justify-content: center; align-items: center; }
         .dark-modal { background: #1a1a1a; padding: 30px; width: 450px; max-width: 90vw; border: 3px solid #333; text-align: center; border-radius: 12px; box-shadow: 0 0 50px rgba(255,0,0,0.4); }
-        .dark-modal input { width: 100%; padding: 12px; margin-bottom: 12px; background: #000; color: #39d353; border: 1px solid #444; font-family: 'Almendra'; font-size: 18px; box-sizing: border-box; outline: none; }
+        .dark-modal input, .dark-modal textarea { width: 100%; padding: 12px; margin-bottom: 12px; background: #000; color: #39d353; border: 1px solid #444; font-family: 'Almendra'; font-size: 18px; box-sizing: border-box; outline: none; }
         .logbtn { padding: 15px; border: none; cursor: pointer; font-family: 'Almendra'; font-weight: bold; font-size: 18px; border-radius: 5px; color: black; }
 
         /* DASHBOARD */
         #dashboard { display: none; position: relative; width: 100vw; min-height: 100vh; background: black; }
         #bg-bull { position: fixed; left: 50%; top: 45%; transform: translate(-50%, -50%); width: 850px; z-index: 1; opacity: 0.4; pointer-events: none; }
         
-        /* Logout Fix (etwas weiter von rechts weg) */
         #top-bar { position: fixed; top: 0; width: 100%; display: flex; justify-content: flex-end; padding: 10px 40px; z-index: 100; background: rgba(0,0,0,0.8); box-sizing: border-box;}
         
         .panel { opacity: 0; transform: translateY(20px); transition: all 0.6s ease-out; background: rgba(15, 15, 15, 0.95); border: 1px solid #444; padding: 12px; z-index: 10; border-radius: 8px; width: 240px; }
@@ -62,7 +58,6 @@
             .panel { position: relative !important; width: 92% !important; margin: 10px auto !important; }
         }
 
-        /* --- BLACKLIST DESIGN (BEIBEHALTEN) --- */
         .bl-box { width: 95%; max-width: 1200px; background: #111; border: 2px solid #333; padding: 30px; border-radius: 10px; }
         .bl-header { color: #ff3131; font-size: 55px; text-align: center; margin-bottom: 20px; font-weight: bold; }
         .bl-search-row { display: flex; gap: 20px; align-items: center; margin-bottom: 30px; background: #1a1a1a; padding: 15px; border-radius: 10px; }
@@ -103,11 +98,22 @@
     <div class="dark-modal">
         <h1 style="color:#ff3131">Rekrutierung</h1>
         <input type="text" id="regName" placeholder="Name">
-        <input type="password" id="regPin1" placeholder="PIN wählen">
         <input type="number" id="regAge" placeholder="Alter">
+        <textarea id="regMsg" placeholder="Warum willst du zu uns?" style="height:80px; width:100%; margin-bottom:10px; background:#000; color:#39d353; border:1px solid #444;"></textarea>
         <div style="display:flex; gap:10px;">
-            <button class="logbtn" style="flex:1; background:#ffd600" onclick="alert('Anfrage gesendet!')">Abschicken</button>
+            <button class="logbtn" style="flex:1; background:#ffd600" onclick="sendDiscordBewerbung()">Abschicken</button>
             <button class="logbtn" style="flex:1; background:#d50000; color:white" onclick="document.getElementById('regModal').style.display='none'">Abbruch</button>
+        </div>
+    </div>
+</div>
+
+<div id="supportModal" class="modal-overlay">
+    <div class="dark-modal">
+        <h1 style="color:#ff3131">Support</h1>
+        <textarea id="supportMsg" placeholder="Wie können wir helfen?" style="height:100px; width:100%; margin-bottom:10px; background:#000; color:#39d353; border:1px solid #444;"></textarea>
+        <div style="display:flex; gap:10px;">
+            <button class="logbtn" style="flex:1; background:#39d353" onclick="sendDiscordSupport()">Ticket Senden</button>
+            <button class="logbtn" style="flex:1; background:#d50000; color:white" onclick="document.getElementById('supportModal').style.display='none'">Abbruch</button>
         </div>
     </div>
 </div>
@@ -124,11 +130,6 @@
                 <button class="logbtn" style="flex:1; background:#d50000; color:white" onclick="closePinModal()">Abbruch</button>
             </div>
         </div>
-        <div id="pinSuccessMessage" style="display: none;">
-            <p style="color: #ffd600; font-size: 24px;">✓ PIN geändert!</p>
-            <p id="displayNewPin" style="color: #39d353; font-size: 32px;"></p>
-            <button class="logbtn" style="width:100%; background:#39d353" onclick="closePinModal()">Verstanden</button>
-        </div>
     </div>
 </div>
 
@@ -141,31 +142,13 @@
             <datalist id="playerList"></datalist>
             <button class="logbtn" style="background:#39d353; padding:10px 30px" onclick="loadBlacklistPlayer()">Spieler Laden</button>
         </div>
-        <div class="bl-section-title">Spielerdaten vom gemeldeten Spieler</div>
         <div class="bl-grid">
-            <div>
-                <p>Spielername ID <span id="outID"></span></p>
-                <p>Allianz bei Erstkontakt <span id="outAllianz"></span></p>
-                <p>Verstoß <span id="outVerstoss"></span></p>
-                <p>Fallnummer <span id="outFall"></span></p>
-            </div>
-            <div><p>Spielername <span id="outName"></span></p><p>Punktestand <span id="outPunkte"></span></p></div>
-            <div>
-                <p>Spieler angemeldet am <span id="outDateReg"></span></p>
-                <p>Meistgespielte Map <span id="outMap"></span></p>
-                <p>Beweise vorhanden? <span id="outBeweis"></span></p>
-                <p>Datum der Meldung <span id="outDateEvent"></span></p>
-            </div>
+            <div><p>ID <span id="outID"></span></p><p>Allianz <span id="outAllianz"></span></p><p>Verstoß <span id="outVerstoss"></span></p></div>
+            <div><p>Name <span id="outName"></span></p><p>Punkte <span id="outPunkte"></span></p></div>
+            <div><p>Datum <span id="outDateEvent"></span></p><p>Fall <span id="outFall"></span></p></div>
         </div>
-        <div class="story-label">Was ist passiert / Beschreibung:</div>
         <div id="outStory" class="story-box"></div>
-        <div class="bl-section-title">Spielerdaten von Zeugen</div>
-        <div class="bl-grid">
-            <div><p>Melder <span id="outMelder"></span></p></div>
-            <div><p>Zeuge 1 <span id="outZ1"></span></p><p>Zeuge 2 <span id="outZ2"></span></p></div>
-            <div><p>Zeuge 3 <span id="outZ3"></span></p><p>Zeuge 4 <span id="outZ4"></span></p></div>
-        </div>
-        <div style="display:flex; justify-content:center; gap:30px; margin-top:30px;">
+        <div style="text-align:center; margin-top:20px;">
             <button class="logbtn" style="background:#ffbd00; width:200px" onclick="document.getElementById('blacklistModal').style.display='none'">Zurück</button>
         </div>
     </div>
@@ -181,27 +164,28 @@
     <div class="panel" id="personal">
         <h2>Persönlich</h2>
         <button onclick="openChangePin()">Pin ändern</button>
-        <button>Statistiken</button>
-        <button>Tipps</button>
+        <button onclick="document.getElementById('supportModal').style.display='flex'">Support Ticket</button>
     </div>
     <div class="panel" id="blacklistPanel">
         <h2>Black Liste</h2>
-        <button onclick="alert('Melde-System folgt')">Sp. Melden</button>
+        <button onclick="alert('System wird in Tabellenseite gid=1599277949 gespeichert...')">Sp. Melden</button>
         <button onclick="openBlacklist()">Anschauen</button>
     </div>
     <div class="panel" id="blacklistAdmin">
         <h2>Pflege Admin</h2>
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:5px;">
-            <button style="font-size:12px">Gemeldete</button><button>Pflege</button>
-            <button>Eintragen</button><button>Volle Ansicht</button>
+            <button>Gemeldete</button><button>Pflege</button>
+            <button>Eintragen</button><button>Vollansicht</button>
         </div>
     </div>
-    <div class="panel" id="admin"><h2>Admin</h2><button>User-Verwaltung</button><button>Einstellungen</button></div>
+    <div class="panel" id="admin"><h2>Admin</h2><button>User-Verwaltung</button></div>
     <div class="panel" id="elo"><h2>Elo Bereich</h2><button>Rohstoffrechner</button></div>
     <button id="chat-btn">ALLIANZ CHAT</button>
 </div>
 
 <script>
+    const WEBHOOK_BEW = "https://discord.com/api/webhooks/1502735246335021267/fpxXtWr5QgSny6rfJzGHKnhYskehC9vDMEl3CvUzjgbBOuKBd8KGzUhCRfvd2KmWcnND";
+    const WEBHOOK_SUP = "https://discord.com/api/webhooks/1502735504997744741/kK6SCl_DQtW0TCfuB5epCbTueMcp4COyETyea0J5bM68EOV8EHQoxPzq4gp1_iuh_444";
     const SHEET_ID = '1Gjnhol0ou63xW20OnbTo_wugzpOTgBP2yjnx3Qzg4bQ';
     const GID_USERS = '1188820112';
     const GID_BLACKLIST = '1767725514';
@@ -230,7 +214,7 @@
             document.getElementById("pinModal").style.display = "none";
             document.getElementById("start").style.display = "none";
             const dash = document.getElementById("dashboard");
-            dash.style.display = window.innerWidth <= 800 ? "flex" : "block";
+            dash.style.display = (window.innerWidth <= 800) ? "flex" : "block";
             document.getElementById("userNameDisplay").innerText = u.name;
             document.getElementById("userRoleDisplay").innerText = u.role;
             setTimeout(() => {
@@ -247,33 +231,30 @@
         } else { alert("Login falsch!"); }
     }
 
-    /* --- PIN FUNKTIONEN --- */
+    async function sendDiscordBewerbung() {
+        const name = document.getElementById("regName").value;
+        const msg = document.getElementById("regMsg").value;
+        const payload = { content: `🚨 **NEUE BEWERBUNG** 🚨\n**Name:** ${name}\n**Nachricht:** ${msg}\n@here` };
+        await fetch(WEBHOOK_BEW, { method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(payload) });
+        alert("Bewerbung wurde an den Discord Ticket-Bot gesendet!");
+        document.getElementById("regModal").style.display = "none";
+    }
+
+    async function sendDiscordSupport() {
+        const user = document.getElementById("userNameDisplay").innerText;
+        const msg = document.getElementById("supportMsg").value;
+        const payload = { content: `🛠️ **SUPPORT TICKET** 🛠️\n**User:** ${user}\n**Anliegen:** ${msg}\n@here` };
+        await fetch(WEBHOOK_SUP, { method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(payload) });
+        alert("Support Ticket wurde im Discord erstellt!");
+        document.getElementById("supportModal").style.display = "none";
+    }
+
     function openChangePin() {
         document.getElementById("pinUser").innerText = document.getElementById("userNameDisplay").innerText;
         document.getElementById("pinChangeModal").style.display = "flex";
     }
-    function closePinModal() {
-        document.getElementById('pinChangeModal').style.display = 'none';
-        document.getElementById('pinChangeForm').style.display = 'block';
-        document.getElementById('pinSuccessMessage').style.display = 'none';
-    }
-    async function submitPinChange() {
-        const n1 = document.getElementById("newPin1").value;
-        const player = document.getElementById("pinUser").innerText;
-        const payload = { action: "updatePin", playerName: player, newPin: n1 };
-        try {
-            const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) });
-            const result = await res.text();
-            if (result === "PIN geändert") {
-                document.getElementById('pinChangeForm').style.display = 'none';
-                document.getElementById('displayNewPin').innerText = n1;
-                document.getElementById('pinSuccessMessage').style.display = 'block';
-                loadData();
-            }
-        } catch (e) { alert("Fehler!"); }
-    }
+    function closePinModal() { document.getElementById('pinChangeModal').style.display = 'none'; }
 
-    /* --- BLACKLIST FUNKTIONEN --- */
     async function openBlacklist() {
         document.getElementById('blacklistModal').style.display = 'flex';
         const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_BLACKLIST}`);
@@ -291,25 +272,18 @@
             }
         });
     }
+
     function loadBlacklistPlayer() {
         const search = document.getElementById('blSearchInput').value.split(" | ")[0];
         const p = blacklistData.find(row => row[1] === search);
         if(p) {
             document.getElementById('outID').innerText = p[1];
             document.getElementById('outName').innerText = p[2];
-            document.getElementById('outDateReg').innerText = p[3];
-            document.getElementById('outMap').innerText = p[4];
             document.getElementById('outAllianz').innerText = p[5];
             document.getElementById('outVerstoss').innerText = p[6];
-            document.getElementById('outMelder').innerText = p[7];
-            document.getElementById('outZ1').innerText = p[8];
-            document.getElementById('outZ2').innerText = p[9];
-            document.getElementById('outZ3').innerText = p[10];
-            document.getElementById('outZ4').innerText = p[11];
             document.getElementById('outFall').innerText = p[12];
             document.getElementById('outStory').innerText = p[13];
             document.getElementById('outDateEvent').innerText = p[14];
-            document.getElementById('outBeweis').innerText = p[15];
             document.getElementById('outPunkte').innerText = p[16];
         }
     }
