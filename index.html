@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dark Bulls - Allianz System V10.3</title>
+    <title>Dark Bulls - Allianz System V10.4</title>
 
     <link rel="icon" type="image/png" href="192x192icon.png">
     <link rel="apple-touch-icon" href="192x192icon.png">
@@ -106,7 +106,7 @@
         <h1 style="color:#ff3131">Rekrutierung</h1>
         <input type="text" id="regName" placeholder="Name">
         <input type="number" id="regAge" placeholder="Alter">
-        <textarea id="regMsg" placeholder="Nachricht..." style="height:80px; width:100%; margin-bottom:10px; background:#000; color:#39d353; border:1px solid #444; font-family:'Almendra';"></textarea>
+        <textarea id="regMsg" placeholder="Nachricht..." style="height:80px; width:100%; background:#000; color:#39d353; border:1px solid #444; font-family:'Almendra';"></textarea>
         <div style="display:flex; gap:10px;">
             <button class="logbtn" style="flex:1; background:#ffd600" onclick="sendDiscordBewerbung()">Abschicken</button>
             <button class="logbtn" style="flex:1; background:#d50000; color:white" onclick="document.getElementById('regModal').style.display='none'">Abbruch</button>
@@ -117,7 +117,7 @@
 <div id="supportModal" class="modal-overlay">
     <div class="dark-modal">
         <h1 style="color:#ff3131">Support</h1>
-        <textarea id="supportMsg" placeholder="Problem?" style="height:100px; width:100%; margin-bottom:10px; background:#000; color:#39d353; border:1px solid #444; font-family:'Almendra';"></textarea>
+        <textarea id="supportMsg" placeholder="Problem?" style="height:100px; width:100%; background:#000; color:#39d353; border:1px solid #444; font-family:'Almendra';"></textarea>
         <div style="display:flex; gap:10px;">
             <button class="logbtn" style="flex:1; background:#39d353" onclick="sendDiscordSupport()">Senden</button>
             <button class="logbtn" style="flex:1; background:#d50000; color:white" onclick="document.getElementById('supportModal').style.display='none'">Abbruch</button>
@@ -131,7 +131,6 @@
         <button onclick="location.reload()" style="background:#d50000; color:white; border:none; padding:8px 15px; cursor:pointer; margin-left:15px; border-radius:5px;">LOGOUT</button>
     </div>
     <img src="bulls_dashboard.jpg" id="bg-bull">
-
     <div class="panel" id="personal">
         <h2>Persönlich</h2>
         <button onclick="openChangePin()">Pin ändern</button>
@@ -146,7 +145,7 @@
         <h2>Pflege Admin</h2>
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:5px;">
             <button>Gemeldete</button><button>Pflege</button>
-            <button>Eintragen</button><button>Vollansicht</button>
+            <button>Eintragen</button><button>Volle Ansicht</button>
         </div>
     </div>
     <div class="panel" id="admin"><h2>Admin</h2><button>User-Verwaltung</button></div>
@@ -163,13 +162,33 @@
             <datalist id="playerList"></datalist>
             <button class="logbtn" style="background:#39d353; padding:10px 30px" onclick="loadBlacklistPlayer()">Spieler Laden</button>
         </div>
+        <div class="bl-section-title">Spielerdaten vom gemeldeten Spieler</div>
         <div class="bl-grid">
-            <div><p>ID <span id="outID"></span></p><p>Allianz <span id="outAllianz"></span></p><p>Verstoß <span id="outVerstoss"></span></p></div>
-            <div><p>Name <span id="outName"></span></p><p>Punkte <span id="outPunkte"></span></p></div>
-            <div><p>Datum <span id="outDateEvent"></span></p><p>Fall <span id="outFall"></span></p></div>
+            <div>
+                <p>Spielername ID <span id="outID"></span></p>
+                <p>Allianz bei Erstkontakt <span id="outAllianz"></span></p>
+                <p>Verstoß <span id="outVerstoss"></span></p>
+                <p>Fallnummer <span id="outFall"></span></p>
+            </div>
+            <div><p>Spielername <span id="outName"></span></p><p>Punktestand <span id="outPunkte"></span></p></div>
+            <div>
+                <p>Spieler angemeldet am <span id="outDateReg"></span></p>
+                <p>Meistgespielte Map <span id="outMap"></span></p>
+                <p>Beweise vorhanden? <span id="outBeweis"></span></p>
+                <p>Datum der Meldung <span id="outDateEvent"></span></p>
+            </div>
         </div>
+        <div class="story-label">Was ist passiert / Beschreibung:</div>
         <div id="outStory" class="story-box"></div>
-        <div style="text-align:center; margin-top:20px;"><button class="logbtn" style="background:#ffbd00; width:200px" onclick="document.getElementById('blacklistModal').style.display='none'">Zurück</button></div>
+        <div class="bl-section-title">Spielerdaten von Zeugen</div>
+        <div class="bl-grid">
+            <div><p>Melder <span id="outMelder"></span></p></div>
+            <div><p>Zeuge 1 <span id="outZ1"></span></p><p>Zeuge 2 <span id="outZ2"></span></p></div>
+            <div><p>Zeuge 3 <span id="outZ3"></span></p><p>Zeuge 4 <span id="outZ4"></span></p></div>
+        </div>
+        <div style="display:flex; justify-content:center; gap:30px; margin-top:30px;">
+            <button class="logbtn" style="background:#ffbd00; width:200px" onclick="document.getElementById('blacklistModal').style.display='none'">Zurück</button>
+        </div>
     </div>
 </div>
 
@@ -225,17 +244,15 @@
         const msg = document.getElementById("regMsg").value;
         const payload = { content: `🚨 **NEUE BEWERBUNG** 🚨\n**Name:** ${name}\n**Nachricht:** ${msg}\n@here` };
         await fetch(WEBHOOK_BEW, { method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(payload) });
-        alert("Bewerbung wurde an Discord gesendet!");
-        document.getElementById("regModal").style.display = "none";
+        alert("Anfrage gesendet!"); document.getElementById("regModal").style.display = "none";
     }
 
     async function sendDiscordSupport() {
         const user = document.getElementById("userNameDisplay").innerText;
         const msg = document.getElementById("supportMsg").value;
-        const payload = { content: `🛠️ **SUPPORT TICKET** 🛠️\n**User:** ${user}\n**Anliegen:** ${msg}\n@here` };
+        const payload = { content: `🛠️ **SUPPORT TICKET** 🛠️\n**User:** ${user}\n**Problem:** ${msg}\n@here` };
         await fetch(WEBHOOK_SUP, { method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(payload) });
-        alert("Support Ticket erstellt!");
-        document.getElementById("supportModal").style.display = "none";
+        alert("Support Ticket erstellt!"); document.getElementById("supportModal").style.display = "none";
     }
 
     function openChangePin() {
@@ -287,11 +304,19 @@
         if(p) {
             document.getElementById('outID').innerText = p[1];
             document.getElementById('outName').innerText = p[2];
+            document.getElementById('outDateReg').innerText = p[3];
+            document.getElementById('outMap').innerText = p[4];
             document.getElementById('outAllianz').innerText = p[5];
             document.getElementById('outVerstoss').innerText = p[6];
+            document.getElementById('outMelder').innerText = p[7];
+            document.getElementById('outZ1').innerText = p[8];
+            document.getElementById('outZ2').innerText = p[9];
+            document.getElementById('outZ3').innerText = p[10];
+            document.getElementById('outZ4').innerText = p[11];
             document.getElementById('outFall').innerText = p[12];
             document.getElementById('outStory').innerText = p[13];
             document.getElementById('outDateEvent').innerText = p[14];
+            document.getElementById('outBeweis').innerText = p[15];
             document.getElementById('outPunkte').innerText = p[16];
         }
     }
