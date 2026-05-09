@@ -3,16 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dark Bulls - Allianz System V11.5</title>
-
-    <link rel="icon" type="image/png" href="192x192icon.png">
-    <link rel="apple-touch-icon" href="192x192icon.png">
-    <link rel="manifest" href="manifest.json">
+    <title>Dark Bulls - Allianz System V11.6</title>
     <link href="https://fonts.googleapis.com/css2?family=Almendra:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body { margin: 0; padding: 0; font-family: 'Almendra', serif; background: black; color: white; overflow-x: hidden; min-height: 100vh; }
         
-        /* --- STARTSEITE (Wiederhergestellt) --- */
+        /* STARTSEITE */
         #start { display: flex; align-items: center; justify-content: center; height: 100vh; position: relative; background: black; z-index: 10; }
         #logo-container img { width: 780px; max-width: 75vw; filter: drop-shadow(0 0 60px rgba(255, 0, 0, 0.9)); }
         
@@ -25,25 +21,34 @@
         #btn-hist { background: #5b5bff; color: white; }
         #btn-web { background: #00cfd1; }
 
-        /* MODALS */
+        /* MODALS (Login/Chat) */
         .modal-overlay { display: none; position: fixed; z-index: 5000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); justify-content: center; align-items: center; }
-        .dark-modal { background: #1a1a1a; padding: 30px; width: 450px; max-width: 90vw; border: 3px solid #333; text-align: center; border-radius: 12px; box-shadow: 0 0 50px rgba(255,0,0,0.4); }
-        .dark-modal input, .dark-modal textarea { width: 100%; padding: 12px; margin-bottom: 12px; background: #000; color: #39d353; border: 1px solid #444; font-family: 'Almendra'; font-size: 18px; box-sizing: border-box; outline: none; }
-        .logbtn { padding: 15px; border: none; cursor: pointer; font-family: 'Almendra'; font-weight: bold; font-size: 18px; border-radius: 5px; color: black; }
+        .dark-modal { background: #1a1a1a; padding: 30px; width: 400px; max-width: 90vw; border: 3px solid #333; text-align: center; border-radius: 12px; }
+        
+        /* FIX: Eingabefelder wieder sichtbar machen */
+        .dark-modal h1 { color: #ff3131; margin-top: 0; }
+        .dark-modal input { 
+            width: 100%; padding: 15px; margin-bottom: 15px; 
+            background: #000 !important; color: #39d353 !important; 
+            border: 1px solid #444; font-family: 'Almendra'; font-size: 20px; 
+            box-sizing: border-box; display: block;
+        }
+
+        .logbtn { width: 100%; padding: 15px; border: none; cursor: pointer; font-family: 'Almendra'; font-weight: bold; font-size: 20px; border-radius: 5px; color: black; background: #39d353; }
 
         /* DASHBOARD */
         #dashboard { display: none; position: relative; width: 100vw; min-height: 100vh; background: black; }
-        #bg-bull { position: fixed; left: 50%; top: 45%; transform: translate(-50%, -50%); width: 850px; z-index: 1; opacity: 0.4; pointer-events: none; }
-        #top-bar { position: fixed; top: 0; width: 100%; display: flex; justify-content: flex-end; padding: 10px 40px; z-index: 100; background: rgba(0,0,0,0.8); box-sizing: border-box;}
+        #bg-bull { position: fixed; left: 50%; top: 45%; transform: translate(-50%, -50%); width: 850px; z-index: 1; opacity: 0.3; pointer-events: none; }
+        #top-bar { position: fixed; top: 0; width: 100%; display: flex; justify-content: flex-end; padding: 15px 40px; z-index: 100; background: rgba(0,0,0,0.8); box-sizing: border-box;}
         
-        .panel { opacity: 0; transform: translateY(20px); transition: all 0.6s ease-out; background: rgba(15, 15, 15, 0.95); border: 1px solid #444; padding: 12px; z-index: 10; border-radius: 8px; width: 240px; }
-        .panel.visible { opacity: 1; transform: translateY(0); }
-        .panel h2 { color: #ff3131; margin: 0 0 8px 0; font-size: 20px; text-decoration: underline; }
-        .panel button { display: block; width: 100%; margin: 5px 0; background: #39d353; border: none; padding: 10px; font-family: 'Almendra'; font-weight: bold; cursor: pointer; color: black; border-radius: 4px; }
-        
-        /* CHAT KOMPONENTEN */
+        .panel { opacity: 0; transform: translateY(20px); transition: all 0.6s ease-out; background: rgba(15, 15, 15, 0.95); border: 1px solid #444; padding: 15px; z-index: 10; border-radius: 8px; width: 250px; display: none; }
+        .panel.visible { opacity: 1; transform: translateY(0); display: block; }
+        .panel h2 { color: #ff3131; margin: 0 0 10px 0; font-size: 22px; text-decoration: underline; }
+        .panel button { display: block; width: 100%; margin: 8px 0; background: #39d353; border: none; padding: 12px; font-family: 'Almendra'; font-weight: bold; cursor: pointer; color: black; border-radius: 4px; font-size: 16px; }
+
+        /* CHAT */
         .chat-window { width: 95vw; height: 90vh; background: #0a0a0a; border: 2px solid #444; display: flex; flex-direction: column; border-radius: 10px; overflow: hidden; }
-        .chat-tabs { display: flex; background: #1a1a1a; border-bottom: 2px solid #333; }
+        .chat-tabs { display: flex; background: #1a1a1a; }
         .chat-tab { flex: 1; padding: 15px; text-align: center; cursor: pointer; border-right: 1px solid #333; font-weight: bold; color: #888; }
         .chat-tab.active { background: #39d353; color: black; }
         .chat-body { display: flex; flex: 1; overflow: hidden; }
@@ -51,7 +56,9 @@
         .chat-main { flex: 1; display: flex; flex-direction: column; background: #000; }
         .chat-history { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
         .chat-input-area { padding: 15px; background: #1a1a1a; display: flex; gap: 10px; }
-        .chat-input-area input { flex: 1; padding: 10px; background: #000; border: 1px solid #444; color: #39d353; font-size: 18px; }
+        .chat-input-area input { flex: 1; padding: 12px; background: #000; border: 1px solid #444; color: #39d353; font-size: 18px; }
+        
+        .contact-item { padding: 12px; border-bottom: 1px solid #222; cursor: pointer; }
         .status-dot { height: 10px; width: 10px; border-radius: 50%; display: inline-block; margin-right: 8px; }
         .online { background-color: #39d353; box-shadow: 0 0 8px #39d353; }
         .offline { background-color: #555; }
@@ -59,16 +66,15 @@
         .msg-own { align-self: flex-end; background: #1b4d1b; border-right: 4px solid #39d353; }
         .msg-other { align-self: flex-start; background: #222; border-left: 4px solid #ff3131; }
 
-        #chat-btn { position: fixed; bottom: 0; right: 0; background: #ff8c00; padding: 15px; font-size: 22px; font-weight: bold; cursor: pointer; z-index: 200; font-family: 'Almendra'; width: 100%; display: none; color: black; border: none; opacity: 0; transition: opacity 1s; }
+        #chat-btn { position: fixed; bottom: 40px; right: 40px; background: #ff8c00; padding: 20px 60px; font-size: 28px; font-weight: bold; border-radius: 8px; color: black; border: none; cursor: pointer; z-index: 1000; display: none; opacity: 0; transition: opacity 1s; font-family: 'Almendra'; }
 
         @media (min-width: 801px) {
             .panel { position: absolute; }
             #personal { left: 40px; top: 80px; }
             #blacklistPanel { left: 40px; top: 380px; }
-            #blacklistAdmin { left: 40px; bottom: 40px; width: 440px; }
+            #blacklistAdmin { left: 40px; bottom: 40px; width: 450px; }
             #admin { right: 40px; top: 120px; width: 260px; }
             #elo { right: 40px; top: 420px; width: 260px; }
-            #chat-btn { width: auto; right: 40px; bottom: 40px; border-radius: 8px; padding: 20px 60px; font-size: 28px; }
         }
     </style>
 </head>
@@ -76,22 +82,53 @@
 
 <div id="start">
     <div id="loginBar" onclick="document.getElementById('pinModal').style.display='flex'">LOGIN</div>
-    <div id="regBar" onclick="document.getElementById('regModal').style.display='flex'">REGISTRIEREN</div>
+    <div id="regBar" onclick="alert('Registrierung folgt...')">REGISTRIEREN</div>
     <div id="logo-container"><img src="bulls_start.jpg"></div>
     <div id="side-menu">
         <button class="info-btn" id="btn-yt" onclick="window.open('https://www.youtube.com/@DarkBullsGruppe')">YOUTUBE</button>
-        <button class="info-btn" id="btn-hist" style="background:#5b5bff; color:white;">HISTORIES</button>
+        <button class="info-btn" id="btn-hist">HISTORIES</button>
         <button class="info-btn" id="btn-web" onclick="window.open('https://darkbulls.jimdofree.com/')">INTERNET</button>
     </div>
 </div>
 
 <div id="pinModal" class="modal-overlay">
     <div class="dark-modal">
-        <h1 style="color:#ff3131">Anmeldung</h1>
-        <input type="text" id="nameInput" placeholder="Name...">
-        <input type="password" id="pinInput" placeholder="PIN...">
-        <button class="logbtn" style="width:100%; background:#39d353" onclick="doLogin()">Anmelden</button>
+        <h1>Bullen Login</h1>
+        <input type="text" id="nameInput" placeholder="Dein Name..." autocomplete="off">
+        <input type="password" id="pinInput" placeholder="Deine PIN..." autocomplete="off">
+        <button class="logbtn" onclick="doLogin()">JETZT ANMELDEN</button>
+        <button onclick="document.getElementById('pinModal').style.display='none'" style="background:none; border:none; color:#555; margin-top:10px; cursor:pointer;">Abbrechen</button>
     </div>
+</div>
+
+<div id="dashboard">
+    <div id="top-bar">
+        <div style="font-size: 20px; color:#ff3131"><span id="userNameDisplay"></span> | <span id="userRoleDisplay"></span></div>
+        <button onclick="location.reload()" style="background:#d50000; color:white; border:none; padding:8px 15px; cursor:pointer; margin-left:15px; border-radius:5px;">LOGOUT</button>
+    </div>
+    <img src="bulls_dashboard.jpg" id="bg-bull">
+    
+    <div class="panel" id="personal">
+        <h2>Persönlich</h2>
+        <button>Pin ändern</button>
+        <button onclick="openSupportChat()">Support Chat</button>
+    </div>
+    <div class="panel" id="blacklistPanel">
+        <h2>Black Liste</h2>
+        <button>Sp. Melden</button>
+        <button>Anschauen</button>
+    </div>
+    <div class="panel" id="blacklistAdmin">
+        <h2>Pflege Admin</h2>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+            <button>Gemeldete</button><button>Pflege</button>
+            <button>Eintragen</button><button>Vollbild</button>
+        </div>
+    </div>
+    <div class="panel" id="admin"><h2>Admin</h2><button>User-Verwaltung</button></div>
+    <div class="panel" id="elo"><h2>Elo Bereich</h2><button>Rohstoffrechner</button></div>
+    
+    <button id="chat-btn" onclick="document.getElementById('fullChatModal').style.display='flex'">ALLIANZ CHAT</button>
 </div>
 
 <div id="fullChatModal" class="modal-overlay">
@@ -104,43 +141,15 @@
         <div class="chat-body">
             <div class="chat-sidebar" id="chatSidebar"></div>
             <div class="chat-main">
-                <div id="chatHeader" style="padding:10px; background:#222; font-weight:bold; color:#39d353;">Wähle jemanden aus...</div>
+                <div id="chatHeader" style="padding:15px; background:#222; font-weight:bold; color:#39d353; border-bottom:1px solid #333;">Wähle jemanden aus...</div>
                 <div class="chat-history" id="chatHistory"></div>
                 <div class="chat-input-area">
-                    <input type="text" id="chatInput" placeholder="Nachricht...">
-                    <button class="logbtn" style="background:#39d353; padding:10px 20px" onclick="sendChatMessage()">Senden</button>
+                    <input type="text" id="chatInput" placeholder="Schreibe etwas...">
+                    <button class="logbtn" style="width:auto; padding:10px 30px;" onclick="sendChatMessage()">SENDEN</button>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
-<div id="dashboard">
-    <div id="top-bar">
-        <div style="font-size: 18px; color:#ff3131"><span id="userNameDisplay"></span> (<span id="userRoleDisplay"></span>)</div>
-        <button onclick="location.reload()" style="background:#d50000; color:white; border:none; padding:8px 15px; cursor:pointer; margin-left:15px; border-radius:5px;">LOGOUT</button>
-    </div>
-    <img src="bulls_dashboard.jpg" id="bg-bull">
-    <div class="panel" id="personal">
-        <h2>Persönlich</h2>
-        <button onclick="openChangePin()">Pin ändern</button>
-        <button onclick="openSupportChat()">Support Chat</button>
-    </div>
-    <div class="panel" id="blacklistPanel">
-        <h2>Black Liste</h2>
-        <button onclick="alert('Melde-System folgt')">Sp. Melden</button>
-        <button onclick="openBlacklist()">Anschauen</button>
-    </div>
-    <div class="panel" id="blacklistAdmin">
-        <h2>Pflege Admin</h2>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:5px;">
-            <button>Gemeldete</button><button>Pflege</button>
-            <button>Eintragen</button><button>Volle Ansicht</button>
-        </div>
-    </div>
-    <div class="panel" id="admin"><h2>Admin</h2><button>User-Verwaltung</button></div>
-    <div class="panel" id="elo"><h2>Elo Bereich</h2><button>Rohstoffrechner</button></div>
-    <button id="chat-btn" onclick="document.getElementById('fullChatModal').style.display='flex'">ALLIANZ CHAT</button>
 </div>
 
 <script>
@@ -152,21 +161,27 @@
     let users = []; let myName = ""; let chatPartner = "";
 
     async function loadData() {
-        const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_USERS}&t=${new Date().getTime()}`);
-        const text = await res.text();
-        const rows = text.split('\n').slice(1);
-        users = rows.map(r => {
-            const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-            const cl = (s) => s ? s.replace(/["']/g, "").trim() : "";
-            return { name: cl(c[0]), pin: cl(c[2]), role: cl(c[3]), lastActive: cl(c[4]) };
-        });
-        if(myName) switchChatTab('mitglieder');
+        try {
+            const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_USERS}&t=${new Date().getTime()}`);
+            const text = await res.text();
+            const rows = text.split('\n').slice(1);
+            users = rows.map(r => {
+                const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                const cl = (s) => s ? s.replace(/["']/g, "").trim() : "";
+                return { name: cl(c[0]), pin: cl(c[2]), role: cl(c[3]), lastActive: cl(c[4]) };
+            });
+            if(myName) switchChatTab('mitglieder');
+        } catch(e) { console.error("Fehler beim Laden", e); }
     }
 
     function doLogin() {
-        const n = document.getElementById("nameInput").value.trim().toLowerCase();
-        const p = document.getElementById("pinInput").value.trim();
-        const u = users.find(x => x.name.toLowerCase() === n && x.pin === p);
+        const nInput = document.getElementById("nameInput").value.trim();
+        const pInput = document.getElementById("pinInput").value.trim();
+        
+        if(!nInput || !pInput) { alert("Bitte Name und PIN eingeben!"); return; }
+        
+        const u = users.find(x => x.name.toLowerCase() === nInput.toLowerCase() && x.pin === pInput);
+        
         if (u) {
             myName = u.name;
             document.getElementById("pinModal").style.display = "none";
@@ -174,16 +189,18 @@
             document.getElementById("dashboard").style.display = "block";
             document.getElementById("userNameDisplay").innerText = u.name;
             document.getElementById("userRoleDisplay").innerText = u.role;
+            
             fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "updateStatus", playerName: myName }) });
-            switchChatTab('mitglieder');
+            
             setInterval(loadChatHistory, 4000);
             setInterval(loadData, 10000);
+            
             setTimeout(() => { 
                 document.querySelectorAll('.panel').forEach(p => p.classList.add('visible')); 
                 document.getElementById("chat-btn").style.display = "block"; 
                 setTimeout(() => document.getElementById("chat-btn").style.opacity = "1", 100); 
             }, 500);
-        } else { alert("Login falsch!"); }
+        } else { alert("Daten falsch oder User nicht gefunden!"); }
     }
 
     function switchChatTab(tab) {
@@ -216,7 +233,6 @@
         document.getElementById("chatHistory").innerHTML += `<div class="msg msg-own"><small>${myName}</small><br>${msg}</div>`;
         input.value = "";
         await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "sendChat", absender: myName, kanalID: kanalID, nachricht: msg }) });
-        loadChatHistory();
     }
 
     async function loadChatHistory() {
@@ -225,13 +241,12 @@
         const text = await res.text(); const rows = text.split('\n').slice(1);
         const history = document.getElementById("chatHistory");
         let kanalID = (chatPartner === "SUPPORT") ? "SUPPORT-" + myName : [myName, chatPartner].sort().join("-");
-        const role = document.getElementById("userRoleDisplay").innerText;
         let html = "";
         rows.forEach(r => {
             const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/"/g,"").trim());
-            let show = (c[2] === kanalID);
-            if(chatPartner === "SUPPORT" && (role === "Admin" || role === "Support") && c[2].startsWith("SUPPORT-")) show = true;
-            if(show) { html += `<div class="msg ${c[1] === myName ? 'msg-own' : 'msg-other'}"><small>${c[1]}</small><br>${c[3]}</div>`; }
+            if (c[2] === kanalID || (chatPartner === "SUPPORT" && c[2].startsWith("SUPPORT-") && (document.getElementById("userRoleDisplay").innerText.includes("Admin")))) {
+                html += `<div class="msg ${c[1] === myName ? 'msg-own' : 'msg-other'}"><small>${c[1]}</small><br>${c[3]}</div>`;
+            }
         });
         history.innerHTML = html; history.scrollTop = history.scrollHeight;
     }
