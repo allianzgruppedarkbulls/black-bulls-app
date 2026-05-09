@@ -3,10 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dark Bulls - Allianz System V9.0</title>
-    <link rel="icon" type="image/png" href="192x192icon.png">
-    <link rel="apple-touch-icon" href="192x192icon.png">
-    <link rel="manifest" href="manifest.json">
+    <title>Dark Bulls - Allianz System V9.1</title>
     <link href="https://fonts.googleapis.com/css2?family=Almendra:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body { margin: 0; padding: 0; font-family: 'Almendra', serif; background: black; color: white; overflow-x: hidden; min-height: 100vh; }
@@ -16,29 +13,27 @@
         #regBar { position: absolute; left: 0; top: 65%; transform: translateY(-50%); background: #ffd600; padding: 25px 5px; font-size: 14px; font-weight: bold; color: black; cursor: pointer; z-index: 100; border-radius: 0 10px 10px 0; writing-mode: vertical-rl; text-orientation: upright; width: 40px; text-align: center; }
         #side-menu { position: absolute; right: 0; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 8px; z-index: 100; }
         .info-btn { padding: 15px 5px; font-size: 15px; font-weight: bold; border: none; cursor: pointer; font-family: 'Almendra'; writing-mode: vertical-rl; text-orientation: upright; border-radius: 10px 0 0 10px; width: 40px; text-align: center; color: black; min-height: 100px; }
-        #btn-yt { background: #ff8c00; }
-        #btn-hist { background: #5b5bff; color: white; }
-        #btn-web { background: #00cfd1; }
+        
         .modal-overlay { display: none; position: fixed; z-index: 5000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); justify-content: center; align-items: center; }
         .dark-modal { background: #1a1a1a; padding: 30px; width: 450px; max-width: 90vw; border: 3px solid #333; text-align: center; border-radius: 12px; box-shadow: 0 0 50px rgba(255,0,0,0.4); }
         .dark-modal input, .dark-modal textarea { width: 100%; padding: 12px; margin-bottom: 12px; background: #000; color: #39d353; border: 1px solid #444; font-family: 'Almendra'; font-size: 18px; box-sizing: border-box; outline: none; border-radius: 4px; }
+        
         #dashboard { display: none; position: relative; width: 100vw; min-height: 100vh; background: black; }
         #bg-bull { position: fixed; left: 50%; top: 45%; transform: translate(-50%, -50%); width: 850px; z-index: 1; opacity: 0.4; pointer-events: none; }
         #top-bar { position: fixed; top: 0; width: 100%; display: flex; justify-content: flex-end; padding: 10px 40px; z-index: 100; background: rgba(0,0,0,0.8); box-sizing: border-box;}
+        
         .panel { opacity: 0; transform: translateY(20px); transition: all 0.6s ease-out; background: rgba(15, 15, 15, 0.95); border: 1px solid #444; padding: 12px; z-index: 10; border-radius: 8px; width: 240px; }
         .panel.visible { opacity: 1; transform: translateY(0); }
         .panel h2 { color: #ff3131; margin: 0 0 8px 0; font-size: 20px; text-decoration: underline; }
         .panel button { display: block; width: 100%; margin: 5px 0; background: #39d353; border: none; padding: 10px; font-family: 'Almendra'; font-weight: bold; cursor: pointer; color: black; border-radius: 4px; }
+
         .bl-box { width: 95%; max-width: 1200px; background: #111; border: 2px solid #333; padding: 30px; border-radius: 10px; }
         .bl-header { color: #ff3131; font-size: 55px; text-align: center; margin-bottom: 20px; font-weight: bold; }
-        .bl-search-row { display: flex; gap: 20px; align-items: center; margin-bottom: 30px; background: #1a1a1a; padding: 15px; border-radius: 10px; }
-        .bl-section-title { color: #5b9bd5; font-size: 26px; border-bottom: 1px solid #5b9bd5; margin: 20px 0 15px 0; font-style: italic; }
         .bl-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; text-align: left; }
         .bl-grid p { margin: 8px 0; font-size: 20px; font-weight: bold; }
         .bl-grid span { color: #39d353; margin-left: 10px; }
-        .story-box { background: #000; border: 1px solid #444; padding: 20px; min-height: 100px; color: #39d353; font-size: 22px; margin-top: 10px; border-radius: 5px; white-space: pre-wrap; }
+        .story-box { background: #000; border: 1px solid #333; padding: 20px; min-height: 100px; color: #39d353; font-size: 22px; margin-top: 10px; border-radius: 5px; white-space: pre-wrap; }
         @media (min-width: 801px) { .panel { position: absolute; } #personal { left: 40px; top: 80px; } #blacklistPanel { left: 40px; top: 380px; } #blacklistAdmin { left: 40px; bottom: 40px; width: 440px; } #admin { right: 40px; top: 120px; width: 260px; } #elo { right: 40px; top: 420px; width: 260px; } }
-        @media (max-width: 800px) { #dashboard { overflow-y: auto; display: none; flex-direction: column; align-items: center; padding-top: 70px; padding-bottom: 100px; } .panel { position: relative !important; width: 92% !important; margin: 10px auto !important; } }
     </style>
 </head>
 <body>
@@ -61,8 +56,8 @@
         <input type="number" id="regAge" placeholder="Alter">
         <textarea id="regMsg" placeholder="Deine Nachricht..."></textarea>
         <div style="display:flex; gap:10px;">
-            <button class="logbtn" style="flex:1; background:#ffd600" onclick="sendDiscordBewerbung()">Abschicken</button>
-            <button class="logbtn" style="flex:1; background:#d50000; color:white" onclick="document.getElementById('regModal').style.display='none'">Abbruch</button>
+            <button onclick="sendDiscordBewerbung()" style="flex:1; background:#ffd600; padding:15px; border:none; font-family:'Almendra'; font-weight:bold; cursor:pointer;">Abschicken</button>
+            <button onclick="document.getElementById('regModal').style.display='none'" style="flex:1; background:#d50000; color:white; padding:15px; border:none; cursor:pointer;">Abbruch</button>
         </div>
     </div>
 </div>
@@ -72,8 +67,8 @@
         <h1 style="color:#ff3131">Support</h1>
         <textarea id="supportMsg" placeholder="Was ist dein Problem?"></textarea>
         <div style="display:flex; gap:10px;">
-            <button class="logbtn" style="flex:1; background:#39d353" onclick="sendDiscordSupport()">Senden</button>
-            <button class="logbtn" style="flex:1; background:#d50000; color:white" onclick="document.getElementById('supportModal').style.display='none'">Abbruch</button>
+            <button onclick="sendDiscordSupport()" style="flex:1; background:#39d353; padding:15px; border:none; font-family:'Almendra'; font-weight:bold; cursor:pointer;">Senden</button>
+            <button onclick="document.getElementById('supportModal').style.display='none'" style="flex:1; background:#d50000; color:white; padding:15px; border:none; cursor:pointer;">Abbruch</button>
         </div>
     </div>
 </div>
@@ -81,11 +76,12 @@
 <div id="loginModal" class="modal-overlay">
     <div class="dark-modal">
         <h1 style="color:#ff3131">Anmeldung</h1>
+        <div id="loadingInfo" style="color:#ffd600; margin-bottom:10px;">Lade Cloud-Daten...</div>
         <input type="text" id="nameInput" placeholder="Name...">
         <input type="password" id="pinInput" placeholder="PIN...">
         <div style="display:flex; gap:10px;">
-            <button class="logbtn" style="flex:1; background:#39d353" onclick="doLogin()">Anmelden</button>
-            <button class="logbtn" style="flex:1; background:#d50000; color:white" onclick="document.getElementById('loginModal').style.display='none'">Abbruch</button>
+            <button id="loginBtn" onclick="doLogin()" style="flex:1; background:#39d353; border:none; padding:15px; font-family:'Almendra'; font-weight:bold; cursor:pointer;">Anmelden</button>
+            <button onclick="document.getElementById('loginModal').style.display='none'" style="flex:1; background:#d50000; color:white; border:none; padding:15px; cursor:pointer;">Abbruch</button>
         </div>
     </div>
 </div>
@@ -94,19 +90,17 @@
     <div class="bl-box">
         <div class="bl-header">DARK BULLS BLACK LISTE</div>
         <div class="bl-search-row">
-            <label style="font-size:24px">Spieler auswählen</label>
-            <input list="playerList" id="blSearchInput" style="flex:1; padding:10px; background:black; color:#39d353; border:1px solid #555;">
+            <input list="playerList" id="blSearchInput" placeholder="Spieler suchen..." style="flex:1; padding:10px; background:black; color:#39d353; border:1px solid #555;">
             <datalist id="playerList"></datalist>
-            <button class="logbtn" style="background:#39d353; padding:10px 30px" onclick="loadBlacklistPlayer()">Spieler Laden</button>
+            <button onclick="loadBlacklistPlayer()" style="background:#39d353; border:none; padding:10px 30px; font-family:'Almendra'; font-weight:bold; cursor:pointer;">Laden</button>
         </div>
-        <div class="bl-section-title">Spielerdaten vom gemeldeten Spieler</div>
         <div class="bl-grid">
-            <div><p>ID <span id="outID"></span></p><p>Allianz <span id="outAllianz"></span></p><p>Verstoß <span id="outVerstoss"></span></p><p>Fall <span id="outFall"></span></p></div>
+            <div><p>ID <span id="outID"></span></p><p>Allianz <span id="outAllianz"></span></p><p>Verstoß <span id="outVerstoss"></span></p></div>
             <div><p>Name <span id="outName"></span></p><p>Punkte <span id="outPunkte"></span></p></div>
-            <div><p>Reg <span id="outDateReg"></span></p><p>Map <span id="outMap"></span></p><p>Beweis <span id="outBeweis"></span></p><p>Datum <span id="outDateEvent"></span></p></div>
+            <div><p>Reg <span id="outDateReg"></span></p><p>Fall <span id="outFall"></span></p><p>Datum <span id="outDateEvent"></span></p></div>
         </div>
         <div id="outStory" class="story-box"></div>
-        <div style="text-align:center; margin-top:20px;"><button class="logbtn" style="background:#ffbd00; width:200px" onclick="document.getElementById('blacklistModal').style.display='none'">Zurück</button></div>
+        <div style="text-align:center; margin-top:20px;"><button onclick="document.getElementById('blacklistModal').style.display='none'" style="background:#ffbd00; padding:15px 50px; border:none; font-family:'Almendra'; font-weight:bold; cursor:pointer;">Zurück</button></div>
     </div>
 </div>
 
@@ -123,7 +117,7 @@
     </div>
     <div class="panel" id="blacklistPanel">
         <h2>Black Liste</h2>
-        <button>Sp. Melden</button>
+        <button onclick="alert('Melde-System folgt')">Sp. Melden</button>
         <button onclick="openBlacklist()">Anschauen</button>
     </div>
     <div class="panel" id="blacklistAdmin">
@@ -134,7 +128,7 @@
         </div>
     </div>
     <div class="panel" id="admin"><h2>Admin</h2><button>User-Verwaltung</button></div>
-    <div class="panel" id="elo"><h2>Elo Bereich</h2><button>Rohstoffrechner</button></div>
+    <div class="panel" id="elo"><h2>Elo Bereich</h2><button>Rechner</button></div>
 </div>
 
 <script>
@@ -144,25 +138,34 @@
     const GID_USERS = '1188820112';
     const GID_BLACKLIST = '1767725514';
 
-    let users = []; let blacklistData = [];
+    let users = []; let blacklistData = []; let dataLoaded = false;
 
     async function loadData() {
-        const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx:out:csv&gid=${GID_USERS}`);
-        const text = await res.text();
-        const rows = text.split('\n').slice(1);
-        users = rows.map(r => {
-            const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-            const clean = (s) => s ? s.replace(/["']/g, "").trim() : "";
-            return { name: clean(c[0]), pin: clean(c[2]), role: clean(c[3]) };
-        });
+        try {
+            const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx:out:csv&gid=${GID_USERS}`);
+            const text = await res.text();
+            const rows = text.split('\n').slice(1);
+            users = rows.map(r => {
+                const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                const clean = (s) => s ? s.replace(/["']/g, "").trim() : "";
+                return { name: clean(c[0]), pin: clean(c[2]), role: clean(c[3]) };
+            });
+            dataLoaded = true;
+            document.getElementById("loadingInfo").innerText = "Cloud bereit! ✓";
+            document.getElementById("loadingInfo").style.color = "#39d353";
+        } catch (e) { 
+            document.getElementById("loadingInfo").innerText = "Cloud-Fehler! (Internet prüfen)";
+            document.getElementById("loadingInfo").style.color = "#d50000";
+        }
     }
 
     function doLogin() {
+        if(!dataLoaded) return alert("Daten werden noch geladen. Moment bitte...");
         const n = document.getElementById("nameInput").value.trim().toLowerCase();
         const p = document.getElementById("pinInput").value.trim();
         const u = users.find(x => x.name.toLowerCase() === n && x.pin === p);
         if (u) {
-            document.getElementById("pinModal").style.display = "none";
+            document.getElementById("loginModal").style.display = "none";
             document.getElementById("start").style.display = "none";
             document.getElementById("dashboard").style.display = "block";
             document.getElementById("userNameDisplay").innerText = u.name;
@@ -174,24 +177,24 @@
                         setTimeout(() => panel.classList.add('visible'), index * 120);
                     }
                 });
-            }, 600);
-        } else { alert("Login falsch!"); }
+            }, 500);
+        } else { alert("Login falsch! Überprüfe Name und PIN."); }
     }
 
     async function sendDiscordBewerbung() {
         const name = document.getElementById("regName").value;
         const msg = document.getElementById("regMsg").value;
-        const payload = { content: `🚨 **NEUE BEWERBUNG** 🚨\n**Name:** ${name}\n**Info:** ${msg}\n@here` };
+        const payload = { content: `🚨 **NEUE BEWERBUNG** 🚨\n**Name:** ${name}\n**Nachricht:** ${msg}\n@here` };
         await fetch(WEBHOOK_BEWERBUNG, { method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(payload) });
-        alert("Bewerbung gesendet!"); document.getElementById("regModal").style.display = "none";
+        alert("Gesendet!"); document.getElementById("regModal").style.display = "none";
     }
 
     async function sendDiscordSupport() {
         const user = document.getElementById("userNameDisplay").innerText;
         const msg = document.getElementById("supportMsg").value;
-        const payload = { content: `🛠️ **SUPPORT TICKET** 🛠️\n**User:** ${user}\n**Problem:** ${msg}\n@here` };
+        const payload = { content: `🛠️ **SUPPORT ANFRAGE** 🛠️\n**User:** ${user}\n**Problem:** ${msg}\n@here` };
         await fetch(WEBHOOK_SUPPORT, { method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(payload) });
-        alert("Support Ticket erstellt!"); document.getElementById("supportModal").style.display = "none";
+        alert("Support-Ticket erstellt!"); document.getElementById("supportModal").style.display = "none";
     }
 
     async function openBlacklist() {
@@ -218,8 +221,6 @@
         if(p) {
             document.getElementById('outID').innerText = p[1];
             document.getElementById('outName').innerText = p[2];
-            document.getElementById('outDateReg').innerText = p[3];
-            document.getElementById('outMap').innerText = p[4];
             document.getElementById('outAllianz').innerText = p[5];
             document.getElementById('outVerstoss').innerText = p[6];
             document.getElementById('outFall').innerText = p[12];
