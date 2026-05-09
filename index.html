@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dark Bulls - Allianz System V11.4</title>
+    <title>Dark Bulls - Allianz System V11.5</title>
 
     <link rel="icon" type="image/png" href="192x192icon.png">
     <link rel="apple-touch-icon" href="192x192icon.png">
@@ -11,37 +11,37 @@
     <link href="https://fonts.googleapis.com/css2?family=Almendra:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body { margin: 0; padding: 0; font-family: 'Almendra', serif; background: black; color: white; overflow-x: hidden; min-height: 100vh; }
+        
+        /* --- STARTSEITE (Wiederhergestellt) --- */
         #start { display: flex; align-items: center; justify-content: center; height: 100vh; position: relative; background: black; z-index: 10; }
         #logo-container img { width: 780px; max-width: 75vw; filter: drop-shadow(0 0 60px rgba(255, 0, 0, 0.9)); }
-        #loginBar, #regBar { position: absolute; left: 0; transform: translateY(-50%); background: #39d353; padding: 30px 5px; font-size: 20px; font-weight: bold; color: black; cursor: pointer; z-index: 100; border-radius: 0 10px 10px 0; writing-mode: vertical-rl; text-orientation: upright; width: 40px; text-align: center; }
-        #loginBar { top: 35%; } #regBar { top: 65%; background: #ffd600; }
         
+        #loginBar { position: absolute; left: 0; top: 35%; transform: translateY(-50%); background: #39d353; padding: 30px 5px; font-size: 20px; font-weight: bold; color: black; cursor: pointer; z-index: 100; border-radius: 0 10px 10px 0; writing-mode: vertical-rl; text-orientation: upright; width: 40px; text-align: center; }
+        #regBar { position: absolute; left: 0; top: 65%; transform: translateY(-50%); background: #ffd600; padding: 25px 5px; font-size: 14px; font-weight: bold; color: black; cursor: pointer; z-index: 100; border-radius: 0 10px 10px 0; writing-mode: vertical-rl; text-orientation: upright; width: 40px; text-align: center; }
+
         #side-menu { position: absolute; right: 0; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 8px; z-index: 100; }
         .info-btn { padding: 15px 5px; font-size: 15px; font-weight: bold; border: none; cursor: pointer; font-family: 'Almendra'; writing-mode: vertical-rl; text-orientation: upright; border-radius: 10px 0 0 10px; width: 40px; text-align: center; color: black; min-height: 100px; }
         #btn-yt { background: #ff8c00; }
         #btn-hist { background: #5b5bff; color: white; }
         #btn-web { background: #00cfd1; }
 
+        /* MODALS */
         .modal-overlay { display: none; position: fixed; z-index: 5000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); justify-content: center; align-items: center; }
         .dark-modal { background: #1a1a1a; padding: 30px; width: 450px; max-width: 90vw; border: 3px solid #333; text-align: center; border-radius: 12px; box-shadow: 0 0 50px rgba(255,0,0,0.4); }
         .dark-modal input, .dark-modal textarea { width: 100%; padding: 12px; margin-bottom: 12px; background: #000; color: #39d353; border: 1px solid #444; font-family: 'Almendra'; font-size: 18px; box-sizing: border-box; outline: none; }
         .logbtn { padding: 15px; border: none; cursor: pointer; font-family: 'Almendra'; font-weight: bold; font-size: 18px; border-radius: 5px; color: black; }
 
-        /* STATUS PUNKT */
-        .status-dot { height: 10px; width: 10px; border-radius: 50%; display: inline-block; margin-right: 8px; }
-        .online { background-color: #39d353; box-shadow: 0 0 8px #39d353; }
-        .offline { background-color: #555; }
-
-        /* DASHBOARD & PANELS */
+        /* DASHBOARD */
         #dashboard { display: none; position: relative; width: 100vw; min-height: 100vh; background: black; }
         #bg-bull { position: fixed; left: 50%; top: 45%; transform: translate(-50%, -50%); width: 850px; z-index: 1; opacity: 0.4; pointer-events: none; }
         #top-bar { position: fixed; top: 0; width: 100%; display: flex; justify-content: flex-end; padding: 10px 40px; z-index: 100; background: rgba(0,0,0,0.8); box-sizing: border-box;}
+        
         .panel { opacity: 0; transform: translateY(20px); transition: all 0.6s ease-out; background: rgba(15, 15, 15, 0.95); border: 1px solid #444; padding: 12px; z-index: 10; border-radius: 8px; width: 240px; }
         .panel.visible { opacity: 1; transform: translateY(0); }
         .panel h2 { color: #ff3131; margin: 0 0 8px 0; font-size: 20px; text-decoration: underline; }
         .panel button { display: block; width: 100%; margin: 5px 0; background: #39d353; border: none; padding: 10px; font-family: 'Almendra'; font-weight: bold; cursor: pointer; color: black; border-radius: 4px; }
-
-        /* CHAT WINDOW */
+        
+        /* CHAT KOMPONENTEN */
         .chat-window { width: 95vw; height: 90vh; background: #0a0a0a; border: 2px solid #444; display: flex; flex-direction: column; border-radius: 10px; overflow: hidden; }
         .chat-tabs { display: flex; background: #1a1a1a; border-bottom: 2px solid #333; }
         .chat-tab { flex: 1; padding: 15px; text-align: center; cursor: pointer; border-right: 1px solid #333; font-weight: bold; color: #888; }
@@ -52,10 +52,12 @@
         .chat-history { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
         .chat-input-area { padding: 15px; background: #1a1a1a; display: flex; gap: 10px; }
         .chat-input-area input { flex: 1; padding: 10px; background: #000; border: 1px solid #444; color: #39d353; font-size: 18px; }
+        .status-dot { height: 10px; width: 10px; border-radius: 50%; display: inline-block; margin-right: 8px; }
+        .online { background-color: #39d353; box-shadow: 0 0 8px #39d353; }
+        .offline { background-color: #555; }
         .msg { padding: 8px 12px; border-radius: 5px; max-width: 80%; font-size: 18px; }
         .msg-own { align-self: flex-end; background: #1b4d1b; border-right: 4px solid #39d353; }
         .msg-other { align-self: flex-start; background: #222; border-left: 4px solid #ff3131; }
-        .contact-item { padding: 12px; border-bottom: 1px solid #222; cursor: pointer; }
 
         #chat-btn { position: fixed; bottom: 0; right: 0; background: #ff8c00; padding: 15px; font-size: 22px; font-weight: bold; cursor: pointer; z-index: 200; font-family: 'Almendra'; width: 100%; display: none; color: black; border: none; opacity: 0; transition: opacity 1s; }
 
@@ -106,7 +108,7 @@
                 <div class="chat-history" id="chatHistory"></div>
                 <div class="chat-input-area">
                     <input type="text" id="chatInput" placeholder="Nachricht...">
-                    <button class="logbtn" style="background:#39d353; padding:10px 20px" onclick="sendChatMessage()">SENDEN</button>
+                    <button class="logbtn" style="background:#39d353; padding:10px 20px" onclick="sendChatMessage()">Senden</button>
                 </div>
             </div>
         </div>
@@ -121,8 +123,23 @@
     <img src="bulls_dashboard.jpg" id="bg-bull">
     <div class="panel" id="personal">
         <h2>Persönlich</h2>
+        <button onclick="openChangePin()">Pin ändern</button>
         <button onclick="openSupportChat()">Support Chat</button>
     </div>
+    <div class="panel" id="blacklistPanel">
+        <h2>Black Liste</h2>
+        <button onclick="alert('Melde-System folgt')">Sp. Melden</button>
+        <button onclick="openBlacklist()">Anschauen</button>
+    </div>
+    <div class="panel" id="blacklistAdmin">
+        <h2>Pflege Admin</h2>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:5px;">
+            <button>Gemeldete</button><button>Pflege</button>
+            <button>Eintragen</button><button>Volle Ansicht</button>
+        </div>
+    </div>
+    <div class="panel" id="admin"><h2>Admin</h2><button>User-Verwaltung</button></div>
+    <div class="panel" id="elo"><h2>Elo Bereich</h2><button>Rohstoffrechner</button></div>
     <button id="chat-btn" onclick="document.getElementById('fullChatModal').style.display='flex'">ALLIANZ CHAT</button>
 </div>
 
@@ -161,7 +178,11 @@
             switchChatTab('mitglieder');
             setInterval(loadChatHistory, 4000);
             setInterval(loadData, 10000);
-            setTimeout(() => { document.querySelectorAll('.panel').forEach(p => p.classList.add('visible')); document.getElementById("chat-btn").style.display = "block"; setTimeout(() => document.getElementById("chat-btn").style.opacity = "1", 100); }, 500);
+            setTimeout(() => { 
+                document.querySelectorAll('.panel').forEach(p => p.classList.add('visible')); 
+                document.getElementById("chat-btn").style.display = "block"; 
+                setTimeout(() => document.getElementById("chat-btn").style.opacity = "1", 100); 
+            }, 500);
         } else { alert("Login falsch!"); }
     }
 
@@ -175,7 +196,11 @@
                 if(u.name !== myName) {
                     const lastDate = new Date(u.lastActive);
                     const isOnline = (new Date() - lastDate) < 300000;
-                    sidebar.innerHTML += `<div class="contact-item" onclick="startChat('${u.name}')"><span class="status-dot ${isOnline ? 'online' : 'offline'}"></span>${u.name}</div>`;
+                    let div = document.createElement("div");
+                    div.className = "contact-item";
+                    div.innerHTML = `<span class="status-dot ${isOnline ? 'online' : 'offline'}"></span>${u.name}`;
+                    div.onclick = () => startChat(u.name);
+                    sidebar.appendChild(div);
                 }
             });
         } else if(tab === 'pn') {
@@ -211,7 +236,7 @@
         history.innerHTML = html; history.scrollTop = history.scrollHeight;
     }
 
-    function openSupportChat() { document.getElementById('fullChatModal').style.display = 'flex'; switchTab('pn'); startChat('SUPPORT'); }
+    function openSupportChat() { document.getElementById('fullChatModal').style.display = 'flex'; switchChatTab('pn'); startChat('SUPPORT'); }
     window.onload = loadData;
 </script>
 </body>
