@@ -232,7 +232,7 @@
 </div>
 
 <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxIXKlIvApuZH1po2w1Hjzc03v8IhMiVnE40h6BRTuXbaWPHj1n0DwtO6DKVJo6-fCYxQ/exec'; 
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwlZWpYkINjQsh72hVecR_2KRZ66ff7aKnc7tZHqKbKezTQHeyjkv1NE3L6_GIgiU7WTA/exec'; 
     const WEBHOOK_BEW = "https://discord.com/api/webhooks/1502735246335021267/fpxXtWr5QgSny6rfJzGHKnhYskehC9vDMEl3CvUzjgbBOuKBd8KGzUhCRfvd2KmWcnND";
     const WEBHOOK_SUP = "https://discord.com/api/webhooks/1502735504997744741/kK6SCl_DQtW0TCfuB5epCbTueMcp4COyETyea0J5bM68EOV8EHQoxPzq4gp1_iuh_444";
     const SHEET_ID = '1Gjnhol0ou63xW20OnbTo_wugzpOTgBP2yjnx3Qzg4bQ';
@@ -273,28 +273,31 @@
             dash.style.display = (window.innerWidth <= 800) ? "flex" : "block";
             document.getElementById("userNameDisplay").innerText = u.name;
             document.getElementById("userRoleDisplay").innerText = u.role;
-            
-            // STATUS UPDATE
             fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "updateStatus", playerName: myName }) });
-            
             switchChatTab('mitglieder');
             setInterval(loadChatHistory, 4000);
             setInterval(loadData, 10000);
 
             setTimeout(() => {
                 document.querySelectorAll('.panel').forEach((panel, index) => {
-                    // RECHTE-FILTER: 
-                    // Gast sieht NUR 'personal'. Alle anderen sehen ihre jeweiligen Bereiche.
+                    // STRENGE RECHTE-KONTROLLE
                     if (u.role === "Gast") {
                         if (panel.id === "personal") {
                             panel.style.display = "block";
-                            setTimeout(() => panel.classList.add('visible'), 100);
+                            panel.style.opacity = "1";
+                            panel.classList.add('visible');
                         } else {
                             panel.style.display = "none";
+                            panel.classList.remove('visible');
                         }
+                    } else if (u.role === "Admin") {
+                        panel.style.display = "block";
+                        setTimeout(() => panel.classList.add('visible'), index * 120);
                     } else {
-                        // Logik für Admin/Mitglieder wie gehabt
-                        if (u.role === "Admin" || panel.id === "personal" || (panel.id === "blacklistPanel" && u.role !== "Gast")) {
+                        // Standard Mitglied
+                        if (panel.id === "admin" || panel.id === "blacklistAdmin") {
+                            panel.style.display = "none";
+                        } else {
                             panel.style.display = "block";
                             setTimeout(() => panel.classList.add('visible'), index * 120);
                         }
