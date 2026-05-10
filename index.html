@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dark Bulls - Allianz System V13.0</title>
+    <title>Dark Bulls - Allianz System V13.1</title>
     <link href="https://fonts.googleapis.com/css2?family=Almendra:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body { margin: 0; padding: 0; font-family: 'Almendra', serif; background: black; color: white; overflow-x: hidden; min-height: 100vh; }
@@ -28,7 +28,7 @@
         #chat-btn { background: #ff8c00; font-weight: bold; cursor: pointer; z-index: 200; font-family: 'Almendra'; color: black; border: none; display: none; }
         .modal-overlay { display: none; position: fixed; z-index: 5000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); justify-content: center; align-items: center; }
         .dark-modal { background: #1a1a1a; padding: 25px; width: 450px; max-width: 90vw; border: 3px solid #333; text-align: center; border-radius: 12px; box-shadow: 0 0 50px red; }
-        .dark-modal input { width: 100%; padding: 12px; margin-bottom: 12px; background: #000; color: #39d353; border: 1px solid #444; font-family: 'Almendra'; font-size: 18px; box-sizing: border-box; }
+        .dark-modal input, .dark-modal select { width: 100%; padding: 12px; margin-bottom: 12px; background: #000; color: #39d353; border: 1px solid #444; font-family: 'Almendra'; font-size: 18px; box-sizing: border-box; }
         .chat-window { width: 95vw; height: 90vh; background: #0a0a0a; border: 2px solid #444; display: flex; flex-direction: column; border-radius: 10px; overflow: hidden; }
         .chat-tabs { display: flex; background: #1a1a1a; border-bottom: 2px solid #333; }
         .chat-tab { flex: 1; padding: 15px; text-align: center; cursor: pointer; font-weight: bold; color: #888; }
@@ -65,13 +65,15 @@
 
 <div id="groupMgmtModal" class="modal-overlay">
     <div class="dark-modal">
-        <h1 style="color:#ffd600">Gruppen Management</h1>
+        <h1 style="color:#ffd600">Gruppen & Archiv</h1>
+        <select id="groupSelectEdit" onchange="loadGroupDetailsForEdit()">
+            <option value="">-- Neue Gruppe --</option>
+        </select>
         <input type="text" id="newGroupName" placeholder="Name der Karte...">
         <input type="text" id="newGroupWebhook" placeholder="Discord Webhook...">
-        <div class="player-scroll" id="playerSelectList">
-            <div class="player-row"><input type="checkbox" id="chk-alle"> <b>ALLE SPIELER</b></div>
-        </div>
-        <button onclick="createNewGroup()" style="width:100%; background:#39d353; padding:12px; border:none; font-family:'Almendra'; font-weight:bold; cursor:pointer;">SPEICHERN</button>
+        <div class="player-scroll" id="playerSelectList"></div>
+        <button onclick="createNewGroup()" style="width:100%; background:#39d353; padding:12px; border:none; font-family:'Almendra'; font-weight:bold; cursor:pointer;">SPEICHERN / UPDATE</button>
+        <button onclick="archiveCurrentGroup()" id="archiveBtn" style="width:100%; background:#ff8c00; padding:12px; border:none; margin-top:10px; font-family:'Almendra'; font-weight:bold; cursor:pointer; display:none;">ARCHIVIEREN</button>
         <button onclick="document.getElementById('groupMgmtModal').style.display='none'" style="width:100%; background:red; padding:12px; border:none; margin-top:10px; font-family:'Almendra'; font-weight:bold; cursor:pointer;">ABBRECHEN</button>
     </div>
 </div>
@@ -104,42 +106,35 @@
         <button onclick="location.reload()" style="background:red; border:none; padding:8px 15px; margin-left:20px; border-radius:5px; cursor:pointer; color:white;">LOGOUT</button>
     </div>
     <img src="bulls_dashboard.jpg" id="bg-bull">
-
     <div class="panel" id="personal">
         <h2>Persönlich</h2>
         <button onclick="alert('In Arbeit...')">Support Chat</button>
         <button onclick="alert('In Arbeit...')">Pin ändern</button>
     </div>
-
     <div class="panel" id="blacklistPanel">
         <h2>Black Liste</h2>
         <button onclick="alert('In Arbeit...')">Anschauen</button>
         <button onclick="alert('In Arbeit...')">Spieler Melden</button>
     </div>
-
     <div class="panel" id="blacklistAdmin">
         <h2>Pflege Admin</h2>
         <button id="btn-mgmt" style="background:#ffd600; display:none;" onclick="openGroupMgmt()">Gruppen Management</button>
         <button>Spieler eintragen</button>
         <button>Volle Ansicht</button>
     </div>
-
     <div class="panel" id="admin">
         <h2>Admin</h2>
         <button>User Verwaltung</button>
     </div>
-
     <div class="panel" id="elo">
         <h2>Elo Bereich</h2>
         <button>Rohstoffrechner</button>
     </div>
-
     <button id="chat-btn" onclick="document.getElementById('fullChatModal').style.display='flex'">ALLIANZ CHAT</button>
 </div>
 
 <script>
-    // DEINE NEUE URL VON GERADE EBEN
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyGmtY9gpXhYWHlBAlYrxJy83uhbwnwFIaQ-LqSHijFTpUDX9U-lOzSBPHKkX2GDqRoyQ/exec'; 
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwlZWpYkINjQsh72hVecR_2KRZ66ff7aKnc7tZHqKbKezTQHeyjkv1NE3L6_GIgiU7WTA/exec'; 
     const SHEET_ID = '1Gjnhol0ou63xW20OnbTo_wugzpOTgBP2yjnx3Qzg4bQ';
     const GID_USERS = '1188820112'; const GID_CHAT = '274206006'; const GID_STEER = '717972533';
 
@@ -183,10 +178,33 @@
     }
 
     function openGroupMgmt() {
+        const select = document.getElementById("groupSelectEdit");
+        select.innerHTML = '<option value="">-- Neue Gruppe --</option>';
+        activeGroups.forEach(g => { select.innerHTML += `<option value="${g.name}">${g.name}</option>`; });
         const list = document.getElementById("playerSelectList");
         list.innerHTML = `<div class="player-row"><input type="checkbox" id="chk-alle"> <b>ALLE SPIELER</b></div>`;
         users.forEach(u => { list.innerHTML += `<div class="player-row"><input type="checkbox" class="user-chk" value="${u.name}"> ${u.name}</div>`; });
+        document.getElementById("newGroupName").value = "";
+        document.getElementById("newGroupWebhook").value = "";
+        document.getElementById("archiveBtn").style.display = "none";
         document.getElementById("groupMgmtModal").style.display = "flex";
+    }
+
+    function loadGroupDetailsForEdit() {
+        const sel = document.getElementById("groupSelectEdit").value;
+        const g = activeGroups.find(x => x.name === sel);
+        if(g) {
+            document.getElementById("newGroupName").value = g.name;
+            document.getElementById("newGroupWebhook").value = g.webhook;
+            document.getElementById("archiveBtn").style.display = "block";
+            const allowed = g.allowed.split(",");
+            document.getElementById("chk-alle").checked = allowed.includes("ALLE");
+            document.querySelectorAll(".user-chk").forEach(c => c.checked = allowed.includes(c.value));
+        } else {
+            document.getElementById("newGroupName").value = "";
+            document.getElementById("newGroupWebhook").value = "";
+            document.getElementById("archiveBtn").style.display = "none";
+        }
     }
 
     async function createNewGroup() {
@@ -195,56 +213,4 @@
         let selected = document.getElementById("chk-alle").checked ? ["ALLE"] : [];
         if(selected.length === 0) document.querySelectorAll(".user-chk:checked").forEach(c => selected.push(c.value));
         if(!name || !hook || selected.length === 0) return alert("Bitte alles ausfüllen!");
-        await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "createGroup", groupName: name, webhook: hook, allowedUsers: selected.join(",") }) });
-        alert("Karte gespeichert!"); location.reload();
-    }
-
-    function switchChatTab(tab) {
-        document.querySelectorAll('.chat-tab').forEach(t => t.classList.remove('active'));
-        document.getElementById('tab-' + tab).classList.add('active');
-        const sidebar = document.getElementById("chatSidebar"); sidebar.innerHTML = "";
-        if(tab === 'mitglieder') {
-            users.forEach(u => { if(u.name !== myName) sidebar.innerHTML += `<div class="contact-item" onclick="startChat('${u.name}', false)">👤 ${u.name}</div>`; });
-        } else if(tab === 'gruppen') {
-            activeGroups.forEach(g => {
-                if(g.allowed === "ALLE" || g.allowed.includes(myName) || myRole === "Admin") 
-                    sidebar.innerHTML += `<div class="contact-item" onclick="startChat('${g.name}', true)">📢 ${g.name}</div>`;
-            });
-        }
-    }
-
-    function startChat(partner, isGrp) { chatPartner = partner; isGroupChat = isGrp; document.getElementById("chatHeader").innerText = partner; loadChatHistory(); }
-
-    async function sendChatMessage() {
-        const input = document.getElementById("chatInput"); const msg = input.value.trim(); if(!msg) return;
-        let kanalID = isGroupChat ? "GRUPPE-" + chatPartner : [myName, chatPartner].sort().join("-");
-        await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: isGroupChat ? "sendGroupChat" : "sendChat", absender: myName, kanalID: kanalID, nachricht: msg }) });
-        input.value = ""; loadChatHistory();
-    }
-
-    async function loadChatHistory() {
-        if(!chatPartner) return;
-        const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_CHAT}&t=${new Date().getTime()}`);
-        const text = await res.text();
-        const rows = text.split('\n').slice(1).map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/"/g,"").trim()));
-        
-        // INTERNER ABGLEICH RADIKAL: Nur a-z und 0-9
-        let currentKanalClean = (isGroupChat ? chatPartner : [myName, chatPartner].sort().join("-")).toLowerCase().replace(/[^a-z0-9]/g, "");
-        
-        let html = "";
-        rows.forEach(c => { 
-            if(c[2]) {
-                let rowKanalClean = c[2].toLowerCase().replace(/[^a-z0-9]/g, "").replace("gruppe", "");
-                if(rowKanalClean === currentKanalClean) {
-                    html += `<div class="msg ${c[1] === myName ? 'msg-own' : 'msg-other'}"><small>${c[1]}</small><br>${c[3]}</div>`; 
-                }
-            }
-        });
-        document.getElementById("chatHistory").innerHTML = html;
-        document.getElementById("chatHistory").scrollTop = 99999;
-    }
-
-    window.onload = loadData;
-</script>
-</body>
-</html>
+        await fetch(SCRIPT_URL, { method: "POST", body:
