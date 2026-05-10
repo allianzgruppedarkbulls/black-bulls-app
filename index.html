@@ -3,215 +3,245 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dark Bulls - V13.9 Profi-System</title>
+    <title>Dark Bulls - Allianz System V13.9</title>
     <link href="https://fonts.googleapis.com/css2?family=Almendra:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { margin: 0; padding: 0; font-family: 'Almendra', serif; background: black; color: white; overflow-x: hidden; }
+        body { margin: 0; padding: 0; font-family: 'Almendra', serif; background: black; color: white; overflow-x: hidden; min-height: 100vh; }
         
-        /* DASHBOARD DESIGN */
-        #start { display: flex; align-items: center; justify-content: center; height: 100vh; background: black; }
-        #logo-container img { width: 780px; max-width: 75vw; filter: drop-shadow(0 0 50px red); }
-        .side-bar { position: absolute; left: 0; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 10px; }
-        .bar-btn { padding: 30px 5px; font-weight: bold; color: black; cursor: pointer; border-radius: 0 10px 10px 0; writing-mode: vertical-rl; text-orientation: upright; width: 45px; text-align: center; }
+        /* --- DESIGN PANZER (V13.8 STAND) --- */
+        #start { display: flex; align-items: center; justify-content: center; height: 100vh; position: relative; background: black; z-index: 10; }
+        #logo-container img { width: 780px; max-width: 75vw; filter: drop-shadow(0 0 60px rgba(255, 0, 0, 0.9)); }
+        #loginBar { position: absolute; left: 0; top: 35%; transform: translateY(-50%); background: #39d353; padding: 30px 5px; font-size: 20px; font-weight: bold; color: black; cursor: pointer; z-index: 100; border-radius: 0 10px 10px 0; writing-mode: vertical-rl; text-orientation: upright; width: 40px; text-align: center; }
+        #regBar { position: absolute; left: 0; top: 65%; transform: translateY(-50%); background: #ffd600; padding: 25px 5px; font-size: 14px; font-weight: bold; color: black; cursor: pointer; z-index: 100; border-radius: 0 10px 10px 0; writing-mode: vertical-rl; text-orientation: upright; width: 40px; text-align: center; }
+        #side-menu { position: absolute; right: 0; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 8px; z-index: 100; }
+        .info-btn { padding: 15px 5px; font-size: 15px; font-weight: bold; border: none; cursor: pointer; font-family: 'Almendra'; writing-mode: vertical-rl; text-orientation: upright; border-radius: 10px 0 0 10px; width: 40px; text-align: center; color: black; min-height: 100px; }
+        #btn-yt { background: #ff8c00; }
+        #btn-hist { background: #5b5bff; color: white; }
+        #btn-web { background: #00cfd1; }
+
+        #dashboard { display: none; position: relative; width: 100vw; min-height: 100vh; background: black; }
+        #bg-bull { position: fixed; left: 50%; top: 45%; transform: translate(-50%, -50%); width: 850px; z-index: 1; opacity: 0.4; pointer-events: none; }
+        #top-bar { position: fixed; top: 0; width: 100%; display: flex; justify-content: flex-end; padding: 10px 40px; z-index: 100; background: rgba(0,0,0,0.8); height: 60px; align-items: center; box-sizing: border-box; }
+        
+        .panel { opacity: 0; transform: translateY(20px); transition: all 0.6s ease-out; background: rgba(15, 15, 15, 0.95); border: 1px solid #444; padding: 12px; z-index: 10; border-radius: 8px; width: 240px; position: absolute; box-sizing: border-box; }
+        .panel.visible { opacity: 1; transform: translateY(0); }
+        .panel h2 { color: #ff3131; margin: 0 0 8px 0; font-size: 20px; text-decoration: underline; text-align: center; }
+        .panel button { display: block; width: 100%; margin: 5px 0; background: #39d353; border: none; padding: 10px; font-family: 'Almendra'; font-weight: bold; cursor: pointer; color: black; border-radius: 4px; }
+
+        @media (min-width: 801px) {
+            #personal { left: 40px; top: 80px; }
+            #blacklistPanel { left: 40px; top: 380px; }
+            #blacklistAdmin { left: 40px; bottom: 40px; width: 440px; }
+            #admin { right: 40px; top: 120px; width: 260px; }
+            #elo { right: 40px; top: 420px; width: 260px; }
+            #chat-btn { position: fixed; bottom: 40px; right: 40px; width: auto; border-radius: 8px; padding: 20px 60px; font-size: 28px; background: #ff8c00; font-family: 'Almendra'; font-weight: bold; border: none; cursor: pointer; z-index: 100; color: black; display: none; }
+        }
 
         /* MODALS */
-        .modal-overlay { display: none; position: fixed; z-index: 9000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; }
-        .dark-modal { background: #111; border: 2px solid #444; padding: 25px; width: 500px; max-width: 95vw; border-radius: 10px; text-align: center; box-shadow: 0 0 30px rgba(255,0,0,0.3); }
-        .dark-modal input, .dark-modal select, .dark-modal textarea { width: 100%; padding: 10px; margin: 8px 0; background: #000; color: #39d353; border: 1px solid #333; font-family: 'Almendra'; font-size: 16px; box-sizing: border-box; }
+        .modal-overlay { display: none; position: fixed; z-index: 5000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); justify-content: center; align-items: center; }
+        .dark-modal { background: #1a1a1a; padding: 30px; width: 450px; max-width: 90vw; border: 3px solid #333; text-align: center; border-radius: 12px; box-shadow: 0 0 50px rgba(255,0,0,0.4); }
+        .dark-modal input, .dark-modal select, .dark-modal textarea { width: 100%; padding: 12px; margin-bottom: 12px; background: #000; color: #39d353; border: 1px solid #444; font-family: 'Almendra'; font-size: 18px; box-sizing: border-box; outline: none; }
+        .logbtn { padding: 15px; border: none; cursor: pointer; font-family: 'Almendra'; font-weight: bold; font-size: 18px; border-radius: 5px; color: black; }
 
-        /* PROFI-GRID BLACKLIST */
-        .bl-container { width: 98vw; height: 90vh; background: #0a0a0a; border: 2px solid #333; display: flex; flex-direction: column; overflow: hidden; }
-        .bl-header { background: #1a1a1a; padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #ff3131; }
-        .bl-table-wrapper { flex: 1; overflow: auto; }
-        table { width: 100%; border-collapse: collapse; font-size: 14px; }
-        th { background: #222; color: #ff3131; position: sticky; top: 0; padding: 12px; border: 1px solid #333; }
-        td { padding: 10px; border: 1px solid #222; text-align: center; }
-        tr:nth-child(even) { background: #0f0f0f; }
-        tr:hover { background: #1a1a1a; color: #39d353; }
+        /* BLACKLIST GRID (SPALTE A-Q) */
+        .bl-box { width: 95%; max-width: 1200px; background: #111; border: 2px solid #333; padding: 30px; border-radius: 10px; }
+        .bl-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; text-align: left; }
+        .bl-grid p { margin: 8px 0; font-size: 20px; font-weight: bold; }
+        .bl-grid span { color: #39d353; margin-left: 10px; }
+        .story-box { background: #000; border: 1px solid #444; padding: 20px; min-height: 100px; color: #39d353; font-size: 22px; margin-top: 10px; border-radius: 5px; white-space: pre-wrap; }
 
-        /* DASHBOARD */
-        #dashboard { display: none; min-height: 100vh; background: url('bulls_dashboard.jpg') no-repeat center center fixed; background-size: cover; }
-        .panel { background: rgba(0,0,0,0.85); border: 1px solid #444; padding: 15px; border-radius: 8px; width: 250px; position: absolute; }
-        .panel h2 { color: #ff3131; margin-top: 0; text-align: center; border-bottom: 1px solid #444; }
-        .panel button { width: 100%; padding: 8px; margin: 4px 0; font-family: 'Almendra'; font-weight: bold; cursor: pointer; border: none; border-radius: 4px; }
-        
-        #personal { left: 30px; top: 80px; }
-        #blacklistPanel { left: 30px; top: 320px; }
-        #blacklistAdmin { left: 30px; bottom: 40px; width: 450px; }
-        #admin { right: 30px; top: 80px; }
-        
-        .role-badge { position: fixed; top: 10px; right: 20px; color: #ff3131; font-weight: bold; background: rgba(0,0,0,0.7); padding: 5px 15px; border-radius: 20px; border: 1px solid #444; }
+        /* CHAT */
+        .chat-window { width: 95vw; height: 90vh; background: #0a0a0a; border: 2px solid #444; display: flex; flex-direction: column; border-radius: 10px; overflow: hidden; }
+        .chat-tabs { display: flex; background: #1a1a1a; border-bottom: 2px solid #333; }
+        .chat-tab { flex: 1; padding: 15px; text-align: center; cursor: pointer; border-right: 1px solid #333; font-weight: bold; color: #888; }
+        .chat-tab.active { background: #39d353; color: black; }
+        .chat-sidebar { width: 250px; border-right: 1px solid #333; overflow-y: auto; background: #111; }
+        .chat-main { flex: 1; display: flex; flex-direction: column; background: #000; }
+        .chat-history { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+        .chat-input-area { padding: 15px; background: #1a1a1a; display: flex; gap: 10px; }
+        .chat-input-area input { flex: 1; padding: 10px; background: #000; border: 1px solid #444; color: #39d353; font-size: 18px; }
+        .msg { padding: 8px 12px; border-radius: 5px; max-width: 80%; font-size: 18px; }
+        .msg-own { align-self: flex-end; background: #1b4d1b; border-right: 4px solid #39d353; }
+        .msg-other { align-self: flex-start; background: #222; border-left: 4px solid #ff3131; }
+
+        .player-scroll { background: #000; border: 1px solid #444; padding: 5px; max-height: 200px; overflow-y: auto; text-align: left; margin-bottom: 15px; border-radius: 4px; }
+        .player-row { display: flex; align-items: center; gap: 12px; padding: 10px; border-bottom: 1px solid #222; color: #39d353; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div id="start">
-    <div class="side-bar">
-        <div class="bar-btn" style="background:#39d353;" onclick="openLogin()">LOGIN</div>
-        <div class="bar-btn" style="background:#ffd600;" onclick="alert('Registrierung folgt')">REG</div>
-    </div>
+    <div id="loginBar" onclick="document.getElementById('pinModal').style.display='flex'">LOGIN</div>
+    <div id="regBar" onclick="document.getElementById('regModal').style.display='flex'">REGISTRIEREN</div>
     <div id="logo-container"><img src="bulls_start.jpg"></div>
-</div>
-
-<div id="dashboard">
-    <div class="role-badge"><span id="uName"></span> | <span id="uRole"></span></div>
-    
-    <div class="panel" id="personal">
-        <h2>Persönlich</h2>
-        <button style="background:#39d353">Support Chat</button>
-        <button style="background:#39d353">Pin ändern</button>
-    </div>
-
-    <div class="panel" id="blacklistPanel">
-        <h2>Black Liste</h2>
-        <button style="background:#ff3131; color:white;" onclick="openProfiBlacklist()">Anschauen (Grid)</button>
-        <button style="background:#ff8c00;" onclick="openReportForm()">Spieler Melden</button>
-    </div>
-
-    <div class="panel" id="blacklistAdmin">
-        <h2>Pflege Admin</h2>
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
-            <button id="btnGemeldet" style="background:#5b5bff; color:white; display:none;" onclick="openReportedList()">Gemeldete</button>
-            <button style="background:#ffd600;">Pflege</button>
-            <button style="background:#39d353;">Eintragen</button>
-            <button style="background:#fff; color:black;" onclick="openProfiBlacklist()">Vollansicht</button>
-        </div>
-    </div>
-
-    <div class="panel" id="admin">
-        <h2>Admin</h2>
-        <button id="btnMgmt" style="background:#ffd600; display:none;">Gruppen Mgmt</button>
-        <button style="background:#39d353;">User Verwaltung</button>
+    <div id="side-menu">
+        <button class="info-btn" id="btn-yt" onclick="window.open('https://www.youtube.com/@DarkBullsGruppe')">YOUTUBE</button>
+        <button class="info-btn" id="btn-hist" style="background:#5b5bff; color:white;">HISTORIES</button>
+        <button class="info-btn" id="btn-web" onclick="window.open('https://darkbulls.jimdofree.com/')">INTERNET</button>
     </div>
 </div>
 
-<div id="blacklistModal" class="modal-overlay">
-    <div class="bl-container">
-        <div class="bl-header">
-            <h1 style="margin:0; color:#ff3131;">DARK BULLS PROFI GRID</h1>
-            <input type="text" id="blSearch" placeholder="Suchen..." style="width:300px; padding:10px; background:#000; color:#39d353; border:1px solid #444;" onkeyup="filterTable()">
-            <button onclick="document.getElementById('blacklistModal').style.display='none'" style="background:red; color:white; padding:10px 20px; border:none; cursor:pointer;">SCHLIESSEN</button>
-        </div>
-        <div class="bl-table-wrapper">
-            <table id="profiTable">
-                <thead>
-                    <tr>
-                        <th>ID</th><th>Name</th><th>Allianz</th><th>Verstoß</th><th>Punkte</th><th>Datum</th><th>Fall-Nr</th><th>Melder</th><th>Beweis</th>
-                    </tr>
-                </thead>
-                <tbody id="blBody"></tbody>
-            </table>
+<div id="pinModal" class="modal-overlay">
+    <div class="dark-modal">
+        <h1 style="color:#ff3131">Anmeldung</h1>
+        <input type="text" id="nameInput" placeholder="Name...">
+        <input type="password" id="pinInput" placeholder="PIN...">
+        <div style="display:flex; gap:10px;">
+            <button class="logbtn" style="flex:1; background:#39d353" onclick="doLogin()">Anmelden</button>
+            <button class="logbtn" style="flex:1; background:#d50000; color:white" onclick="document.getElementById('pinModal').style.display='none'">Abbruch</button>
         </div>
     </div>
 </div>
 
 <div id="reportModal" class="modal-overlay">
     <div class="dark-modal">
-        <h2 style="color:#ff8c00">Spieler Melden</h2>
-        <input type="text" id="repName" placeholder="Spieler Name">
-        <input type="text" id="repAlly" placeholder="Allianz">
-        <select id="repReason">
-            <option value="">-- Grund wählen --</option>
-            <option value="Beleidigung">Beleidigung</option>
-            <option value="Multi-Account">Multi-Account</option>
-            <option value="Spionage">Spionage</option>
-            <option value="Anderes">Anderes</option>
-        </select>
-        <textarea id="repStory" placeholder="Was ist passiert?"></textarea>
-        <input type="text" id="repProof" placeholder="Beweis Link (Bild/Video)">
-        <button style="background:#39d353; padding:15px;" onclick="submitReport()">MELDUNG ABSENDEN</button>
-        <button style="background:red; color:white; margin-top:5px;" onclick="document.getElementById('reportModal').style.display='none'">ABBRUCH</button>
+        <h1 style="color:#ff8c00">Spieler Melden</h1>
+        <input type="text" id="repName" placeholder="Name des Spielers...">
+        <input type="text" id="repAlly" placeholder="Allianz...">
+        <textarea id="repStory" placeholder="Was ist passiert? (Beschreibung)..." style="height:100px"></textarea>
+        <input type="text" id="repProof" placeholder="Beweis Link...">
+        <div style="display:flex; gap:10px;">
+            <button class="logbtn" style="flex:1; background:#39d353" onclick="submitReport()">Absenden</button>
+            <button class="logbtn" style="flex:1; background:#d50000; color:white" onclick="document.getElementById('reportModal').style.display='none'">Abbruch</button>
+        </div>
     </div>
 </div>
 
-<div id="loginModal" class="modal-overlay">
-    <div class="dark-modal">
-        <h1>Anmeldung</h1>
-        <input type="text" id="loginName" placeholder="Name">
-        <input type="password" id="loginPin" placeholder="PIN">
-        <button onclick="doLogin()" style="background:#39d353; padding:15px; width:100%;">LOGIN</button>
+<div id="dashboard">
+    <div id="top-bar">
+        <div style="font-size: 18px; color:#ff3131"><span id="userNameDisplay"></span> | <span id="userRoleDisplay"></span></div>
+        <button onclick="location.reload()" style="background:red; color:white; border:none; padding:8px 15px; cursor:pointer; margin-left:15px; border-radius:5px;">LOGOUT</button>
+    </div>
+    <img src="bulls_dashboard.jpg" id="bg-bull">
+
+    <div class="panel" id="personal">
+        <h2>Persönlich</h2>
+        <button onclick="openSupportChat()">Support Chat</button>
+        <button onclick="alert('In Arbeit...')">Pin ändern</button>
+    </div>
+
+    <div class="panel" id="blacklistPanel">
+        <h2>Black Liste</h2>
+        <button onclick="openBlacklist()">Anschauen</button>
+        <button onclick="document.getElementById('reportModal').style.display='flex'">Spieler Melden</button>
+    </div>
+
+    <div class="panel" id="blacklistAdmin">
+        <h2>Pflege Admin</h2>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:5px;">
+            <button id="btn-gemeldet" style="display:none; background:#5b5bff; color:white;">Gemeldete</button>
+            <button>Pflege</button>
+            <button>Eintragen</button>
+            <button onclick="openBlacklist()">Vollansicht</button>
+        </div>
+    </div>
+
+    <div class="panel" id="admin">
+        <h2>Admin</h2>
+        <button onclick="openGroupMgmt()" id="btn-mgmt" style="background:#ffd600; display:none;">Gruppen Mgmt</button>
+        <button>User Verwaltung</button>
+    </div>
+
+    <div class="panel" id="elo">
+        <h2>Elo Bereich</h2>
+        <button>Rohstoffrechner</button>
+    </div>
+
+    <button id="chat-btn" onclick="document.getElementById('fullChatModal').style.display='flex'">ALLIANZ CHAT</button>
+</div>
+
+<div id="blacklistModal" class="modal-overlay">
+    <div class="bl-box">
+        <div class="bl-header">DARK BULLS BLACK LISTE</div>
+        <div style="display:flex; gap:10px; margin-bottom:20px;">
+            <input list="playerList" id="blSearchInput" placeholder="Spieler suchen...">
+            <datalist id="playerList"></datalist>
+            <button onclick="loadBlacklistPlayer()" style="background:#39d353; color:black; padding:10px; border:none; font-family:'Almendra'; font-weight:bold; cursor:pointer;">LADEN</button>
+        </div>
+        <div class="bl-grid">
+            <div><p>Spieler ID: <span id="outID"></span></p><p>Allianz: <span id="outAllianz"></span></p><p>Verstoß: <span id="outVerstoss"></span></p></div>
+            <div><p>Name: <span id="outName"></span></p><p>Punkte: <span id="outPunkte"></span></p><p>Datum: <span id="outDateEvent"></span></p></div>
+            <div><p>Melder: <span id="outMelder"></span></p><p>Fall-Nr: <span id="outFall"></span></p><p>Beweis: <span id="outBeweis"></span></p></div>
+        </div>
+        <div class="story-box" id="outStory"></div>
+        <button onclick="document.getElementById('blacklistModal').style.display='none'" style="width:100%; background:red; margin-top:20px; padding:15px; border:none; font-family:'Almendra'; font-weight:bold; cursor:pointer;">ZURÜCK</button>
     </div>
 </div>
 
 <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwlZWpYkINjQsh72hVecR_2KRZ66ff7aKnc7tZHqKbKezTQHeyjkv1NE3L6_GIgiU7WTA/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwlZWpYkINjQsh72hVecR_2KRZ66ff7aKnc7tZHqKbKezTQHeyjkv1NE3L6_GIgiU7WTA/exec'; 
     const SHEET_ID = '1Gjnhol0ou63xW20OnbTo_wugzpOTgBP2yjnx3Qzg4bQ';
-    
-    let currentUser = null;
-    let blacklistData = [];
+    const GID_USERS = '1188820112'; const GID_STEER = '717972533'; const GID_BLACKLIST = '1767725514';
 
-    async function doLogin() {
-        // ... (Login Logik wie gehabt)
-        // Nach Login Check der Rollen:
-        const name = document.getElementById('loginName').value;
-        const pin = document.getElementById('loginPin').value;
-        
-        // Simulierter Check (wird durch fetch ersetzt)
-        currentUser = { name: name, role: "Admin" }; // Nur Test
-        
-        document.getElementById('uName').innerText = currentUser.name;
-        document.getElementById('uRole').innerText = currentUser.role;
-        document.getElementById('loginModal').style.display = 'none';
-        document.getElementById('start').style.display = 'none';
-        document.getElementById('dashboard').style.display = 'block';
+    let users = []; let myName = ""; let myRole = ""; let activeGroups = []; let blacklistData = [];
 
-        // BUCHHALTER / ADMIN RECHTE
-        if(currentUser.role === "Admin" || currentUser.role === "Buchhalter") {
-            document.getElementById('btnGemeldet').style.display = 'block';
-        }
-        if(currentUser.role === "Admin") {
-            document.getElementById('btnMgmt').style.display = 'block';
-        }
+    async function loadData() {
+        const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_USERS}&t=${new Date().getTime()}`);
+        const text = await res.text();
+        users = text.split('\n').slice(1).map(r => {
+            const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+            const cl = (s) => s ? s.replace(/["']/g, "").trim() : "";
+            return { name: cl(c[0]), pin: cl(c[2]), role: cl(c[3]) };
+        });
     }
 
-    function openLogin() { document.getElementById('loginModal').style.display='flex'; }
-    function openReportForm() { document.getElementById('reportModal').style.display='flex'; }
+    function doLogin() {
+        const nInput = document.getElementById("nameInput").value.trim().toLowerCase();
+        const pInput = document.getElementById("pinInput").value.trim();
+        const u = users.find(x => x.name.toLowerCase() === nInput && x.pin === pInput);
+        if (u) {
+            myName = u.name; myRole = u.role;
+            document.getElementById("pinModal").style.display = "none";
+            document.getElementById("start").style.display = "none";
+            document.getElementById("dashboard").style.display = "block";
+            document.getElementById("userNameDisplay").innerText = myName;
+            document.getElementById("userRoleDisplay").innerText = myRole;
+            if(myRole === "Admin" || myRole === "Ausbilder" || myRole === "Offizier") document.getElementById("btn-mgmt").style.display = "block";
+            if(myRole === "Admin" || myRole === "Buchhalter") document.getElementById("btn-gemeldet").style.display = "block";
+            setInterval(loadData, 15000);
+            setTimeout(() => { document.querySelectorAll('.panel').forEach(p => p.classList.add('visible')); }, 300);
+        } else { alert("Login falsch!"); }
+    }
+
+    async function openBlacklist() {
+        document.getElementById('blacklistModal').style.display = 'flex';
+        const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_BLACKLIST}`);
+        const text = await res.text();
+        // Hier begrenzen wir die Daten radikal auf Spalte A bis Q (0 bis 16)
+        blacklistData = text.split('\n').slice(1).map(r => {
+            let row = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/"/g,"").trim());
+            return row.slice(0, 17); // Nur bis Spalte Q laden!
+        });
+        const dl = document.getElementById('playerList'); dl.innerHTML = "";
+        blacklistData.forEach(p => { if(p[1]) { let o = document.createElement('option'); o.value = p[1]; dl.appendChild(o); }});
+    }
+
+    function loadBlacklistPlayer() {
+        const p = blacklistData.find(x => x[1] === document.getElementById('blSearchInput').value);
+        if(p) {
+            document.getElementById('outID').innerText = p[1]; document.getElementById('outName').innerText = p[2];
+            document.getElementById('outAllianz').innerText = p[5]; document.getElementById('outVerstoss').innerText = p[6];
+            document.getElementById('outPunkte').innerText = p[16]; document.getElementById('outDateEvent').innerText = p[14];
+            document.getElementById('outStory').innerText = p[13]; document.getElementById('outMelder').innerText = p[7];
+            document.getElementById('outFall').innerText = p[12]; document.getElementById('outBeweis').innerText = p[15];
+        }
+    }
 
     async function submitReport() {
         const data = {
             action: "reportPlayer",
             name: document.getElementById('repName').value,
             ally: document.getElementById('repAlly').value,
-            reason: document.getElementById('repReason').value,
             story: document.getElementById('repStory').value,
             proof: document.getElementById('repProof').value,
-            reporter: currentUser.name
+            reporter: myName
         };
         await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(data) });
-        alert("Meldung wurde an die Administration gesendet!");
-        document.getElementById('reportModal').style.display='none';
+        alert("Meldung an Gegenliste gesendet!");
+        document.getElementById('reportModal').style.display = 'none';
     }
 
-    async function openProfiBlacklist() {
-        document.getElementById('blacklistModal').style.display = 'flex';
-        const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=1767725514`);
-        const text = await res.text();
-        const rows = text.split('\n').slice(1);
-        let html = "";
-        rows.forEach(r => {
-            const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/"/g,""));
-            html += `<tr>
-                <td>${c[1]}</td><td>${c[2]}</td><td>${c[5]}</td><td>${c[6]}</td>
-                <td>${c[16]}</td><td>${c[14]}</td><td>${c[12]}</td><td>${c[7]}</td><td><a href="${c[15]}" target="_blank">🔗</a></td>
-            </tr>`;
-        });
-        document.getElementById('blBody').innerHTML = html;
-    }
-
-    function filterTable() {
-        let input = document.getElementById("blSearch").value.toLowerCase();
-        let rows = document.getElementById("blBody").getElementsByTagName("tr");
-        for (let i = 0; i < rows.length; i++) {
-            rows[i].style.display = rows[i].innerText.toLowerCase().includes(input) ? "" : "none";
-        }
-    }
-
-    // PFLEGE ADMIN: GEMELDETE AUFRUFEN (Wird über GID 1599277949 geladen)
-    async function openReportedList() {
-        alert("Lade gemeldete Fälle aus der Gegenliste...");
-        // Hier Fetch auf GID 1599277949
-        // Logik zum Bearbeiten und "Hübsch Speichern" mit Fallnummer-Spiegelung
-    }
+    window.onload = loadData;
 </script>
 </body>
 </html>
