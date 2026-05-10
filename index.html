@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dark Bulls - Allianz System V15.3</title>
+    <title>Dark Bulls - Allianz System V15.4</title>
+
+    <link rel="icon" type="image/png" href="192x192icon.png">
+    <link rel="apple-touch-icon" href="192x192icon.png">
+    <link rel="manifest" href="manifest.json">
     <link href="https://fonts.googleapis.com/css2?family=Almendra:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body { margin: 0; padding: 0; font-family: 'Almendra', serif; background: black; color: white; overflow-x: hidden; min-height: 100vh; }
@@ -15,6 +19,9 @@
         #regBar { position: absolute; left: 0; top: 65%; transform: translateY(-50%); background: #ffd600; padding: 25px 5px; font-size: 14px; font-weight: bold; color: black; cursor: pointer; z-index: 100; border-radius: 0 10px 10px 0; writing-mode: vertical-rl; text-orientation: upright; width: 40px; text-align: center; }
         #side-menu { position: absolute; right: 0; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 8px; z-index: 100; }
         .info-btn { padding: 15px 5px; font-size: 15px; font-weight: bold; border: none; cursor: pointer; font-family: 'Almendra'; writing-mode: vertical-rl; text-orientation: upright; border-radius: 10px 0 0 10px; width: 40px; text-align: center; color: black; min-height: 100px; }
+        #btn-yt { background: #ff8c00; }
+        #btn-hist { background: #5b5bff; color: white; }
+        #btn-web { background: #00cfd1; }
 
         .modal-overlay { display: none; position: fixed; z-index: 5000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); justify-content: center; align-items: center; }
         .dark-modal { background: #1a1a1a; padding: 30px; width: 450px; max-width: 90vw; border: 3px solid #333; text-align: center; border-radius: 12px; box-shadow: 0 0 50px rgba(255,0,0,0.4); }
@@ -39,12 +46,12 @@
             #chat-btn { position: fixed; bottom: 40px; right: 40px; width: auto; border-radius: 8px; padding: 20px 60px; font-size: 28px; background: #ff8c00; font-family: 'Almendra'; font-weight: bold; border: none; cursor: pointer; z-index: 100; color: black; display: none; }
         }
 
-        /* BLACKLIST DESIGN FIX */
+        /* BLACKLIST DESIGN */
         .bl-box { width: 95%; max-width: 1200px; background: #111; border: 2px solid #333; padding: 30px; border-radius: 10px; }
         .bl-header { color: #ff3131; font-size: 55px; text-align: center; margin-bottom: 20px; font-weight: bold; }
         .bl-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; text-align: left; }
-        .bl-grid p { margin: 8px 0; font-size: 20px; font-weight: bold; color: white; border-bottom: 1px solid #222; }
-        .bl-grid span { color: #39d353; margin-left: 10px; font-weight: normal; }
+        .bl-grid p { margin: 8px 0; font-size: 20px; font-weight: bold; }
+        .bl-grid span { color: #39d353; margin-left: 10px; }
         .story-box { background: #000; border: 1px solid #444; padding: 20px; min-height: 100px; color: #39d353; font-size: 22px; margin-top: 10px; border-radius: 5px; white-space: pre-wrap; width: 100%; box-sizing: border-box; }
     </style>
 </head>
@@ -52,10 +59,12 @@
 
 <div id="start">
     <div id="loginBar" onclick="document.getElementById('pinModal').style.display='flex'">LOGIN</div>
+    <div id="regBar" onclick="document.getElementById('regModal').style.display='flex'">REGISTRIEREN</div>
     <div id="logo-container"><img src="bulls_start.jpg"></div>
     <div id="side-menu">
-        <button class="info-btn" style="background:#ff8c00" onclick="window.open('https://www.youtube.com/@DarkBullsGruppe')">YOUTUBE</button>
-        <button class="info-btn" style="background:#00cfd1" onclick="window.open('https://darkbulls.jimdofree.com/')">INTERNET</button>
+        <button class="info-btn" id="btn-yt" onclick="window.open('https://www.youtube.com/@DarkBullsGruppe')">YOUTUBE</button>
+        <button class="info-btn" id="btn-hist">HISTORIES</button>
+        <button class="info-btn" id="btn-web" onclick="window.open('https://darkbulls.jimdofree.com/')">INTERNET</button>
     </div>
 </div>
 
@@ -64,7 +73,10 @@
         <h1 style="color:#ff3131">Anmeldung</h1>
         <input type="text" id="nameInput" placeholder="Name...">
         <input type="password" id="pinInput" placeholder="PIN...">
-        <button class="logbtn" style="width:100%; background:#39d353" onclick="doLogin()">Anmelden</button>
+        <div style="display:flex; gap:10px;">
+            <button class="logbtn" style="flex:1; background:#39d353" onclick="doLogin()">Anmelden</button>
+            <button class="logbtn" style="flex:1; background:#d50000; color:white" onclick="document.getElementById('pinModal').style.display='none'">Abbruch</button>
+        </div>
     </div>
 </div>
 
@@ -77,32 +89,42 @@
 
     <div class="panel" id="personal">
         <h2>Persönlich</h2>
-        <button onclick="alert('Chat folgt')">Support Chat</button>
+        <button onclick="alert('Support Chat folgt')">Support Chat</button>
     </div>
 
     <div class="panel" id="blacklistPanel">
         <h2>Black Liste</h2>
         <button onclick="openBlacklist()">Anschauen</button>
+        <button onclick="alert('System wird in Tabellenseite gid=1599277949 gespeichert...')">Sp. Melden</button>
     </div>
 
-    <div class="panel" id="admin"><h2>Admin</h2><button>Verwaltung</button></div>
-    <div class="panel" id="elo"><h2>Elo</h2><button>Rechner</button></div>
+    <div class="panel" id="blacklistAdmin">
+        <h2>Pflege Admin</h2>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:5px;">
+            <button>Gemeldete</button><button>Pflege</button>
+            <button>Eintragen</button><button>Vollansicht</button>
+        </div>
+    </div>
+
+    <div class="panel" id="admin"><h2>Admin</h2><button>User Verwaltung</button></div>
+    <div class="panel" id="elo"><h2>Elo Bereich</h2><button>Rechner</button></div>
 </div>
 
 <div id="blacklistModal" class="modal-overlay">
     <div class="bl-box">
         <div class="bl-header">DARK BULLS BLACK LISTE</div>
-        <input list="playerList" id="blSearchInput" placeholder="Spieler wählen..." style="width:100%; padding:15px; background:black; color:#39d353; border:1px solid #444; font-size:20px;">
-        <datalist id="playerList"></datalist>
-        <button class="logbtn" style="width:100%; background:#39d353; margin-top:10px;" onclick="loadBlacklistPlayer()">LADEN</button>
-        
-        <div class="bl-grid" style="margin-top:20px;">
+        <div style="display:flex; gap:10px; margin-bottom:20px;">
+            <input list="playerList" id="blSearchInput" placeholder="Spieler suchen...">
+            <datalist id="playerList"></datalist>
+            <button onclick="loadBlacklistPlayer()" style="background:#39d353; color:black; padding:10px 30px; border:none; font-family:'Almendra'; font-weight:bold; cursor:pointer;">LADEN</button>
+        </div>
+        <div class="bl-grid">
             <div><p>ID: <span id="outID"></span></p><p>Allianz: <span id="outAllianz"></span></p><p>Verstoß: <span id="outVerstoss"></span></p></div>
             <div><p>Name: <span id="outName"></span></p><p>Punkte: <span id="outPunkte"></span></p><p>Fall-Nr: <span id="outFall"></span></p></div>
-            <div><p>Datum: <span id="outDate"></span></p><p>Melder: <span id="outMelder"></span></p><p>Beweis: <span id="outBeweis"></span></p></div>
+            <div><p>Datum: <span id="outDateEvent"></span></p><p>Melder: <span id="outMelder"></span></p><p>Beweis: <span id="outBeweis"></span></p></div>
         </div>
         <div class="story-box" id="outStory"></div>
-        <button class="logbtn" style="width:100%; background:red; color:white; margin-top:20px;" onclick="document.getElementById('blacklistModal').style.display='none'">ZURÜCK</button>
+        <button onclick="document.getElementById('blacklistModal').style.display='none'" style="width:100%; background:red; margin-top:20px; padding:15px; border:none; color:white; font-family:'Almendra';">ZURÜCK</button>
     </div>
 </div>
 
@@ -113,18 +135,19 @@
     let users = []; let blacklistData = [];
 
     async function loadData() {
-        const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_USERS}`);
+        const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_USERS}&t=${new Date().getTime()}`);
         const text = await res.text();
         users = text.split('\n').slice(1).map(r => {
             const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-            return { name: c[0].replace(/"/g,"").trim(), pin: c[2].replace(/"/g,"").trim(), role: c[3].replace(/"/g,"").trim() };
+            const cl = (s) => s ? s.replace(/["']/g, "").trim() : "";
+            return { name: cl(c[0]), pin: cl(c[2]), role: cl(c[3]) };
         });
     }
 
     function doLogin() {
-        const n = document.getElementById("nameInput").value.trim().toLowerCase();
-        const p = document.getElementById("pinInput").value.trim();
-        const u = users.find(x => x.name.toLowerCase() === n && x.pin === p);
+        const nInput = document.getElementById("nameInput").value.trim().toLowerCase();
+        const pInput = document.getElementById("pinInput").value.trim();
+        const u = users.find(x => x.name.toLowerCase() === nInput && x.pin === pInput);
         if (u) {
             document.getElementById("pinModal").style.display = "none";
             document.getElementById("start").style.display = "none";
@@ -137,7 +160,7 @@
 
     async function openBlacklist() {
         document.getElementById('blacklistModal').style.display = 'flex';
-        const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_BLACKLIST}`);
+        const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_BLACKLIST}&t=${new Date().getTime()}`);
         const text = await res.text();
         blacklistData = text.split('\n').slice(1).map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/"/g,"").trim()));
         const dl = document.getElementById('playerList'); dl.innerHTML = "";
@@ -149,7 +172,7 @@
         if(p) {
             document.getElementById('outID').innerText = p[1]; document.getElementById('outName').innerText = p[2];
             document.getElementById('outAllianz').innerText = p[5]; document.getElementById('outVerstoss').innerText = p[6];
-            document.getElementById('outPunkte').innerText = p[16]; document.getElementById('outDate').innerText = p[14];
+            document.getElementById('outPunkte').innerText = p[16]; document.getElementById('outDateEvent').innerText = p[14];
             document.getElementById('outStory').innerText = p[13]; document.getElementById('outMelder').innerText = p[7];
             document.getElementById('outFall').innerText = p[12]; document.getElementById('outBeweis').innerText = p[15];
         }
