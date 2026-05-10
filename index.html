@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dark Bulls - Allianz System V14.6</title>
+    <title>Dark Bulls - Allianz System V13.8</title>
 
     <link rel="icon" type="image/png" href="192x192icon.png">
     <link rel="apple-touch-icon" href="192x192icon.png">
@@ -12,7 +12,7 @@
     <style>
         body { margin: 0; padding: 0; font-family: 'Almendra', serif; background: black; color: white; overflow-x: hidden; min-height: 100vh; }
         
-        /* --- DESIGN PANZER (V13.8 STABIL) --- */
+        /* --- DESIGN PANZER (V12.1 ORIGINAL) --- */
         #start { display: flex; align-items: center; justify-content: center; height: 100vh; position: relative; background: black; z-index: 10; }
         #logo-container img { width: 780px; max-width: 75vw; filter: drop-shadow(0 0 60px rgba(255, 0, 0, 0.9)); }
         #loginBar { position: absolute; left: 0; top: 35%; transform: translateY(-50%); background: #39d353; padding: 30px 5px; font-size: 20px; font-weight: bold; color: black; cursor: pointer; z-index: 100; border-radius: 0 10px 10px 0; writing-mode: vertical-rl; text-orientation: upright; width: 40px; text-align: center; }
@@ -46,22 +46,34 @@
             #chat-btn { position: fixed; bottom: 40px; right: 40px; width: auto; border-radius: 8px; padding: 20px 60px; font-size: 28px; background: #ff8c00; font-family: 'Almendra'; font-weight: bold; border: none; cursor: pointer; z-index: 100; color: black; display: none; }
         }
 
-        /* --- BLACKLIST & REPORT GRID --- */
+        /* --- BLACKLIST GRID --- */
         .bl-box { width: 95%; max-width: 1200px; background: #111; border: 2px solid #333; padding: 30px; border-radius: 10px; }
+        .bl-header { color: #ff3131; font-size: 55px; text-align: center; margin-bottom: 20px; font-weight: bold; }
         .bl-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; text-align: left; }
-        .bl-grid p { margin: 8px 0; font-size: 20px; font-weight: bold; color: white; border-bottom: 1px solid #333; }
-        .bl-grid span { color: #39d353; float: right; }
-        .bl-grid input, .bl-grid select { background: #000; border: 1px solid #444; color: #39d353; float: right; padding: 3px; font-family: 'Almendra'; width: 130px; margin-top: -3px; }
-        .story-box { background: #000; border: 1px solid #444; padding: 20px; min-height: 100px; color: #39d353; font-size: 22px; margin-top: 10px; border-radius: 5px; white-space: pre-wrap; width: 100%; box-sizing: border-box; }
+        .bl-grid p { margin: 8px 0; font-size: 20px; font-weight: bold; }
+        .bl-grid span { color: #39d353; margin-left: 10px; }
+        .story-box { background: #000; border: 1px solid #444; padding: 20px; min-height: 100px; color: #39d353; font-size: 22px; margin-top: 10px; border-radius: 5px; white-space: pre-wrap; }
 
-        /* --- VOLLANSICHT GRID --- */
-        .full-grid-container { width: 98vw; height: 90vh; background: #0a0a0a; border: 2px solid #444; display: flex; flex-direction: column; overflow: hidden; }
-        table { width: 100%; border-collapse: collapse; font-size: 14px; color: #ccc; }
-        th { background: #222; color: #ff3131; padding: 12px; border: 1px solid #333; position: sticky; top: 0; }
-        td { padding: 10px; border: 1px solid #222; text-align: center; }
+        /* --- CHAT --- */
+        .chat-window { width: 95vw; height: 90vh; background: #0a0a0a; border: 2px solid #444; display: flex; flex-direction: column; border-radius: 10px; overflow: hidden; }
+        .chat-tabs { display: flex; background: #1a1a1a; border-bottom: 2px solid #333; }
+        .chat-tab { flex: 1; padding: 15px; text-align: center; cursor: pointer; border-right: 1px solid #333; font-weight: bold; color: #888; }
+        .chat-tab.active { background: #39d353; color: black; }
+        .chat-body { display: flex; flex: 1; overflow: hidden; }
+        .chat-sidebar { width: 250px; border-right: 1px solid #333; overflow-y: auto; background: #111; }
+        .chat-main { flex: 1; display: flex; flex-direction: column; background: #000; }
+        .chat-history { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+        .chat-input-area { padding: 15px; background: #1a1a1a; display: flex; gap: 10px; }
+        .chat-input-area input { flex: 1; padding: 10px; background: #000; border: 1px solid #444; color: #39d353; font-size: 18px; }
+        .msg { padding: 8px 12px; border-radius: 5px; max-width: 80%; font-size: 18px; }
+        .msg-own { align-self: flex-end; background: #1b4d1b; border-right: 4px solid #39d353; }
+        .msg-other { align-self: flex-start; background: #222; border-left: 4px solid #ff3131; }
 
+        /* KOMPAKTE HAKEN LISTE */
         .player-scroll { background: #000; border: 1px solid #444; padding: 5px; max-height: 200px; overflow-y: auto; text-align: left; margin-bottom: 15px; border-radius: 4px; }
         .player-row { display: flex; align-items: center; gap: 12px; padding: 10px; border-bottom: 1px solid #222; color: #39d353; cursor: pointer; }
+        .player-row:hover { background: #111; }
+        .player-row input { width: 18px; height: 18px; accent-color: #39d353; }
     </style>
 </head>
 <body>
@@ -89,6 +101,33 @@
     </div>
 </div>
 
+<div id="pinChangeModal" class="modal-overlay">
+    <div class="dark-modal">
+        <h1>Pin Ändern</h1>
+        <input type="password" id="newPin1" placeholder="Neue PIN">
+        <input type="password" id="newPin2" placeholder="Wiederholen">
+        <div style="display:flex; gap:10px;">
+            <button class="logbtn" style="flex:1; background:#39d353" onclick="submitPinChange()">Speichern</button>
+            <button class="logbtn" style="flex:1; background:#d50000; color:white" onclick="document.getElementById('pinChangeModal').style.display='none'">Abbruch</button>
+        </div>
+    </div>
+</div>
+
+<div id="groupMgmtModal" class="modal-overlay">
+    <div class="dark-modal">
+        <h1 style="color:#ffd600">Gruppen & Archiv</h1>
+        <select id="groupSelectEdit" onchange="loadGroupDetailsForEdit()">
+            <option value="">-- Neue Gruppe --</option>
+        </select>
+        <input type="text" id="newGroupName" placeholder="Name der Karte...">
+        <input type="text" id="newGroupWebhook" placeholder="Discord Webhook...">
+        <div class="player-scroll" id="playerSelectList"></div>
+        <button onclick="createNewGroup()" style="width:100%; background:#39d353; padding:12px; border:none; font-family:'Almendra'; font-weight:bold; cursor:pointer;">SPEICHERN</button>
+        <button onclick="archiveCurrentGroup()" id="archiveBtn" style="width:100%; background:#ff8c00; padding:12px; border:none; margin-top:10px; font-family:'Almendra'; font-weight:bold; cursor:pointer; display:none;">ARCHIVIEREN</button>
+        <button onclick="document.getElementById('groupMgmtModal').style.display='none'" style="width:100%; background:red; padding:12px; border:none; margin-top:10px; font-family:'Almendra'; font-weight:bold; cursor:pointer;">ABBRECHEN</button>
+    </div>
+</div>
+
 <div id="dashboard">
     <div id="top-bar">
         <div style="font-size: 18px; color:#ff3131"><span id="userNameDisplay"></span> | <span id="userRoleDisplay"></span></div>
@@ -98,23 +137,21 @@
 
     <div class="panel" id="personal">
         <h2>Persönlich</h2>
-        <button onclick="alert('Support folgt')">Support Chat</button>
-        <button onclick="alert('Pin ändern folgt')">Pin ändern</button>
+        <button onclick="openSupportChat()">Support Chat</button>
+        <button onclick="document.getElementById('pinChangeModal').style.display='flex'">Pin ändern</button>
     </div>
 
     <div class="panel" id="blacklistPanel">
         <h2>Black Liste</h2>
         <button onclick="openBlacklist()">Anschauen</button>
-        <button onclick="document.getElementById('reportModal').style.display='flex'">Spieler Melden</button>
+        <button onclick="alert('Folgt')">Spieler Melden</button>
     </div>
 
     <div class="panel" id="blacklistAdmin">
         <h2>Pflege Admin</h2>
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:5px;">
-            <button id="btn-gemeldet" style="display:none; background:#5b5bff; color:white;">Gemeldete</button>
-            <button>Pflege</button>
-            <button>Eintragen</button>
-            <button onclick="openFullGrid()">Vollansicht</button>
+            <button>Gemeldete</button><button>Pflege</button>
+            <button>Eintragen</button><button>Vollansicht</button>
         </div>
     </div>
 
@@ -129,67 +166,45 @@
         <button>Rohstoffrechner</button>
     </div>
 
-    <button id="chat-btn" onclick="alert('Chat folgt')">ALLIANZ CHAT</button>
+    <button id="chat-btn" onclick="document.getElementById('fullChatModal').style.display='flex'">ALLIANZ CHAT</button>
 </div>
 
 <div id="blacklistModal" class="modal-overlay">
     <div class="bl-box">
-        <h1 style="color:#ff3131; text-align:center; margin-top:0;">DARK BULLS BLACK LISTE</h1>
+        <div class="bl-header">DARK BULLS BLACK LISTE</div>
         <div style="display:flex; gap:10px; margin-bottom:20px;">
             <input list="playerList" id="blSearchInput" placeholder="Spieler suchen...">
             <datalist id="playerList"></datalist>
-            <button onclick="loadBlacklistPlayer()" style="background:#39d353; color:black; padding:10px; border:none; font-family:'Almendra'; font-weight:bold;">LADEN</button>
+            <button onclick="loadBlacklistPlayer()" style="background:#39d353; color:black; padding:10px; border:none; font-family:'Almendra'; font-weight:bold; cursor:pointer;">LADEN</button>
         </div>
         <div class="bl-grid">
-            <div><p>ID <span><b id="outID"></b></span></p><p>Allianz <span><b id="outAllianz"></b></span></p><p>Verstoß <span><b id="outVerstoss"></b></span></p></div>
-            <div><p>Name <span><b id="outName"></b></span></p><p>Punkte <span><b id="outPunkte"></b></span></p><p>Fallnummer <span><b id="outFall"></b></span></p></div>
-            <div><p>Datum <span><b id="outDate"></b></span></p><p>Melder <span><b id="outMelder"></b></span></p><p>Beweis <span><b id="outBeweis"></b></span></p></div>
+            <div><p>ID: <span id="outID"></span></p><p>Allianz: <span id="outAllianz"></span></p><p>Verstoß: <span id="outVerstoss"></span></p></div>
+            <div><p>Name: <span id="outName"></span></p><p>Punkte: <span id="outPunkte"></span></p><p>Datum: <span id="outDateEvent"></span></p></div>
+            <div><p>Melder: <span id="outMelder"></span></p><p>Fall-Nr: <span id="outFall"></span></p><p>Beweis: <span id="outBeweis"></span></p></div>
         </div>
         <div class="story-box" id="outStory"></div>
-        <button onclick="document.getElementById('blacklistModal').style.display='none'" style="width:100%; background:red; margin-top:20px; padding:15px; border:none; font-family:'Almendra'; font-weight:bold;">ZURÜCK</button>
+        <button onclick="document.getElementById('blacklistModal').style.display='none'" style="width:100%; background:red; margin-top:20px; padding:15px; border:none; font-family:'Almendra'; font-weight:bold; cursor:pointer;">ZURÜCK</button>
     </div>
 </div>
 
-<div id="reportModal" class="modal-overlay">
-    <div class="bl-box">
-        <h1 style="color:#ff8c00; text-align:center; margin-top:0;">SPIELER MELDEN (GEGENLISTE)</h1>
-        <div class="bl-grid">
-            <div>
-                <p>Spieler ID <input type="text" id="repID"></p>
-                <p>Allianz <input type="text" id="repAlly"></p>
-                <p>Verstoß <select id="repReason"><option value="Verrat">Verrat</option><option value="Spionage">Spionage</option><option value="Beleidigung">Beleidigung</option></select></p>
-            </div>
-            <div>
-                <p>Spielername <input type="text" id="repName"></p>
-                <p>Punktestand <input type="number" id="repPunkte"></p>
-                <p>Map <input type="text" id="repMap"></p>
-            </div>
-            <div>
-                <p>Datum <input type="date" id="repDate"></p>
-                <p>Beweis? <select id="repBeweis"><option value="Ja">Ja</option><option value="Nein">Nein</option></select></p>
-                <p>Beweis Link <input type="text" id="repLink"></p>
-            </div>
+<div id="fullChatModal" class="modal-overlay">
+    <div class="chat-window">
+        <div class="chat-tabs">
+            <div class="chat-tab active" id="tab-mitglieder" onclick="switchChatTab('mitglieder')">MITGLIEDER</div>
+            <div class="chat-tab" id="tab-pn" onclick="switchChatTab('pn')">NACHRICHTEN</div>
+            <div class="chat-tab" id="tab-gruppen" onclick="switchChatTab('gruppen')">GRUPPEN (DC)</div>
+            <div class="chat-tab" style="background:red; color:white; flex:0.2" onclick="document.getElementById('fullChatModal').style.display='none'">X</div>
         </div>
-        <p style="color:#ffbd00; font-weight:bold; margin-top:10px;">Beschreibung:</p>
-        <textarea id="repStory" class="story-box" placeholder="Was ist passiert?"></textarea>
-        <div style="display:flex; gap:10px; margin-top:15px;">
-            <button class="logbtn" style="flex:1; background:#39d353" onclick="submitReport()">Absenden</button>
-            <button class="logbtn" style="flex:1; background:red; color:white" onclick="document.getElementById('reportModal').style.display='none'">Abbruch</button>
-        </div>
-    </div>
-</div>
-
-<div id="fullGridModal" class="modal-overlay">
-    <div class="full-grid-container">
-        <div style="padding:15px; background:#1a1a1a; display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #ff3131;">
-            <h2 style="margin:0; color:#ff3131;">DARK BULLS PROFI GRID (A-Q)</h2>
-            <button onclick="document.getElementById('fullGridModal').style.display='none'" style="background:red; color:white; padding:10px; border:none; cursor:pointer;">SCHLIESSEN</button>
-        </div>
-        <div style="flex:1; overflow:auto;">
-            <table id="gridTable">
-                <thead><tr><th>ID</th><th>Name</th><th>Allianz</th><th>Verstoß</th><th>Punkte</th><th>Datum</th><th>Fall-Nr</th><th>Melder</th><th>Beweis</th></tr></thead>
-                <tbody id="gridBody"></tbody>
-            </table>
+        <div class="chat-body">
+            <div class="chat-sidebar" id="chatSidebar"></div>
+            <div class="chat-main">
+                <div id="chatHeader" style="padding:10px; background:#222; color:#39d353; font-weight:bold;">Wähle einen Chat...</div>
+                <div class="chat-history" id="chatHistory"></div>
+                <div class="chat-input-area">
+                    <input type="text" id="chatInput" placeholder="Nachricht...">
+                    <button onclick="sendChatMessage()" style="background:#39d353; padding:10px 20px; border:none; font-family:'Almendra'; font-weight:bold; cursor:pointer;">SENDEN</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -197,18 +212,27 @@
 <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwlZWpYkINjQsh72hVecR_2KRZ66ff7aKnc7tZHqKbKezTQHeyjkv1NE3L6_GIgiU7WTA/exec'; 
     const SHEET_ID = '1Gjnhol0ou63xW20OnbTo_wugzpOTgBP2yjnx3Qzg4bQ';
-    const GID_USERS = '1188820112'; const GID_BLACKLIST = '1767725514';
+    const GID_USERS = '1188820112'; const GID_CHAT = '274206006'; const GID_STEER = '717972533'; const GID_BLACKLIST = '1767725514';
 
-    let users = []; let myName = ""; let myRole = ""; let blacklistData = [];
+    let users = []; let myName = ""; let myRole = ""; let chatPartner = ""; let isGroupChat = false;
+    let activeGroups = []; let blacklistData = [];
 
     async function loadData() {
         const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_USERS}&t=${new Date().getTime()}`);
         const text = await res.text();
-        users = text.split('\n').slice(1).map(r => {
+        const rows = text.split('\n').slice(1);
+        users = rows.map(r => {
             const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
             const cl = (s) => s ? s.replace(/["']/g, "").trim() : "";
             return { name: cl(c[0]), pin: cl(c[2]), role: cl(c[3]) };
         });
+
+        const resG = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_STEER}&t=${new Date().getTime()}`);
+        const textG = await resG.text();
+        activeGroups = textG.split('\n').slice(1).map(r => {
+            const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/"/g,"").trim());
+            return { name: c[0], webhook: c[1], status: c[2], allowed: c[3] || "" };
+        }).filter(g => g.status === "aktiv");
     }
 
     function doLogin() {
@@ -223,17 +247,98 @@
             document.getElementById("userNameDisplay").innerText = myName;
             document.getElementById("userRoleDisplay").innerText = myRole;
             document.getElementById("chat-btn").style.display = "block";
-            if(myRole === "Admin" || myRole === "Ausbilder") document.getElementById("btn-mgmt").style.display = "block";
-            if(myRole === "Admin" || myRole === "Buchhalter") document.getElementById("btn-gemeldet").style.display = "block";
+            if(myRole === "Admin" || myRole === "Ausbilder" || myRole === "Offizier") document.getElementById("btn-mgmt").style.display = "block";
+            setInterval(loadChatHistory, 5000); setInterval(loadData, 15000);
             setTimeout(() => { document.querySelectorAll('.panel').forEach(p => p.classList.add('visible')); }, 300);
         } else { alert("Login falsch!"); }
+    }
+
+    async function submitPinChange() {
+        const p1 = document.getElementById("newPin1").value;
+        await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "updatePin", playerName: myName, newPin: p1 }) });
+        alert("Pin geändert!"); document.getElementById("pinChangeModal").style.display = "none";
+    }
+
+    function openGroupMgmt() {
+        const select = document.getElementById("groupSelectEdit");
+        select.innerHTML = '<option value="">-- Neue Gruppe --</option>';
+        activeGroups.forEach(g => { select.innerHTML += `<option value="${g.name}">${g.name}</option>`; });
+        const list = document.getElementById("playerSelectList");
+        list.innerHTML = `<div class="player-row" onclick="const c = this.querySelector('input'); c.checked = !c.checked;"><input type="checkbox" id="chk-alle" onclick="event.stopPropagation()"> <b>ALLE SPIELER</b></div>`;
+        users.forEach(u => { list.innerHTML += `<div class="player-row" onclick="const c = this.querySelector('input'); c.checked = !c.checked;"><input type="checkbox" class="user-chk" value="${u.name}" onclick="event.stopPropagation()"> <span>${u.name}</span></div>`; });
+        document.getElementById("groupMgmtModal").style.display = "flex";
+    }
+
+    function loadGroupDetailsForEdit() {
+        const sel = document.getElementById("groupSelectEdit").value;
+        const g = activeGroups.find(x => x.name === sel);
+        if(g) {
+            document.getElementById("newGroupName").value = g.name;
+            document.getElementById("newGroupWebhook").value = g.webhook;
+            document.getElementById("archiveBtn").style.display = "block";
+            const allowed = g.allowed.split(",");
+            document.getElementById("chk-alle").checked = allowed.includes("ALLE");
+            document.querySelectorAll(".user-chk").forEach(c => c.checked = allowed.includes(c.value));
+        }
+    }
+
+    async function createNewGroup() {
+        const name = document.getElementById("newGroupName").value;
+        const hook = document.getElementById("newGroupWebhook").value;
+        let sel = document.getElementById("chk-alle").checked ? ["ALLE"] : [];
+        if(sel.length===0) document.querySelectorAll(".user-chk:checked").forEach(c => sel.push(c.value));
+        await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "createGroup", groupName: name, webhook: hook, allowedUsers: sel.join(",") }) });
+        alert("Gespeichert!"); location.reload();
+    }
+
+    async function archiveCurrentGroup() {
+        await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "closeGroup", groupName: document.getElementById("newGroupName").value }) });
+        alert("Archiviert!"); location.reload();
+    }
+
+    function switchChatTab(tab) {
+        document.querySelectorAll('.chat-tab').forEach(t => t.classList.remove('active'));
+        document.getElementById('tab-' + tab).classList.add('active');
+        const sidebar = document.getElementById("chatSidebar"); sidebar.innerHTML = "";
+        if(tab === 'mitglieder') {
+            users.forEach(u => { if(u.name !== myName) sidebar.innerHTML += `<div class="contact-item" onclick="startChat('${u.name}', false)">👤 ${u.name}</div>`; });
+        } else if(tab === 'gruppen') {
+            activeGroups.forEach(g => {
+                if(g.allowed === "ALLE" || g.allowed.includes(myName) || myRole === "Admin") 
+                    sidebar.innerHTML += `<div class="contact-item" onclick="startChat('${g.name}', true)">📢 ${g.name}</div>`;
+            });
+        }
+    }
+
+    function startChat(p, isGrp) { chatPartner = p; isGroupChat = isGrp; document.getElementById("chatHeader").innerText = p; loadChatHistory(); }
+
+    async function sendChatMessage() {
+        const input = document.getElementById("chatInput"); const msg = input.value.trim(); if(!msg) return;
+        let kanalID = isGroupChat ? "GRUPPE-" + chatPartner : [myName, chatPartner].sort().join("-");
+        await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: isGroupChat ? "sendGroupChat" : "sendChat", absender: myName, kanalID: kanalID, nachricht: msg }) });
+        input.value = ""; loadChatHistory();
+    }
+
+    async function loadChatHistory() {
+        if(!chatPartner) return;
+        const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_CHAT}&t=${new Date().getTime()}`);
+        const text = await res.text();
+        const rows = text.split('\n').slice(1).map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/"/g,"").trim()));
+        let clean = (isGroupChat ? chatPartner : [myName, chatPartner].sort().join("-")).toLowerCase().replace(/[^a-z0-9]/g, "");
+        let html = "";
+        rows.forEach(c => { 
+            let rowClean = c[2] ? c[2].toLowerCase().replace(/[^a-z0-9]/g, "").replace("gruppe", "") : "";
+            if(rowClean === clean) html += `<div class="msg ${c[1] === myName ? 'msg-own' : 'msg-other'}"><small>${c[1]}</small><br>${c[3]}</div>`; 
+        });
+        document.getElementById("chatHistory").innerHTML = html;
+        document.getElementById("chatHistory").scrollTop = 99999;
     }
 
     async function openBlacklist() {
         document.getElementById('blacklistModal').style.display = 'flex';
         const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_BLACKLIST}`);
         const text = await res.text();
-        blacklistData = text.split('\n').slice(1).map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/"/g,"").trim()).slice(0, 17));
+        blacklistData = text.split('\n').slice(1).map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/"/g,"").trim()));
         const dl = document.getElementById('playerList'); dl.innerHTML = "";
         blacklistData.forEach(p => { if(p[1]) { let o = document.createElement('option'); o.value = p[1]; dl.appendChild(o); }});
     }
@@ -243,24 +348,13 @@
         if(p) {
             document.getElementById('outID').innerText = p[1]; document.getElementById('outName').innerText = p[2];
             document.getElementById('outAllianz').innerText = p[5]; document.getElementById('outVerstoss').innerText = p[6];
-            document.getElementById('outPunkte').innerText = p[16]; document.getElementById('outDate').innerText = p[14];
+            document.getElementById('outPunkte').innerText = p[16]; document.getElementById('outDateEvent').innerText = p[14];
             document.getElementById('outStory').innerText = p[13]; document.getElementById('outMelder').innerText = p[7];
             document.getElementById('outFall').innerText = p[12]; document.getElementById('outBeweis').innerText = p[15];
         }
     }
 
-    function openFullGrid() {
-        document.getElementById('fullGridModal').style.display = 'flex';
-        let html = "";
-        blacklistData.forEach(p => { if(p[1]) html += `<tr><td>${p[1]}</td><td>${p[2]}</td><td>${p[5]}</td><td>${p[6]}</td><td>${p[16]}</td><td>${p[14]}</td><td>${p[12]}</td><td>${p[7]}</td><td>${p[15]}</td></tr>`; });
-        document.getElementById('gridBody').innerHTML = html;
-    }
-
-    async function submitReport() {
-        const data = { action: "reportPlayer", id: document.getElementById('repID').value, name: document.getElementById('repName').value, ally: document.getElementById('repAlly').value, points: document.getElementById('repPunkte').value, reason: document.getElementById('repReason').value, map: document.getElementById('repMap').value, date: document.getElementById('repDate').value, proof: document.getElementById('repLink').value, story: document.getElementById('repStory').value, reporter: myName };
-        await fetch(SCRIPT_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(data) });
-        alert("Meldung gesendet!"); document.getElementById('reportModal').style.display = 'none';
-    }
+    function openSupportChat() { document.getElementById('fullChatModal').style.display = 'flex'; switchChatTab('pn'); startChat('SUPPORT'); }
 
     window.onload = loadData;
 </script>
