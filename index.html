@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dark Bulls - Allianz System V13.8</title>
+    <title>Dark Bulls - Allianz System V12.1</title>
 
     <link rel="icon" type="image/png" href="192x192icon.png">
     <link rel="apple-touch-icon" href="192x192icon.png">
@@ -12,7 +12,7 @@
     <style>
         body { margin: 0; padding: 0; font-family: 'Almendra', serif; background: black; color: white; overflow-x: hidden; min-height: 100vh; }
         
-        /* --- DESIGN PANZER (V12.1 ORIGINAL) --- */
+        /* --- DESIGN PANZER (V10.4) --- */
         #start { display: flex; align-items: center; justify-content: center; height: 100vh; position: relative; background: black; z-index: 10; }
         #logo-container img { width: 780px; max-width: 75vw; filter: drop-shadow(0 0 60px rgba(255, 0, 0, 0.9)); }
         #loginBar { position: absolute; left: 0; top: 35%; transform: translateY(-50%); background: #39d353; padding: 30px 5px; font-size: 20px; font-weight: bold; color: black; cursor: pointer; z-index: 100; border-radius: 0 10px 10px 0; writing-mode: vertical-rl; text-orientation: upright; width: 40px; text-align: center; }
@@ -25,36 +25,30 @@
 
         .modal-overlay { display: none; position: fixed; z-index: 5000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); justify-content: center; align-items: center; }
         .dark-modal { background: #1a1a1a; padding: 30px; width: 450px; max-width: 90vw; border: 3px solid #333; text-align: center; border-radius: 12px; box-shadow: 0 0 50px rgba(255,0,0,0.4); }
-        .dark-modal input, .dark-modal select, .dark-modal textarea { width: 100%; padding: 12px; margin-bottom: 12px; background: #000; color: #39d353; border: 1px solid #444; font-family: 'Almendra'; font-size: 18px; box-sizing: border-box; outline: none; }
+        .dark-modal input, .dark-modal textarea { width: 100%; padding: 12px; margin-bottom: 12px; background: #000; color: #39d353; border: 1px solid #444; font-family: 'Almendra'; font-size: 18px; box-sizing: border-box; outline: none; }
         .logbtn { padding: 15px; border: none; cursor: pointer; font-family: 'Almendra'; font-weight: bold; font-size: 18px; border-radius: 5px; color: black; }
 
         #dashboard { display: none; position: relative; width: 100vw; min-height: 100vh; background: black; }
         #bg-bull { position: fixed; left: 50%; top: 45%; transform: translate(-50%, -50%); width: 850px; z-index: 1; opacity: 0.4; pointer-events: none; }
-        #top-bar { position: fixed; top: 0; width: 100%; display: flex; justify-content: flex-end; padding: 10px 40px; z-index: 100; background: rgba(0,0,0,0.8); height: 60px; align-items: center; box-sizing: border-box; }
+        #top-bar { position: fixed; top: 0; width: 100%; display: flex; justify-content: flex-end; padding: 10px 40px; z-index: 100; background: rgba(0,0,0,0.8); box-sizing: border-box;}
         
-        .panel { opacity: 0; transform: translateY(20px); transition: all 0.6s ease-out; background: rgba(15, 15, 15, 0.95); border: 1px solid #444; padding: 12px; z-index: 10; border-radius: 8px; width: 240px; box-sizing: border-box; position: absolute; }
+        .panel { opacity: 0; transform: translateY(20px); transition: all 0.6s ease-out; background: rgba(15, 15, 15, 0.95); border: 1px solid #444; padding: 12px; z-index: 10; border-radius: 8px; width: 240px; }
         .panel.visible { opacity: 1; transform: translateY(0); }
-        .panel h2 { color: #ff3131; margin: 0 0 8px 0; font-size: 20px; text-decoration: underline; text-align: center; }
+        .panel h2 { color: #ff3131; margin: 0 0 8px 0; font-size: 20px; text-decoration: underline; }
         .panel button { display: block; width: 100%; margin: 5px 0; background: #39d353; border: none; padding: 10px; font-family: 'Almendra'; font-weight: bold; cursor: pointer; color: black; border-radius: 4px; }
 
-        @media (min-width: 801px) {
-            #personal { left: 40px; top: 80px; }
-            #blacklistPanel { left: 40px; top: 380px; }
-            #blacklistAdmin { left: 40px; bottom: 40px; width: 440px; }
-            #admin { right: 40px; top: 120px; width: 260px; }
-            #elo { right: 40px; top: 420px; width: 260px; }
-            #chat-btn { position: fixed; bottom: 40px; right: 40px; width: auto; border-radius: 8px; padding: 20px 60px; font-size: 28px; background: #ff8c00; font-family: 'Almendra'; font-weight: bold; border: none; cursor: pointer; z-index: 100; color: black; display: none; }
-        }
-
-        /* --- BLACKLIST GRID --- */
+        /* --- BLACKLIST DESIGN (BEIBEHALTEN) --- */
         .bl-box { width: 95%; max-width: 1200px; background: #111; border: 2px solid #333; padding: 30px; border-radius: 10px; }
         .bl-header { color: #ff3131; font-size: 55px; text-align: center; margin-bottom: 20px; font-weight: bold; }
+        .bl-search-row { display: flex; gap: 20px; align-items: center; margin-bottom: 30px; background: #1a1a1a; padding: 15px; border-radius: 10px; }
+        .bl-section-title { color: #5b9bd5; font-size: 26px; border-bottom: 1px solid #5b9bd5; margin: 20px 0 15px 0; font-style: italic; }
         .bl-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; text-align: left; }
         .bl-grid p { margin: 8px 0; font-size: 20px; font-weight: bold; }
         .bl-grid span { color: #39d353; margin-left: 10px; }
+        .story-label { color: #ffbd00; font-size: 20px; font-weight: bold; margin-top: 20px; }
         .story-box { background: #000; border: 1px solid #444; padding: 20px; min-height: 100px; color: #39d353; font-size: 22px; margin-top: 10px; border-radius: 5px; white-space: pre-wrap; }
 
-        /* --- CHAT --- */
+        /* --- CHAT DESIGN --- */
         .chat-window { width: 95vw; height: 90vh; background: #0a0a0a; border: 2px solid #444; display: flex; flex-direction: column; border-radius: 10px; overflow: hidden; }
         .chat-tabs { display: flex; background: #1a1a1a; border-bottom: 2px solid #333; }
         .chat-tab { flex: 1; padding: 15px; text-align: center; cursor: pointer; border-right: 1px solid #333; font-weight: bold; color: #888; }
@@ -65,15 +59,30 @@
         .chat-history { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
         .chat-input-area { padding: 15px; background: #1a1a1a; display: flex; gap: 10px; }
         .chat-input-area input { flex: 1; padding: 10px; background: #000; border: 1px solid #444; color: #39d353; font-size: 18px; }
-        .msg { padding: 8px 12px; border-radius: 5px; max-width: 80%; font-size: 18px; }
+        .status-dot { height: 10px; width: 10px; border-radius: 50%; display: inline-block; margin-right: 8px; }
+        .online { background-color: #39d353; box-shadow: 0 0 8px #39d353; }
+        .offline { background-color: #555; }
+        .msg { padding: 8px 12px; border-radius: 5px; max-width: 80%; font-size: 18px; margin-bottom: 4px; }
         .msg-own { align-self: flex-end; background: #1b4d1b; border-right: 4px solid #39d353; }
         .msg-other { align-self: flex-start; background: #222; border-left: 4px solid #ff3131; }
+        .contact-item { padding: 12px; border-bottom: 1px solid #222; cursor: pointer; display: flex; align-items: center; font-size: 16px; }
+        #chat-btn { position: fixed; bottom: 0; right: 0; background: #ff8c00; padding: 15px; font-size: 22px; font-weight: bold; cursor: pointer; z-index: 200; font-family: 'Almendra'; width: 100%; display: none; color: black; border: none; opacity: 0; transition: opacity 1s; }
+        .chat-badge { background: red; color: white; border-radius: 50%; padding: 2px 8px; font-size: 16px; margin-left: 10px; display: none; }
+        .new-msg-dot { width: 10px; height: 10px; background: red; border-radius: 50%; display: inline-block; margin-left: auto; }
 
-        /* KOMPAKTE HAKEN LISTE */
-        .player-scroll { background: #000; border: 1px solid #444; padding: 5px; max-height: 200px; overflow-y: auto; text-align: left; margin-bottom: 15px; border-radius: 4px; }
-        .player-row { display: flex; align-items: center; gap: 12px; padding: 10px; border-bottom: 1px solid #222; color: #39d353; cursor: pointer; }
-        .player-row:hover { background: #111; }
-        .player-row input { width: 18px; height: 18px; accent-color: #39d353; }
+        @media (min-width: 801px) {
+            .panel { position: absolute; }
+            #personal { left: 40px; top: 80px; }
+            #blacklistPanel { left: 40px; top: 380px; }
+            #blacklistAdmin { left: 40px; bottom: 40px; width: 440px; }
+            #admin { right: 40px; top: 120px; width: 260px; }
+            #elo { right: 40px; top: 420px; width: 260px; }
+            #chat-btn { width: auto; right: 40px; bottom: 40px; border-radius: 8px; padding: 20px 60px; font-size: 28px; }
+        }
+        @media (max-width: 800px) {
+            #dashboard { overflow-y: auto; display: none; flex-direction: column; align-items: center; padding-top: 70px; padding-bottom: 100px; }
+            .panel { position: relative !important; width: 92% !important; margin: 10px auto !important; }
+        }
     </style>
 </head>
 <body>
@@ -104,86 +113,33 @@
 <div id="pinChangeModal" class="modal-overlay">
     <div class="dark-modal">
         <h1>Pin Ändern</h1>
-        <input type="password" id="newPin1" placeholder="Neue PIN">
-        <input type="password" id="newPin2" placeholder="Wiederholen">
-        <div style="display:flex; gap:10px;">
-            <button class="logbtn" style="flex:1; background:#39d353" onclick="submitPinChange()">Speichern</button>
-            <button class="logbtn" style="flex:1; background:#d50000; color:white" onclick="document.getElementById('pinChangeModal').style.display='none'">Abbruch</button>
+        <div id="pinChangeForm">
+            <p style="color: #39d353;">Benutzer: <span id="pinUser"></span></p>
+            <input type="password" id="newPin1" placeholder="Neue PIN">
+            <input type="password" id="newPin2" placeholder="Wiederholen">
+            <div style="display:flex; gap:10px;">
+                <button class="logbtn" style="flex:1; background:#39d353" onclick="submitPinChange()">Speichern</button>
+                <button class="logbtn" style="flex:1; background:#d50000; color:white" onclick="closePinModal()">Abbruch</button>
+            </div>
+        </div>
+        <div id="pinSuccessMessage" style="display: none;">
+            <p style="color: #ffd600; font-size: 24px;">✓ PIN geändert!</p>
+            <p id="displayNewPin" style="color: #39d353; font-size: 32px;"></p>
+            <button class="logbtn" style="width:100%; background:#39d353" onclick="closePinModal()">Verstanden</button>
         </div>
     </div>
 </div>
 
-<div id="groupMgmtModal" class="modal-overlay">
+<div id="regModal" class="modal-overlay">
     <div class="dark-modal">
-        <h1 style="color:#ffd600">Gruppen & Archiv</h1>
-        <select id="groupSelectEdit" onchange="loadGroupDetailsForEdit()">
-            <option value="">-- Neue Gruppe --</option>
-        </select>
-        <input type="text" id="newGroupName" placeholder="Name der Karte...">
-        <input type="text" id="newGroupWebhook" placeholder="Discord Webhook...">
-        <div class="player-scroll" id="playerSelectList"></div>
-        <button onclick="createNewGroup()" style="width:100%; background:#39d353; padding:12px; border:none; font-family:'Almendra'; font-weight:bold; cursor:pointer;">SPEICHERN</button>
-        <button onclick="archiveCurrentGroup()" id="archiveBtn" style="width:100%; background:#ff8c00; padding:12px; border:none; margin-top:10px; font-family:'Almendra'; font-weight:bold; cursor:pointer; display:none;">ARCHIVIEREN</button>
-        <button onclick="document.getElementById('groupMgmtModal').style.display='none'" style="width:100%; background:red; padding:12px; border:none; margin-top:10px; font-family:'Almendra'; font-weight:bold; cursor:pointer;">ABBRECHEN</button>
-    </div>
-</div>
-
-<div id="dashboard">
-    <div id="top-bar">
-        <div style="font-size: 18px; color:#ff3131"><span id="userNameDisplay"></span> | <span id="userRoleDisplay"></span></div>
-        <button onclick="location.reload()" style="background:red; color:white; border:none; padding:8px 15px; cursor:pointer; margin-left:15px; border-radius:5px;">LOGOUT</button>
-    </div>
-    <img src="bulls_dashboard.jpg" id="bg-bull">
-
-    <div class="panel" id="personal">
-        <h2>Persönlich</h2>
-        <button onclick="openSupportChat()">Support Chat</button>
-        <button onclick="document.getElementById('pinChangeModal').style.display='flex'">Pin ändern</button>
-    </div>
-
-    <div class="panel" id="blacklistPanel">
-        <h2>Black Liste</h2>
-        <button onclick="openBlacklist()">Anschauen</button>
-        <button onclick="alert('Folgt')">Spieler Melden</button>
-    </div>
-
-    <div class="panel" id="blacklistAdmin">
-        <h2>Pflege Admin</h2>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:5px;">
-            <button>Gemeldete</button><button>Pflege</button>
-            <button>Eintragen</button><button>Vollansicht</button>
+        <h1 style="color:#ff3131">Rekrutierung</h1>
+        <input type="text" id="regName" placeholder="Name">
+        <input type="number" id="regAge" placeholder="Alter">
+        <textarea id="regMsg" placeholder="Nachricht..." style="height:80px; width:100%; background:#000; color:#39d353; border:1px solid #444; font-family:'Almendra';"></textarea>
+        <div style="display:flex; gap:10px;">
+            <button class="logbtn" style="flex:1; background:#ffd600" onclick="sendDiscordBewerbung()">Abschicken</button>
+            <button class="logbtn" style="flex:1; background:#d50000; color:white" onclick="document.getElementById('regModal').style.display='none'">Abbruch</button>
         </div>
-    </div>
-
-    <div class="panel" id="admin">
-        <h2>Admin</h2>
-        <button onclick="openGroupMgmt()" id="btn-mgmt" style="background:#ffd600; display:none;">Gruppen Mgmt</button>
-        <button>User Verwaltung</button>
-    </div>
-
-    <div class="panel" id="elo">
-        <h2>Elo Bereich</h2>
-        <button>Rohstoffrechner</button>
-    </div>
-
-    <button id="chat-btn" onclick="document.getElementById('fullChatModal').style.display='flex'">ALLIANZ CHAT</button>
-</div>
-
-<div id="blacklistModal" class="modal-overlay">
-    <div class="bl-box">
-        <div class="bl-header">DARK BULLS BLACK LISTE</div>
-        <div style="display:flex; gap:10px; margin-bottom:20px;">
-            <input list="playerList" id="blSearchInput" placeholder="Spieler suchen...">
-            <datalist id="playerList"></datalist>
-            <button onclick="loadBlacklistPlayer()" style="background:#39d353; color:black; padding:10px; border:none; font-family:'Almendra'; font-weight:bold; cursor:pointer;">LADEN</button>
-        </div>
-        <div class="bl-grid">
-            <div><p>ID: <span id="outID"></span></p><p>Allianz: <span id="outAllianz"></span></p><p>Verstoß: <span id="outVerstoss"></span></p></div>
-            <div><p>Name: <span id="outName"></span></p><p>Punkte: <span id="outPunkte"></span></p><p>Datum: <span id="outDateEvent"></span></p></div>
-            <div><p>Melder: <span id="outMelder"></span></p><p>Fall-Nr: <span id="outFall"></span></p><p>Beweis: <span id="outBeweis"></span></p></div>
-        </div>
-        <div class="story-box" id="outStory"></div>
-        <button onclick="document.getElementById('blacklistModal').style.display='none'" style="width:100%; background:red; margin-top:20px; padding:15px; border:none; font-family:'Almendra'; font-weight:bold; cursor:pointer;">ZURÜCK</button>
     </div>
 </div>
 
@@ -192,47 +148,117 @@
         <div class="chat-tabs">
             <div class="chat-tab active" id="tab-mitglieder" onclick="switchChatTab('mitglieder')">MITGLIEDER</div>
             <div class="chat-tab" id="tab-pn" onclick="switchChatTab('pn')">NACHRICHTEN</div>
-            <div class="chat-tab" id="tab-gruppen" onclick="switchChatTab('gruppen')">GRUPPEN (DC)</div>
-            <div class="chat-tab" style="background:red; color:white; flex:0.2" onclick="document.getElementById('fullChatModal').style.display='none'">X</div>
+            <div class="chat-tab" style="background:#d50000; color:white; flex:0.2;" onclick="document.getElementById('fullChatModal').style.display='none'">X</div>
         </div>
         <div class="chat-body">
             <div class="chat-sidebar" id="chatSidebar"></div>
             <div class="chat-main">
-                <div id="chatHeader" style="padding:10px; background:#222; color:#39d353; font-weight:bold;">Wähle einen Chat...</div>
+                <div id="chatHeader" style="padding:10px; background:#222; font-weight:bold; color:#39d353; border-bottom:1px solid #333;">Wähle jemanden aus...</div>
                 <div class="chat-history" id="chatHistory"></div>
                 <div class="chat-input-area">
                     <input type="text" id="chatInput" placeholder="Nachricht...">
-                    <button onclick="sendChatMessage()" style="background:#39d353; padding:10px 20px; border:none; font-family:'Almendra'; font-weight:bold; cursor:pointer;">SENDEN</button>
+                    <button class="logbtn" style="background:#39d353; padding:10px 20px; width:auto" onclick="sendChatMessage()">SENDEN</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwlZWpYkINjQsh72hVecR_2KRZ66ff7aKnc7tZHqKbKezTQHeyjkv1NE3L6_GIgiU7WTA/exec'; 
-    const SHEET_ID = '1Gjnhol0ou63xW20OnbTo_wugzpOTgBP2yjnx3Qzg4bQ';
-    const GID_USERS = '1188820112'; const GID_CHAT = '274206006'; const GID_STEER = '717972533'; const GID_BLACKLIST = '1767725514';
+<div id="dashboard">
+    <div id="top-bar">
+        <div style="font-size: 18px; color:#ff3131"><span id="userNameDisplay"></span> (<span id="userRoleDisplay"></span>)</div>
+        <button onclick="location.reload()" style="background:#d50000; color:white; border:none; padding:8px 15px; cursor:pointer; margin-left:15px; border-radius:5px;">LOGOUT</button>
+    </div>
+    <img src="bulls_dashboard.jpg" id="bg-bull">
+    <div class="panel" id="personal">
+        <h2>Persönlich</h2>
+        <button onclick="openChangePin()">Pin ändern</button>
+        <button onclick="openSupportChat()">Support Chat</button>
+    </div>
+    <div class="panel" id="blacklistPanel">
+        <h2>Black Liste</h2>
+        <button onclick="alert('Melde-System folgt')">Sp. Melden</button>
+        <button onclick="openBlacklist()">Anschauen</button>
+    </div>
+    <div class="panel" id="blacklistAdmin">
+        <h2>Pflege Admin</h2>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:5px;">
+            <button>Gemeldete</button><button>Pflege</button>
+            <button>Eintragen</button><button>Volle Ansicht</button>
+        </div>
+    </div>
+    <div class="panel" id="admin"><h2>Admin</h2><button>User-Verwaltung</button></div>
+    <div class="panel" id="elo"><h2>Elo Bereich</h2><button>Rohstoffrechner</button></div>
+    <button id="chat-btn" onclick="document.getElementById('fullChatModal').style.display='flex'">ALLIANZ CHAT <span id="mainBadge" class="chat-badge">0</span></button>
+</div>
 
-    let users = []; let myName = ""; let myRole = ""; let chatPartner = ""; let isGroupChat = false;
-    let activeGroups = []; let blacklistData = [];
+<div id="blacklistModal" class="modal-overlay">
+    <div class="bl-box">
+        <div class="bl-header">DARK BULLS BLACK LISTE</div>
+        <div class="bl-search-row">
+            <label style="font-size:24px">Spieler auswählen</label>
+            <input list="playerList" id="blSearchInput" style="flex:1; padding:10px; background:black; color:#39d353; border:1px solid #555;">
+            <datalist id="playerList"></datalist>
+            <button class="logbtn" style="background:#39d353; padding:10px 30px" onclick="loadBlacklistPlayer()">Spieler Laden</button>
+        </div>
+        <div class="bl-section-title">Spielerdaten vom gemeldeten Spieler</div>
+        <div class="bl-grid">
+            <div>
+                <p>Spielername ID <span id="outID"></span></p>
+                <p>Allianz bei Erstkontakt <span id="outAllianz"></span></p>
+                <p>Verstoß <span id="outVerstoss"></span></p>
+                <p>Fallnummer <span id="outFall"></span></p>
+            </div>
+            <div><p>Spielername <span id="outName"></span></p><p>Punktestand <span id="outPunkte"></span></p></div>
+            <div>
+                <p>Spieler angemeldet am <span id="outDateReg"></span></p>
+                <p>Meistgespielte Map <span id="outMap"></span></p>
+                <p>Beweise vorhanden? <span id="outBeweis"></span></p>
+                <p>Datum der Meldung <span id="outDateEvent"></span></p>
+            </div>
+        </div>
+        <div class="story-label">Was ist passiert / Beschreibung:</div>
+        <div id="outStory" class="story-box"></div>
+        <div class="bl-section-title">Spielerdaten von Zeugen</div>
+        <div class="bl-grid">
+            <div><p>Melder <span id="outMelder"></span></p></div>
+            <div><p>Zeuge 1 <span id="outZ1"></span></p><p>Zeuge 2 <span id="outZ2"></span></p></div>
+            <div><p>Zeuge 3 <span id="outZ3"></span></p><p>Zeuge 4 <span id="outZ4"></span></p></div>
+        </div>
+        <div style="display:flex; justify-content:center; gap:30px; margin-top:30px;">
+            <button class="logbtn" style="background:#ffbd00; width:200px" onclick="document.getElementById('blacklistModal').style.display='none'">Zurück</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxIXKlIvApuZH1po2w1Hjzc03v8IhMiVnE40h6BRTuXbaWPHj1n0DwtO6DKVJo6-fCYxQ/exec'; 
+    const WEBHOOK_BEW = "https://discord.com/api/webhooks/1502735246335021267/fpxXtWr5QgSny6rfJzGHKnhYskehC9vDMEl3CvUzjgbBOuKBd8KGzUhCRfvd2KmWcnND";
+    const WEBHOOK_SUP = "https://discord.com/api/webhooks/1502735504997744741/kK6SCl_DQtW0TCfuB5epCbTueMcp4COyETyea0J5bM68EOV8EHQoxPzq4gp1_iuh_444";
+    const SHEET_ID = '1Gjnhol0ou63xW20OnbTo_wugzpOTgBP2yjnx3Qzg4bQ';
+    const GID_USERS = '1188820112';
+    const GID_CHAT = '274206006';
+    const GID_BLACKLIST = '1767725514';
+
+    let users = []; let blacklistData = []; let chatPartner = ""; let myName = ""; let myRole = "";
+    let lastSeen = JSON.parse(localStorage.getItem('bullsChatLastSeen')) || {};
+    let allChatData = [];
 
     async function loadData() {
-        const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_USERS}&t=${new Date().getTime()}`);
-        const text = await res.text();
-        const rows = text.split('\n').slice(1);
-        users = rows.map(r => {
-            const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-            const cl = (s) => s ? s.replace(/["']/g, "").trim() : "";
-            return { name: cl(c[0]), pin: cl(c[2]), role: cl(c[3]) };
-        });
-
-        const resG = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_STEER}&t=${new Date().getTime()}`);
-        const textG = await resG.text();
-        activeGroups = textG.split('\n').slice(1).map(r => {
-            const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/"/g,"").trim());
-            return { name: c[0], webhook: c[1], status: c[2], allowed: c[3] || "" };
-        }).filter(g => g.status === "aktiv");
+        try {
+            const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_USERS}&t=${new Date().getTime()}`);
+            const text = await res.text();
+            const rows = text.split('\n').slice(1);
+            users = rows.map(r => {
+                const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                const cl = (s) => s ? s.replace(/["']/g, "").trim() : "";
+                return { name: cl(c[0]), pin: cl(c[2]), role: cl(c[3]), lastActive: cl(c[4]) };
+            });
+            if(myName) {
+                switchChatTab(document.querySelector('.chat-tab.active').id.replace('tab-',''));
+                checkNotifications();
+            }
+        } catch(e) { console.error("Cloud error"); }
     }
 
     function doLogin() {
@@ -244,118 +270,173 @@
             document.getElementById("pinModal").style.display = "none";
             document.getElementById("start").style.display = "none";
             document.getElementById("dashboard").style.display = "block";
-            document.getElementById("userNameDisplay").innerText = myName;
-            document.getElementById("userRoleDisplay").innerText = myRole;
-            document.getElementById("chat-btn").style.display = "block";
-            if(myRole === "Admin" || myRole === "Ausbilder" || myRole === "Offizier") document.getElementById("btn-mgmt").style.display = "block";
-            setInterval(loadChatHistory, 5000); setInterval(loadData, 15000);
-            setTimeout(() => { document.querySelectorAll('.panel').forEach(p => p.classList.add('visible')); }, 300);
+            document.getElementById("userNameDisplay").innerText = u.name;
+            document.getElementById("userRoleDisplay").innerText = u.role;
+            fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "updateStatus", playerName: myName }) });
+            switchChatTab('mitglieder');
+            setInterval(loadChatHistory, 4000);
+            setInterval(loadData, 10000);
+            setTimeout(() => {
+                document.querySelectorAll('.panel').forEach((panel, index) => {
+                    if (u.role === "Admin" || panel.id === "personal" || (panel.id === "blacklistPanel" && u.role !== "Gast")) {
+                        panel.style.display = "block";
+                        setTimeout(() => panel.classList.add('visible'), index * 120);
+                    }
+                });
+                document.getElementById("chat-btn").style.display = "block";
+                setTimeout(() => document.getElementById("chat-btn").style.opacity = "1", 500);
+            }, 600);
         } else { alert("Login falsch!"); }
     }
 
-    async function submitPinChange() {
-        const p1 = document.getElementById("newPin1").value;
-        await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "updatePin", playerName: myName, newPin: p1 }) });
-        alert("Pin geändert!"); document.getElementById("pinChangeModal").style.display = "none";
-    }
-
-    function openGroupMgmt() {
-        const select = document.getElementById("groupSelectEdit");
-        select.innerHTML = '<option value="">-- Neue Gruppe --</option>';
-        activeGroups.forEach(g => { select.innerHTML += `<option value="${g.name}">${g.name}</option>`; });
-        const list = document.getElementById("playerSelectList");
-        list.innerHTML = `<div class="player-row" onclick="const c = this.querySelector('input'); c.checked = !c.checked;"><input type="checkbox" id="chk-alle" onclick="event.stopPropagation()"> <b>ALLE SPIELER</b></div>`;
-        users.forEach(u => { list.innerHTML += `<div class="player-row" onclick="const c = this.querySelector('input'); c.checked = !c.checked;"><input type="checkbox" class="user-chk" value="${u.name}" onclick="event.stopPropagation()"> <span>${u.name}</span></div>`; });
-        document.getElementById("groupMgmtModal").style.display = "flex";
-    }
-
-    function loadGroupDetailsForEdit() {
-        const sel = document.getElementById("groupSelectEdit").value;
-        const g = activeGroups.find(x => x.name === sel);
-        if(g) {
-            document.getElementById("newGroupName").value = g.name;
-            document.getElementById("newGroupWebhook").value = g.webhook;
-            document.getElementById("archiveBtn").style.display = "block";
-            const allowed = g.allowed.split(",");
-            document.getElementById("chk-alle").checked = allowed.includes("ALLE");
-            document.querySelectorAll(".user-chk").forEach(c => c.checked = allowed.includes(c.value));
-        }
-    }
-
-    async function createNewGroup() {
-        const name = document.getElementById("newGroupName").value;
-        const hook = document.getElementById("newGroupWebhook").value;
-        let sel = document.getElementById("chk-alle").checked ? ["ALLE"] : [];
-        if(sel.length===0) document.querySelectorAll(".user-chk:checked").forEach(c => sel.push(c.value));
-        await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "createGroup", groupName: name, webhook: hook, allowedUsers: sel.join(",") }) });
-        alert("Gespeichert!"); location.reload();
-    }
-
-    async function archiveCurrentGroup() {
-        await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "closeGroup", groupName: document.getElementById("newGroupName").value }) });
-        alert("Archiviert!"); location.reload();
+    /* --- CHAT LOGIK --- */
+    async function checkNotifications() {
+        const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_CHAT}&t=${new Date().getTime()}`);
+        const text = await res.text();
+        const rows = text.split('\n').slice(1);
+        allChatData = rows.map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/"/g,"").trim()));
+        let globalNew = 0; let channelNews = {};
+        allChatData.forEach(c => {
+            const msgTime = new Date(c[0]).getTime();
+            const kanal = c[2]; const sender = c[1];
+            if(sender !== myName) {
+                let isSupportMsg = kanal.startsWith("SUPPORT-");
+                let hasAccess = (kanal === [myName, sender].sort().join("-")) || (isSupportMsg && (kanal === "SUPPORT-"+myName || myRole === "Admin" || myRole === "Support"));
+                if(hasAccess && (!lastSeen[kanal] || msgTime > lastSeen[kanal])) { globalNew++; channelNews[kanal] = (channelNews[kanal] || 0) + 1; }
+            }
+        });
+        const badge = document.getElementById("mainBadge");
+        badge.innerText = globalNew; badge.style.display = (globalNew > 0) ? "inline-block" : "none";
+        window.currentChannelNews = channelNews;
     }
 
     function switchChatTab(tab) {
         document.querySelectorAll('.chat-tab').forEach(t => t.classList.remove('active'));
         document.getElementById('tab-' + tab).classList.add('active');
-        const sidebar = document.getElementById("chatSidebar"); sidebar.innerHTML = "";
+        const sidebar = document.getElementById("chatSidebar");
+        sidebar.innerHTML = "";
         if(tab === 'mitglieder') {
-            users.forEach(u => { if(u.name !== myName) sidebar.innerHTML += `<div class="contact-item" onclick="startChat('${u.name}', false)">👤 ${u.name}</div>`; });
-        } else if(tab === 'gruppen') {
-            activeGroups.forEach(g => {
-                if(g.allowed === "ALLE" || g.allowed.includes(myName) || myRole === "Admin") 
-                    sidebar.innerHTML += `<div class="contact-item" onclick="startChat('${g.name}', true)">📢 ${g.name}</div>`;
+            users.forEach(u => {
+                if(u.name !== myName) {
+                    const kanal = [myName, u.name].sort().join("-");
+                    const lastDate = new Date(u.lastActive);
+                    const isOnline = (new Date() - lastDate) < 300000;
+                    const hasNew = window.currentChannelNews && window.currentChannelNews[kanal];
+                    sidebar.innerHTML += `<div class="contact-item" onclick="startChat('${u.name}')"><span class="status-dot ${isOnline ? 'online' : 'offline'}"></span>${u.name}${hasNew ? '<span class="new-msg-dot"></span>' : ''}</div>`;
+                }
             });
+        } else if(tab === 'pn') {
+            if(myRole === "Admin" || myRole === "Support") {
+                let activeSupportChannels = [...new Set(allChatData.filter(c => c[2].startsWith("SUPPORT-")).map(c => c[2]))];
+                activeSupportChannels.forEach(chan => {
+                    let userPart = chan.replace("SUPPORT-","");
+                    const hasNew = window.currentChannelNews && window.currentChannelNews[chan];
+                    sidebar.innerHTML += `<div class="contact-item" onclick="startChat('${userPart}', true)">🛡️ Support: ${userPart}${hasNew ? '<span class="new-msg-dot"></span>' : ''}</div>`;
+                });
+            } else {
+                sidebar.innerHTML = `<div class='contact-item' onclick='startChat("SUPPORT")'>🛡️ <b>SUPPORT CHAT</b></div>`;
+            }
         }
     }
 
-    function startChat(p, isGrp) { chatPartner = p; isGroupChat = isGrp; document.getElementById("chatHeader").innerText = p; loadChatHistory(); }
+    function startChat(partner, isExplicitSupport = false) { 
+        chatPartner = partner; 
+        document.getElementById("chatHeader").innerText = (isExplicitSupport || partner === "SUPPORT") ? "Support-Fall: " + partner : "Chat mit: " + partner;
+        let kanalID = (partner === "SUPPORT" || isExplicitSupport) ? "SUPPORT-" + (isExplicitSupport ? partner : myName) : [myName, partner].sort().join("-");
+        lastSeen[kanalID] = new Date().getTime();
+        localStorage.setItem('bullsChatLastSeen', JSON.stringify(lastSeen));
+        loadChatHistory();
+    }
 
     async function sendChatMessage() {
-        const input = document.getElementById("chatInput"); const msg = input.value.trim(); if(!msg) return;
-        let kanalID = isGroupChat ? "GRUPPE-" + chatPartner : [myName, chatPartner].sort().join("-");
-        await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: isGroupChat ? "sendGroupChat" : "sendChat", absender: myName, kanalID: kanalID, nachricht: msg }) });
-        input.value = ""; loadChatHistory();
+        const input = document.getElementById("chatInput"); const msg = input.value.trim(); if(!msg || !chatPartner) return;
+        let isSup = document.getElementById("chatHeader").innerText.includes("Support");
+        let kanalID = isSup ? "SUPPORT-" + (chatPartner === "SUPPORT" ? myName : chatPartner) : [myName, chatPartner].sort().join("-");
+        document.getElementById("chatHistory").innerHTML += `<div class="msg msg-own"><small>${myName}</small><br>${msg}</div>`;
+        input.value = "";
+        await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "sendChat", absender: myName, kanalID: kanalID, nachricht: msg }) });
+        if(isSup) {
+            fetch(WEBHOOK_SUP, { method: "POST", headers: {"Content-Type":"application/json"}, body: JSON.stringify({ content: `💬 **Support-Chat (${kanalID})**\n**${myName}**: ${msg}` })});
+        }
     }
 
     async function loadChatHistory() {
-        if(!chatPartner) return;
-        const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_CHAT}&t=${new Date().getTime()}`);
-        const text = await res.text();
-        const rows = text.split('\n').slice(1).map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/"/g,"").trim()));
-        let clean = (isGroupChat ? chatPartner : [myName, chatPartner].sort().join("-")).toLowerCase().replace(/[^a-z0-9]/g, "");
+        if(!chatPartner || document.getElementById('fullChatModal').style.display === 'none') return;
+        let isSup = document.getElementById("chatHeader").innerText.includes("Support");
+        let kanalID = isSup ? "SUPPORT-" + (chatPartner === "SUPPORT" ? myName : chatPartner) : [myName, chatPartner].sort().join("-");
+        const history = document.getElementById("chatHistory");
         let html = "";
-        rows.forEach(c => { 
-            let rowClean = c[2] ? c[2].toLowerCase().replace(/[^a-z0-9]/g, "").replace("gruppe", "") : "";
-            if(rowClean === clean) html += `<div class="msg ${c[1] === myName ? 'msg-own' : 'msg-other'}"><small>${c[1]}</small><br>${c[3]}</div>`; 
+        allChatData.forEach(c => {
+            if(c[2] === kanalID) html += `<div class="msg ${c[1] === myName ? 'msg-own' : 'msg-other'}"><small>${c[1]}</small><br>${c[3]}</div>`;
         });
-        document.getElementById("chatHistory").innerHTML = html;
-        document.getElementById("chatHistory").scrollTop = 99999;
+        history.innerHTML = html; history.scrollTop = history.scrollHeight;
+    }
+
+    /* --- BASIS FUNKTIONEN (WIEDERHERGESTELLT) --- */
+    function openChangePin() { document.getElementById("pinUser").innerText = myName; document.getElementById("pinChangeModal").style.display = "flex"; }
+    function closePinModal() { document.getElementById('pinChangeModal').style.display = 'none'; }
+    async function submitPinChange() {
+        const n1 = document.getElementById("newPin1").value;
+        const payload = { action: "updatePin", playerName: myName, newPin: n1 };
+        const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) });
+        const result = await res.text();
+        if (result === "PIN geändert") {
+            document.getElementById('pinChangeForm').style.display = 'none';
+            document.getElementById('displayNewPin').innerText = n1;
+            document.getElementById('pinSuccessMessage').style.display = 'block';
+            loadData();
+        }
     }
 
     async function openBlacklist() {
         document.getElementById('blacklistModal').style.display = 'flex';
         const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_BLACKLIST}`);
         const text = await res.text();
-        blacklistData = text.split('\n').slice(1).map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/"/g,"").trim()));
-        const dl = document.getElementById('playerList'); dl.innerHTML = "";
-        blacklistData.forEach(p => { if(p[1]) { let o = document.createElement('option'); o.value = p[1]; dl.appendChild(o); }});
+        const rows = text.split('\n').slice(1);
+        const listEl = document.getElementById('playerList');
+        listEl.innerHTML = ""; blacklistData = [];
+        rows.forEach(r => {
+            const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/"/g,"").trim());
+            if(c[1]) {
+                blacklistData.push(c);
+                let opt = document.createElement('option');
+                opt.value = c[1] + " | " + c[2];
+                listEl.appendChild(opt);
+            }
+        });
     }
 
     function loadBlacklistPlayer() {
-        const p = blacklistData.find(x => x[1] === document.getElementById('blSearchInput').value);
+        const search = document.getElementById('blSearchInput').value.split(" | ")[0];
+        const p = blacklistData.find(row => row[1] === search);
         if(p) {
-            document.getElementById('outID').innerText = p[1]; document.getElementById('outName').innerText = p[2];
-            document.getElementById('outAllianz').innerText = p[5]; document.getElementById('outVerstoss').innerText = p[6];
-            document.getElementById('outPunkte').innerText = p[16]; document.getElementById('outDateEvent').innerText = p[14];
-            document.getElementById('outStory').innerText = p[13]; document.getElementById('outMelder').innerText = p[7];
-            document.getElementById('outFall').innerText = p[12]; document.getElementById('outBeweis').innerText = p[15];
+            document.getElementById('outID').innerText = p[1];
+            document.getElementById('outName').innerText = p[2];
+            document.getElementById('outDateReg').innerText = p[3];
+            document.getElementById('outMap').innerText = p[4];
+            document.getElementById('outAllianz').innerText = p[5];
+            document.getElementById('outVerstoss').innerText = p[6];
+            document.getElementById('outMelder').innerText = p[7];
+            document.getElementById('outZ1').innerText = p[8];
+            document.getElementById('outZ2').innerText = p[9];
+            document.getElementById('outZ3').innerText = p[10];
+            document.getElementById('outZ4').innerText = p[11];
+            document.getElementById('outFall').innerText = p[12];
+            document.getElementById('outStory').innerText = p[13];
+            document.getElementById('outDateEvent').innerText = p[14];
+            document.getElementById('outBeweis').innerText = p[15];
+            document.getElementById('outPunkte').innerText = p[16];
         }
     }
 
-    function openSupportChat() { document.getElementById('fullChatModal').style.display = 'flex'; switchChatTab('pn'); startChat('SUPPORT'); }
+    async function sendDiscordBewerbung() {
+        const name = document.getElementById("regName").value;
+        const msg = document.getElementById("regMsg").value;
+        await fetch(WEBHOOK_BEW, { method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({ content: `🚨 **NEUE BEWERBUNG** 🚨\n**Name:** ${name}\n**Nachricht:** ${msg}` }) });
+        alert("Anfrage gesendet!"); document.getElementById("regModal").style.display = "none";
+    }
 
+    function openSupportChat() { document.getElementById('fullChatModal').style.display = 'flex'; switchChatTab('pn'); startChat('SUPPORT'); }
     window.onload = loadData;
 </script>
 </body>
