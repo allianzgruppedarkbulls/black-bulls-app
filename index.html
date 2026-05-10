@@ -3,27 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dark Bulls - Allianz System V12.7</title>
+    <title>Dark Bulls - Allianz System V12.8</title>
     <link href="https://fonts.googleapis.com/css2?family=Almendra:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body { margin: 0; padding: 0; font-family: 'Almendra', serif; background: black; color: white; overflow-x: hidden; min-height: 100vh; }
         
-        /* --- STARTSEITE --- */
+        /* --- DESIGN PANZER (Absolute Positionen) --- */
         #start { display: flex; align-items: center; justify-content: center; height: 100vh; position: relative; background: black; z-index: 100; }
         #logo-container img { width: 780px; max-width: 75vw; filter: drop-shadow(0 0 60px rgba(255, 0, 0, 0.9)); cursor: pointer; }
         #loginBar { position: absolute; left: 0; top: 35%; transform: translateY(-50%); background: #39d353; padding: 30px 5px; font-size: 20px; font-weight: bold; color: black; cursor: pointer; z-index: 100; border-radius: 0 10px 10px 0; writing-mode: vertical-rl; text-orientation: upright; width: 40px; text-align: center; }
 
-        /* --- DASHBOARD DESIGN (PANZER-MODUS) --- */
         #dashboard { display: none; position: relative; width: 100vw; min-height: 100vh; background: black; }
         #bg-bull { position: fixed; left: 50%; top: 45%; transform: translate(-50%, -50%); width: 850px; z-index: 1; opacity: 0.4; pointer-events: none; }
         #top-bar { position: fixed; top: 0; width: 100%; display: flex; justify-content: flex-end; padding: 10px 40px; z-index: 100; background: rgba(0,0,0,0.8); box-sizing: border-box; border-bottom: 1px solid #444; }
         
+        /* FIX: Die Boxen bleiben an ihrem Platz */
         .panel { opacity: 0; transform: translateY(20px); transition: all 0.6s ease-out; background: rgba(15, 15, 15, 0.95); border: 1px solid #444; padding: 12px; z-index: 10; border-radius: 8px; width: 240px; position: absolute; }
         .panel.visible { opacity: 1; transform: translateY(0); }
         .panel h2 { color: #ff3131; margin: 0 0 8px 0; font-size: 20px; text-decoration: underline; text-align: center; }
         .panel button { display: block; width: 100%; margin: 5px 0; background: #39d353; border: none; padding: 10px; font-family: 'Almendra'; font-weight: bold; cursor: pointer; color: black; border-radius: 4px; }
 
-        /* POSITIONIERUNG PC */
         @media (min-width: 801px) {
             #personal { left: 40px; top: 80px; }
             #blacklistPanel { left: 40px; top: 320px; }
@@ -57,7 +56,6 @@
         .msg-other { align-self: flex-start; background: #222; border-left: 4px solid #ff3131; }
         .contact-item { padding: 12px; border-bottom: 1px solid #222; cursor: pointer; }
 
-        /* SPIELER CHECKLISTE */
         .player-scroll { background: #000; border: 1px solid #444; padding: 10px; max-height: 200px; overflow-y: auto; text-align: left; margin-bottom: 15px; }
         .player-row { display: flex; align-items: center; gap: 10px; padding: 8px; border-bottom: 1px solid #222; color: #39d353; }
     </style>
@@ -81,12 +79,12 @@
 <div id="groupMgmtModal" class="modal-overlay">
     <div class="dark-modal">
         <h1 style="color:#ffd600">Gruppen Management</h1>
-        <input type="text" id="newGroupName" placeholder="Name der Karte...">
+        <input type="text" id="newGroupName" placeholder="Name der Karte (KEINE SONDERZEICHEN)...">
         <input type="text" id="newGroupWebhook" placeholder="Discord Webhook...">
         <div class="player-scroll" id="playerSelectList">
             <div class="player-row"><input type="checkbox" id="chk-alle"> <b>ALLE SPIELER</b></div>
         </div>
-        <button onclick="createNewGroup()" style="width:100%; background:#39d353; padding:12px; border:none; font-family:'Almendra'; font-weight:bold; cursor:pointer;">KARTE SPEICHERN</button>
+        <button onclick="createNewGroup()" style="width:100%; background:#39d353; padding:12px; border:none; font-family:'Almendra'; font-weight:bold; cursor:pointer;">SPEICHERN</button>
         <button onclick="document.getElementById('groupMgmtModal').style.display='none'" style="width:100%; background:red; padding:12px; border:none; margin-top:10px; font-family:'Almendra'; font-weight:bold; cursor:pointer;">ABBRECHEN</button>
     </div>
 </div>
@@ -96,13 +94,13 @@
         <div class="chat-tabs">
             <div class="chat-tab active" id="tab-mitglieder" onclick="switchChatTab('mitglieder')">MITGLIEDER</div>
             <div class="chat-tab" id="tab-pn" onclick="switchChatTab('pn')">NACHRICHTEN</div>
-            <div class="chat-tab" id="tab-gruppen" onclick="switchChatTab('gruppen')">GRUPPEN</div>
+            <div class="chat-tab" id="tab-gruppen" onclick="switchChatTab('gruppen')">GRUPPEN (DC)</div>
             <div class="chat-tab" style="background:red; color:white; flex:0.2" onclick="document.getElementById('fullChatModal').style.display='none'">X</div>
         </div>
         <div class="chat-body">
             <div class="chat-sidebar" id="chatSidebar"></div>
             <div class="chat-main">
-                <div id="chatHeader" style="padding:10px; background:#222; color:#39d353; font-weight:bold;">Kanal wählen...</div>
+                <div id="chatHeader" style="padding:10px; background:#222; color:#39d353; font-weight:bold;">Wähle einen Chat...</div>
                 <div class="chat-history" id="chatHistory"></div>
                 <div class="chat-input-area">
                     <input type="text" id="chatInput" placeholder="Nachricht...">
@@ -122,18 +120,21 @@
 
     <div class="panel" id="personal">
         <h2>Persönlich</h2>
-        <button onclick="openSupportChat()">Support Chat</button>
+        <button onclick="alert('In Arbeit...')">Support Chat</button>
+        <button onclick="alert('In Arbeit...')">Pin ändern</button>
     </div>
 
     <div class="panel" id="blacklistPanel">
         <h2>Black Liste</h2>
         <button onclick="alert('In Arbeit...')">Anschauen</button>
+        <button onclick="alert('In Arbeit...')">Spieler Melden</button>
     </div>
 
     <div class="panel" id="blacklistAdmin">
         <h2>Pflege Admin</h2>
         <button id="btn-mgmt" style="background:#ffd600; display:none;" onclick="openGroupMgmt()">Gruppen Management</button>
         <button>Spieler eintragen</button>
+        <button>Volle Ansicht</button>
     </div>
 
     <div class="panel" id="admin">
@@ -150,7 +151,7 @@
 </div>
 
 <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbynCvti8eTql0fsOt7d1Yd3WeWXnV0qhfgaiPg3_G1OA0Lmg9IpOo7kc_cwd5IoBhbT0Q/exec'; 
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwC9yiJyPwwS3fJuXmlIW434vGHhE0H1AZNAMLY1wa8am3d6Oqr8XP-8E_-3HoqhOIg0A/exec'; 
     const SHEET_ID = '1Gjnhol0ou63xW20OnbTo_wugzpOTgBP2yjnx3Qzg4bQ';
     const GID_USERS = '1188820112'; const GID_CHAT = '274206006'; const GID_STEER = '717972533';
 
@@ -205,9 +206,9 @@
         const hook = document.getElementById("newGroupWebhook").value.trim();
         let selected = document.getElementById("chk-alle").checked ? ["ALLE"] : [];
         if(selected.length === 0) document.querySelectorAll(".user-chk:checked").forEach(c => selected.push(c.value));
-        if(!name || !hook || selected.length === 0) return alert("Fehler: Bitte alles ausfüllen!");
+        if(!name || !hook || selected.length === 0) return alert("Bitte alles ausfüllen!");
         await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "createGroup", groupName: name, webhook: hook, allowedUsers: selected.join(",") }) });
-        alert("Gruppe wurde gespeichert!"); location.reload();
+        alert("Karte gespeichert! Lade Allianz neu..."); location.reload();
     }
 
     function switchChatTab(tab) {
@@ -216,8 +217,6 @@
         const sidebar = document.getElementById("chatSidebar"); sidebar.innerHTML = "";
         if(tab === 'mitglieder') {
             users.forEach(u => { if(u.name !== myName) sidebar.innerHTML += `<div class="contact-item" onclick="startChat('${u.name}', false)">👤 ${u.name}</div>`; });
-        } else if(tab === 'pn') {
-            sidebar.innerHTML = `<div class='contact-item' onclick='startChat("SUPPORT", false)'>🛡️ SUPPORT</div>`;
         } else if(tab === 'gruppen') {
             activeGroups.forEach(g => {
                 if(g.allowed === "ALLE" || g.allowed.includes(myName) || myRole === "Admin") 
@@ -230,7 +229,7 @@
 
     async function sendChatMessage() {
         const input = document.getElementById("chatInput"); const msg = input.value.trim(); if(!msg) return;
-        let kanalID = isGroupChat ? "GRUPPE-" + chatPartner : (chatPartner === "SUPPORT" ? "SUPPORT-"+myName : [myName, chatPartner].sort().join("-"));
+        let kanalID = isGroupChat ? "GRUPPE-" + chatPartner : [myName, chatPartner].sort().join("-");
         await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: isGroupChat ? "sendGroupChat" : "sendChat", absender: myName, kanalID: kanalID, nachricht: msg }) });
         input.value = ""; loadChatHistory();
     }
@@ -239,18 +238,14 @@
         if(!chatPartner) return;
         const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_CHAT}&t=${new Date().getTime()}`);
         const text = await res.text();
-        const rows = text.split('\n').slice(1).map(r => r.split(/,(?=(?:non-existent-regex-trick))?/).map(s => s.replace(/"/g,"").trim()));
-        let kanalID = isGroupChat ? "GRUPPE-" + chatPartner : (chatPartner === "SUPPORT" ? "SUPPORT-"+myName : [myName, chatPartner].sort().join("-"));
+        const rows = text.split('\n').slice(1).map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/"/g,"").trim()));
+        let kanalID = isGroupChat ? "GRUPPE-" + chatPartner : [myName, chatPartner].sort().join("-");
         let html = "";
-        rows.forEach(c => { 
-            const rowKanal = c[2] ? c[2].trim() : "";
-            if(rowKanal === kanalID) html += `<div class="msg ${c[1] === myName ? 'msg-own' : 'msg-other'}"><small>${c[1]}</small><br>${c[3]}</div>`; 
-        });
+        rows.forEach(c => { if(c[2] === kanalID) html += `<div class="msg ${c[1] === myName ? 'msg-own' : 'msg-other'}"><small>${c[1]}</small><br>${c[3]}</div>`; });
         document.getElementById("chatHistory").innerHTML = html;
         document.getElementById("chatHistory").scrollTop = 99999;
     }
 
-    function openSupportChat() { document.getElementById('fullChatModal').style.display = 'flex'; switchChatTab('pn'); startChat('SUPPORT', false); }
     window.onload = loadData;
 </script>
 </body>
