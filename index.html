@@ -6,148 +6,156 @@
     <title>Dark Bulls - Allianz System V12.7</title>
     <link href="https://fonts.googleapis.com/css2?family=Almendra:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* FIX: Hintergrund und Grundstruktur */
-        body { margin: 0; padding: 0; font-family: 'Almendra', serif; background: #000; color: white; min-height: 100vh; overflow-x: hidden; }
+        body { margin: 0; padding: 0; font-family: 'Almendra', serif; background: black; color: white; overflow-x: hidden; min-height: 100vh; }
         
-        /* STARTSEITE FIX */
-        #start { display: flex; align-items: center; justify-content: center; height: 100vh; position: relative; background: black; z-index: 1000; }
-        #logo-container img { width: 700px; max-width: 80vw; filter: drop-shadow(0 0 50px red); }
+        /* --- STARTSEITE --- */
+        #start { display: flex; align-items: center; justify-content: center; height: 100vh; position: relative; background: black; z-index: 100; }
+        #logo-container img { width: 780px; max-width: 75vw; filter: drop-shadow(0 0 60px rgba(255, 0, 0, 0.9)); cursor: pointer; }
         
-        /* DASHBOARD FIX: Erzwungene Verteilung */
-        #dashboard { display: none; padding-top: 100px; min-height: 100vh; position: relative; box-sizing: border-box; }
-        #bg-bull { position: fixed; left: 50%; top: 55%; transform: translate(-50%, -50%); width: 750px; opacity: 0.25; pointer-events: none; z-index: 1; }
-        
-        #top-bar { position: fixed; top: 0; left: 0; width: 100%; display: flex; justify-content: flex-end; padding: 20px 40px; background: rgba(0,0,0,0.9); z-index: 2000; border-bottom: 2px solid #333; box-sizing: border-box; }
+        #loginBar { position: absolute; left: 0; top: 35%; transform: translateY(-50%); background: #39d353; padding: 30px 5px; font-size: 20px; font-weight: bold; color: black; cursor: pointer; z-index: 100; border-radius: 0 10px 10px 0; writing-mode: vertical-rl; text-orientation: upright; width: 40px; text-align: center; }
+        #regBar { position: absolute; left: 0; top: 65%; transform: translateY(-50%); background: #ffd600; padding: 25px 5px; font-size: 14px; font-weight: bold; color: black; cursor: pointer; z-index: 100; border-radius: 0 10px 10px 0; writing-mode: vertical-rl; text-orientation: upright; width: 40px; text-align: center; }
 
-        /* PANEL GRID: Verhindert das "alles oben klebt" */
-        .panel-container { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
-            gap: 40px; 
-            padding: 40px; 
-            max-width: 1400px; 
-            margin: 0 auto; 
-            position: relative; 
-            z-index: 10; 
+        /* --- DASHBOARD DESIGN --- */
+        #dashboard { display: none; position: relative; width: 100vw; min-height: 100vh; background: black; }
+        #bg-bull { position: fixed; left: 50%; top: 45%; transform: translate(-50%, -50%); width: 850px; z-index: 1; opacity: 0.4; pointer-events: none; }
+        #top-bar { position: fixed; top: 0; width: 100%; display: flex; justify-content: flex-end; padding: 10px 40px; z-index: 100; background: rgba(0,0,0,0.8); box-sizing: border-box; border-bottom: 1px solid #444; }
+        
+        .panel { opacity: 0; transform: translateY(20px); transition: all 0.6s ease-out; background: rgba(15, 15, 15, 0.95); border: 1px solid #444; padding: 12px; z-index: 10; border-radius: 8px; width: 240px; position: absolute; }
+        .panel.visible { opacity: 1; transform: translateY(0); }
+        .panel h2 { color: #ff3131; margin: 0 0 8px 0; font-size: 20px; text-decoration: underline; text-align: center; }
+        .panel button { display: block; width: 100%; margin: 5px 0; background: #39d353; border: none; padding: 10px; font-family: 'Almendra'; font-weight: bold; cursor: pointer; color: black; border-radius: 4px; }
+
+        /* PANEL POSITIONEN PC */
+        @media (min-width: 801px) {
+            #personal { left: 40px; top: 80px; }
+            #blacklistPanel { left: 40px; top: 320px; }
+            #blacklistAdmin { left: 40px; bottom: 40px; width: 440px; }
+            #admin { right: 40px; top: 120px; width: 260px; }
+            #elo { right: 40px; top: 420px; width: 260px; }
+            #chat-btn { position: fixed; bottom: 40px; right: 40px; width: auto; border-radius: 8px; padding: 20px 60px; font-size: 28px; }
         }
 
-        .panel { background: rgba(20, 20, 20, 0.9); border: 2px solid #444; padding: 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
-        .panel h2 { color: #ff3131; margin-top: 0; text-align: center; border-bottom: 1px solid #444; padding-bottom: 10px; font-size: 24px; }
-        .panel button { display: block; width: 100%; margin: 10px 0; background: #39d353; border: none; padding: 12px; font-family: 'Almendra'; font-weight: bold; cursor: pointer; color: black; border-radius: 5px; font-size: 16px; }
-        .panel button:hover { background: #45f563; transform: scale(1.02); }
-
-        /* CHAT BUTTON */
-        #chat-btn { position: fixed; bottom: 30px; right: 30px; background: #ff8c00; padding: 20px 50px; font-size: 24px; font-weight: bold; cursor: pointer; z-index: 3000; font-family: 'Almendra'; border: none; border-radius: 10px; box-shadow: 0 0 20px rgba(255,140,0,0.4); }
+        #chat-btn { background: #ff8c00; font-weight: bold; cursor: pointer; z-index: 200; font-family: 'Almendra'; color: black; border: none; display: none; }
 
         /* MODALS */
-        .modal-overlay { display: none; position: fixed; z-index: 5000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; }
-        .dark-modal { background: #1a1a1a; padding: 30px; width: 450px; border: 3px solid #333; border-radius: 15px; text-align: center; }
-        .dark-modal input { width: 100%; padding: 12px; margin-bottom: 15px; background: #000; color: #39d353; border: 1px solid #444; font-family: 'Almendra'; font-size: 18px; box-sizing: border-box; }
+        .modal-overlay { display: none; position: fixed; z-index: 5000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); justify-content: center; align-items: center; }
+        .dark-modal { background: #1a1a1a; padding: 25px; width: 450px; max-width: 90vw; border: 3px solid #333; text-align: center; border-radius: 12px; box-shadow: 0 0 50px red; }
+        .dark-modal input { width: 100%; padding: 12px; margin-bottom: 12px; background: #000; color: #39d353; border: 1px solid #444; font-family: 'Almendra'; font-size: 18px; box-sizing: border-box; }
 
-        /* CHAT WINDOW FIX */
-        .chat-window { width: 90vw; height: 85vh; background: #0a0a0a; border: 2px solid #444; display: flex; flex-direction: column; border-radius: 10px; }
-        .chat-tabs { display: flex; background: #1a1a1a; }
-        .chat-tab { flex: 1; padding: 15px; text-align: center; cursor: pointer; color: #888; font-weight: bold; }
+        /* CHAT WINDOW */
+        .chat-window { width: 95vw; height: 90vh; background: #0a0a0a; border: 2px solid #444; display: flex; flex-direction: column; border-radius: 10px; overflow: hidden; }
+        .chat-tabs { display: flex; background: #1a1a1a; border-bottom: 2px solid #333; }
+        .chat-tab { flex: 1; padding: 15px; text-align: center; cursor: pointer; font-weight: bold; color: #888; }
         .chat-tab.active { background: #39d353; color: black; }
         .chat-body { display: flex; flex: 1; overflow: hidden; }
         .chat-sidebar { width: 250px; border-right: 1px solid #333; overflow-y: auto; background: #111; }
-        .chat-main { flex: 1; display: flex; flex-direction: column; }
-        .chat-history { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background: #000; }
-        .msg { padding: 10px; border-radius: 8px; max-width: 70%; font-size: 18px; line-height: 1.4; }
-        .msg-own { align-self: flex-end; background: #1b4d1b; color: #fff; border-right: 4px solid #39d353; }
-        .msg-other { align-self: flex-start; background: #222; color: #fff; border-left: 4px solid #ff3131; }
+        .chat-main { flex: 1; display: flex; flex-direction: column; background: #000; }
+        .chat-history { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+        .chat-input-area { padding: 15px; background: #1a1a1a; display: flex; gap: 10px; }
+        .chat-input-area input { flex: 1; padding: 10px; background: #000; border: 1px solid #444; color: #39d353; font-size: 18px; }
+
+        .msg { padding: 8px 12px; border-radius: 5px; max-width: 80%; font-size: 18px; }
+        .msg-own { align-self: flex-end; background: #1b4d1b; border-right: 4px solid #39d353; }
+        .msg-other { align-self: flex-start; background: #222; border-left: 4px solid #ff3131; }
+        .contact-item { padding: 12px; border-bottom: 1px solid #222; cursor: pointer; }
+
+        /* SPIELER CHECKLISTE */
+        .player-scroll { background: #000; border: 1px solid #444; padding: 10px; max-height: 200px; overflow-y: auto; text-align: left; margin-bottom: 15px; }
+        .player-row { display: flex; align-items: center; gap: 10px; padding: 8px; border-bottom: 1px solid #222; color: #39d353; }
     </style>
 </head>
 <body>
 
 <div id="start">
-    <div id="logo-container" onclick="document.getElementById('pinModal').style.display='flex'">
-        <img src="bulls_start.jpg" style="cursor:pointer">
-        <p style="text-align:center; color:#39d353; font-size:20px;">ZUM EINLOGGEN KLICKEN</p>
-    </div>
+    <div id="loginBar" onclick="document.getElementById('pinModal').style.display='flex'">LOGIN</div>
+    <div id="logo-container"><img src="bulls_start.jpg"></div>
 </div>
 
 <div id="pinModal" class="modal-overlay">
     <div class="dark-modal">
-        <h1 style="color:#ff3131">Bullen Area</h1>
+        <h1 style="color:#ff3131">Login</h1>
         <input type="text" id="nameInput" placeholder="Name...">
         <input type="password" id="pinInput" placeholder="PIN...">
-        <button onclick="doLogin()">ZUTRITT GEWÄHREN</button>
-        <button onclick="document.getElementById('pinModal').style.display='none'" style="background:#444; color:white;">ZURÜCK</button>
+        <button onclick="doLogin()" style="width:100%; background:#39d353; padding:15px; border:none; font-family:'Almendra'; font-weight:bold; cursor:pointer;">ANMELDEN</button>
     </div>
-</div>
-
-<div id="dashboard">
-    <div id="top-bar">
-        <div style="font-size: 20px; color:#ff3131"><span id="userNameDisplay"></span> | <span id="userRoleDisplay"></span></div>
-        <button onclick="location.reload()" style="background:red; border:none; padding:8px 15px; margin-left:20px; border-radius:5px; cursor:pointer; color:white; font-family:'Almendra';">LOGOUT</button>
-    </div>
-    
-    <img src="bulls_dashboard.jpg" id="bg-bull">
-
-    <div class="panel-container">
-        <div class="panel">
-            <h2>Persönlich</h2>
-            <button onclick="alert('In Arbeit...')">Nachrichten</button>
-            <button onclick="alert('In Arbeit...')">Mein Profil</button>
-        </div>
-        
-        <div class="panel">
-            <h2>Kriegskasse</h2>
-            <button>Rohstoffrechner</button>
-            <button>Truppenplaner</button>
-        </div>
-
-        <div class="panel" id="adminArea" style="display:none;">
-            <h2>Management</h2>
-            <button style="background:#ffd600" onclick="openGroupMgmt()">Neue Karte (Discord)</button>
-            <button>User Verwaltung</button>
-        </div>
-
-        <div class="panel">
-            <h2>Blacklist</h2>
-            <button onclick="alert('Liste lädt...')">Blacklist öffnen</button>
-            <button style="background:#ff3131; color:white">Spieler melden</button>
-        </div>
-    </div>
-
-    <button id="chat-btn" onclick="openChat()">ALLIANZ CHAT</button>
 </div>
 
 <div id="groupMgmtModal" class="modal-overlay">
     <div class="dark-modal">
-        <h2 style="color:#ffd600">Discord-Gruppe erstellen</h2>
-        <input type="text" id="newGroupName" placeholder="Karten Name (z.B. Weltbrand 1)">
-        <input type="text" id="newGroupWebhook" placeholder="Discord Webhook Link">
-        <p style="color:#888; font-size:12px;">Spieler werden automatisch aus der Datenbank geladen</p>
-        <button onclick="createNewGroup()">GRUPPE AKTIVIEREN</button>
-        <button onclick="document.getElementById('groupMgmtModal').style.display='none'" style="background:#444; color:white;">ABBRECHEN</button>
+        <h1 style="color:#ffd600">Gruppen Management</h1>
+        <input type="text" id="newGroupName" placeholder="Name der Karte...">
+        <input type="text" id="newGroupWebhook" placeholder="Discord Webhook...">
+        <div class="player-scroll" id="playerSelectList">
+            <div class="player-row"><input type="checkbox" id="chk-alle"> <b>ALLE SPIELER</b></div>
+        </div>
+        <button onclick="createNewGroup()" style="width:100%; background:#39d353; padding:12px; border:none; font-family:'Almendra'; font-weight:bold; cursor:pointer;">KARTE SPEICHERN</button>
+        <button onclick="document.getElementById('groupMgmtModal').style.display='none'" style="width:100%; background:red; padding:12px; border:none; margin-top:10px; font-family:'Almendra'; font-weight:bold; cursor:pointer;">ABBRECHEN</button>
     </div>
 </div>
 
 <div id="fullChatModal" class="modal-overlay">
     <div class="chat-window">
         <div class="chat-tabs">
-            <div class="chat-tab active" id="tab-mitglieder" onclick="switchChatTab('mitglieder')">SPIELER</div>
-            <div class="chat-tab" id="tab-gruppen" onclick="switchChatTab('gruppen')">GRUPPEN (DC)</div>
+            <div class="chat-tab active" id="tab-mitglieder" onclick="switchChatTab('mitglieder')">MITGLIEDER</div>
+            <div class="chat-tab" id="tab-pn" onclick="switchChatTab('pn')">NACHRICHTEN</div>
+            <div class="chat-tab" id="tab-gruppen" onclick="switchChatTab('gruppen')">GRUPPEN</div>
             <div class="chat-tab" style="background:red; color:white; flex:0.2" onclick="document.getElementById('fullChatModal').style.display='none'">X</div>
         </div>
         <div class="chat-body">
             <div class="chat-sidebar" id="chatSidebar"></div>
             <div class="chat-main">
-                <div id="chatHeader" style="padding:15px; background:#222; color:#39d353; font-weight:bold; border-bottom:1px solid #444;">Wähle einen Kanal...</div>
+                <div id="chatHeader" style="padding:10px; background:#222; color:#39d353; font-weight:bold;">Kanal wählen...</div>
                 <div class="chat-history" id="chatHistory"></div>
-                <div style="padding:15px; background:#1a1a1a; display:flex; gap:10px;">
-                    <input type="text" id="chatInput" style="flex:1; padding:12px; background:#000; border:1px solid #444; color:#39d353; font-size:18px;" placeholder="Deine Nachricht...">
-                    <button onclick="sendChatMessage()" style="background:#39d353; padding:10px 25px; border:none; font-family:'Almendra'; font-weight:bold; cursor:pointer;">SENDEN</button>
+                <div class="chat-input-area">
+                    <input type="text" id="chatInput" placeholder="Nachricht...">
+                    <button onclick="sendChatMessage()" style="background:#39d353; padding:10px 20px; border:none; font-family:'Almendra'; font-weight:bold; cursor:pointer;">SENDEN</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+<div id="dashboard">
+    <div id="top-bar">
+        <div style="font-size: 18px; color:#ff3131"><span id="userNameDisplay"></span> | <span id="userRoleDisplay"></span></div>
+        <button onclick="location.reload()" style="background:red; border:none; padding:8px 15px; margin-left:20px; border-radius:5px; cursor:pointer; color:white;">LOGOUT</button>
+    </div>
+    <img src="bulls_dashboard.jpg" id="bg-bull">
+
+    <div class="panel" id="personal">
+        <h2>Persönlich</h2>
+        <button onclick="alert('Support folgt...')">Support Chat</button>
+        <button onclick="alert('Pin folgt...')">Pin ändern</button>
+    </div>
+
+    <div class="panel" id="blacklistPanel">
+        <h2>Black Liste</h2>
+        <button onclick="alert('In Arbeit...')">Anschauen</button>
+        <button onclick="alert('In Arbeit...')">Spieler Melden</button>
+    </div>
+
+    <div class="panel" id="blacklistAdmin">
+        <h2>Pflege Admin</h2>
+        <button id="btn-mgmt" style="background:#ffd600; display:none;" onclick="openGroupMgmt()">Gruppen Management</button>
+        <button>Spieler eintragen</button>
+        <button>Volle Ansicht</button>
+    </div>
+
+    <div class="panel" id="admin">
+        <h2>Admin</h2>
+        <button>User Verwaltung</button>
+    </div>
+
+    <div class="panel" id="elo">
+        <h2>Elo Bereich</h2>
+        <button>Rohstoffrechner</button>
+    </div>
+
+    <button id="chat-btn" onclick="document.getElementById('fullChatModal').style.display='flex'">ALLIANZ CHAT</button>
+</div>
+
 <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxPOYJ1gg_7LFPZBXfX2sRf-xFVZZCgjsv-6ECMXD5S74PqbBxGyFQNCEDrDzD0bQlb/exec'; 
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxds0mEtSLiXLP3YibzD8Dd2VYcXo_xs_5pZgRGK23EW9DjKHq4dfpoLZeqUDRF2RS6_A/exec'; 
     const SHEET_ID = '1Gjnhol0ou63xW20OnbTo_wugzpOTgBP2yjnx3Qzg4bQ';
     const GID_USERS = '1188820112'; const GID_CHAT = '274206006'; const GID_STEER = '717972533';
 
@@ -155,70 +163,78 @@
     let activeGroups = [];
 
     async function loadData() {
-        try {
-            const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_USERS}&t=${new Date().getTime()}`);
-            const text = await res.text();
-            users = text.split('\n').slice(1).map(r => {
-                const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-                return { name: c[0].replace(/"/g,""), role: c[3].replace(/"/g,""), pin: c[2].replace(/"/g,"") };
-            });
+        const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_USERS}&t=${new Date().getTime()}`);
+        const text = await res.text();
+        users = text.split('\n').slice(1).map(r => {
+            const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+            return { name: c[0].replace(/"/g,""), role: c[3].replace(/"/g,""), pin: c[2].replace(/"/g,"") };
+        });
 
-            const resG = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_STEER}&t=${new Date().getTime()}`);
-            const textG = await resG.text();
-            activeGroups = textG.split('\n').slice(1).map(r => {
-                const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/"/g,"").trim());
-                return { name: c[0], webhook: c[1], status: c[2], allowed: c[3] || "" };
-            }).filter(g => g.status === "aktiv");
-        } catch(e) { console.error("Fehler beim Laden:", e); }
+        const resG = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_STEER}&t=${new Date().getTime()}`);
+        const textG = await resG.text();
+        activeGroups = textG.split('\n').slice(1).map(r => {
+            const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/"/g,"").trim());
+            return { name: c[0], webhook: c[1], status: c[2], allowed: c[3] || "" };
+        }).filter(g => g.status === "aktiv");
+        
+        if(myName) switchChatTab(document.querySelector('.chat-tab.active').id.replace('tab-',''));
     }
 
     function doLogin() {
         const nInput = document.getElementById("nameInput").value.trim();
         const pInput = document.getElementById("pinInput").value.trim();
         const u = users.find(x => x.name.toLowerCase() === nInput.toLowerCase() && x.pin === pInput);
-        
         if (u) {
             myName = u.name; myRole = u.role;
-            document.getElementById("start").style.display = "none";
             document.getElementById("pinModal").style.display = "none";
+            document.getElementById("start").style.display = "none";
             document.getElementById("dashboard").style.display = "block";
             document.getElementById("userNameDisplay").innerText = u.name;
             document.getElementById("userRoleDisplay").innerText = u.role;
-            if(myRole === "Admin" || myRole === "Ausbilder") document.getElementById("adminArea").style.display = "block";
-            setInterval(loadChatHistory, 4000);
-        } else { alert("Zutritt verweigert! Name oder PIN falsch."); }
+            if(myRole === "Admin" || myRole === "Ausbilder") document.getElementById("btn-mgmt").style.display = "block";
+            document.getElementById("chat-btn").style.display = "block";
+            setInterval(loadChatHistory, 5000); setInterval(loadData, 15000);
+            setTimeout(() => { document.querySelectorAll('.panel').forEach(p => p.classList.add('visible')); }, 500);
+        } else { alert("Login falsch!"); }
     }
 
-    function openChat() { document.getElementById('fullChatModal').style.display='flex'; switchChatTab('mitglieder'); }
+    function openGroupMgmt() {
+        const list = document.getElementById("playerSelectList");
+        list.innerHTML = `<div class="player-row"><input type="checkbox" id="chk-alle"> <b>ALLE SPIELER</b></div>`;
+        users.forEach(u => { list.innerHTML += `<div class="player-row"><input type="checkbox" class="user-chk" value="${u.name}"> ${u.name}</div>`; });
+        document.getElementById("groupMgmtModal").style.display = "flex";
+    }
+
+    async function createNewGroup() {
+        const name = document.getElementById("newGroupName").value.trim();
+        const hook = document.getElementById("newGroupWebhook").value.trim();
+        let selected = document.getElementById("chk-alle").checked ? ["ALLE"] : [];
+        if(selected.length === 0) document.querySelectorAll(".user-chk:checked").forEach(c => selected.push(c.value));
+        if(!name || !hook || selected.length === 0) return alert("Fehler: Bitte alles ausfüllen!");
+        await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "createGroup", groupName: name, webhook: hook, allowedUsers: selected.join(",") }) });
+        alert("Gruppe wurde in Tabelle gespeichert!"); location.reload();
+    }
 
     function switchChatTab(tab) {
         document.querySelectorAll('.chat-tab').forEach(t => t.classList.remove('active'));
         document.getElementById('tab-' + tab).classList.add('active');
-        const sidebar = document.getElementById("chatSidebar");
-        sidebar.innerHTML = "";
-        
+        const sidebar = document.getElementById("chatSidebar"); sidebar.innerHTML = "";
         if(tab === 'mitglieder') {
-            users.forEach(u => { if(u.name !== myName) sidebar.innerHTML += `<div style="padding:15px; border-bottom:1px solid #222; cursor:pointer;" onclick="startChat('${u.name}', false)">👤 ${u.name}</div>`; });
-        } else {
-            activeGroups.forEach(g => { sidebar.innerHTML += `<div style="padding:15px; border-bottom:1px solid #222; cursor:pointer;" onclick="startChat('${g.name}', true)">📢 ${g.name}</div>`; });
+            users.forEach(u => { if(u.name !== myName) sidebar.innerHTML += `<div class="contact-item" onclick="startChat('${u.name}', false)">${u.name}</div>`; });
+        } else if(tab === 'gruppen') {
+            activeGroups.forEach(g => {
+                if(g.allowed === "ALLE" || g.allowed.includes(myName) || myRole === "Admin") 
+                    sidebar.innerHTML += `<div class="contact-item" onclick="startChat('${g.name}', true)">📢 ${g.name}</div>`;
+            });
         }
     }
 
-    function startChat(partner, isGrp) { chatPartner = partner; isGroupChat = isGrp; document.getElementById("chatHeader").innerText = "Chat mit: " + partner; loadChatHistory(); }
+    function startChat(partner, isGrp) { chatPartner = partner; isGroupChat = isGrp; document.getElementById("chatHeader").innerText = partner; loadChatHistory(); }
 
     async function sendChatMessage() {
-        const input = document.getElementById("chatInput"); const msg = input.value.trim(); if(!msg || !chatPartner) return;
+        const input = document.getElementById("chatInput"); const msg = input.value.trim(); if(!msg) return;
         let kanalID = isGroupChat ? "GRUPPE-" + chatPartner : [myName, chatPartner].sort().join("-");
-        
-        await fetch(SCRIPT_URL, { 
-            method: "POST", 
-            body: JSON.stringify({ 
-                action: isGroupChat ? "sendGroupChat" : "sendChat", 
-                absender: myName, 
-                kanalID: kanalID, 
-                nachricht: msg 
-            }) 
-        });
+        await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: isGroupChat ? "sendGroupChat" : "sendChat", absender: myName, kanalID: kanalID, nachricht: msg }) });
         input.value = ""; loadChatHistory();
     }
 
@@ -228,20 +244,10 @@
         const text = await res.text();
         const rows = text.split('\n').slice(1).map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/"/g,"").trim()));
         let kanalID = isGroupChat ? "GRUPPE-" + chatPartner : [myName, chatPartner].sort().join("-");
-        
         let html = "";
         rows.forEach(c => { if(c[2] === kanalID) html += `<div class="msg ${c[1] === myName ? 'msg-own' : 'msg-other'}"><small>${c[1]}</small><br>${c[3]}</div>`; });
         document.getElementById("chatHistory").innerHTML = html;
         document.getElementById("chatHistory").scrollTop = 99999;
-    }
-
-    function openGroupMgmt() { document.getElementById("groupMgmtModal").style.display = "flex"; }
-    async function createNewGroup() {
-        const name = document.getElementById("newGroupName").value.trim();
-        const hook = document.getElementById("newGroupWebhook").value.trim();
-        if(!name || !hook) return alert("Bitte Name und Webhook ausfüllen!");
-        await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "createGroup", groupName: name, webhook: hook, allowedUsers: "ALLE" }) });
-        alert("Gruppe erstellt! Lade Dashboard neu..."); location.reload();
     }
 
     window.onload = loadData;
