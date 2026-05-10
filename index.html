@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dark Bulls - Allianz System V12.8</title>
+    <title>Dark Bulls - Allianz System V12.9</title>
     <link href="https://fonts.googleapis.com/css2?family=Almendra:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body { margin: 0; padding: 0; font-family: 'Almendra', serif; background: black; color: white; overflow-x: hidden; min-height: 100vh; }
@@ -17,7 +17,6 @@
         #bg-bull { position: fixed; left: 50%; top: 45%; transform: translate(-50%, -50%); width: 850px; z-index: 1; opacity: 0.4; pointer-events: none; }
         #top-bar { position: fixed; top: 0; width: 100%; display: flex; justify-content: flex-end; padding: 10px 40px; z-index: 100; background: rgba(0,0,0,0.8); box-sizing: border-box; border-bottom: 1px solid #444; }
         
-        /* FIX: Die Boxen bleiben an ihrem Platz */
         .panel { opacity: 0; transform: translateY(20px); transition: all 0.6s ease-out; background: rgba(15, 15, 15, 0.95); border: 1px solid #444; padding: 12px; z-index: 10; border-radius: 8px; width: 240px; position: absolute; }
         .panel.visible { opacity: 1; transform: translateY(0); }
         .panel h2 { color: #ff3131; margin: 0 0 8px 0; font-size: 20px; text-decoration: underline; text-align: center; }
@@ -34,12 +33,10 @@
 
         #chat-btn { background: #ff8c00; font-weight: bold; cursor: pointer; z-index: 200; font-family: 'Almendra'; color: black; border: none; display: none; }
 
-        /* MODALS */
         .modal-overlay { display: none; position: fixed; z-index: 5000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); justify-content: center; align-items: center; }
         .dark-modal { background: #1a1a1a; padding: 25px; width: 450px; max-width: 90vw; border: 3px solid #333; text-align: center; border-radius: 12px; box-shadow: 0 0 50px red; }
         .dark-modal input { width: 100%; padding: 12px; margin-bottom: 12px; background: #000; color: #39d353; border: 1px solid #444; font-family: 'Almendra'; font-size: 18px; box-sizing: border-box; }
 
-        /* CHAT WINDOW */
         .chat-window { width: 95vw; height: 90vh; background: #0a0a0a; border: 2px solid #444; display: flex; flex-direction: column; border-radius: 10px; overflow: hidden; }
         .chat-tabs { display: flex; background: #1a1a1a; border-bottom: 2px solid #333; }
         .chat-tab { flex: 1; padding: 15px; text-align: center; cursor: pointer; font-weight: bold; color: #888; }
@@ -79,7 +76,7 @@
 <div id="groupMgmtModal" class="modal-overlay">
     <div class="dark-modal">
         <h1 style="color:#ffd600">Gruppen Management</h1>
-        <input type="text" id="newGroupName" placeholder="Name der Karte (KEINE SONDERZEICHEN)...">
+        <input type="text" id="newGroupName" placeholder="Name der Karte...">
         <input type="text" id="newGroupWebhook" placeholder="Discord Webhook...">
         <div class="player-scroll" id="playerSelectList">
             <div class="player-row"><input type="checkbox" id="chk-alle"> <b>ALLE SPIELER</b></div>
@@ -151,7 +148,7 @@
 </div>
 
 <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwC9yiJyPwwS3fJuXmlIW434vGHhE0H1AZNAMLY1wa8am3d6Oqr8XP-8E_-3HoqhOIg0A/exec'; 
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzRkLBK5JNBvlLo4Kt8sHolq1_Xgy6-pyHlJEvkwIdmQInoSRS5E1ZmEGApRyfY4pjpYg/exec'; 
     const SHEET_ID = '1Gjnhol0ou63xW20OnbTo_wugzpOTgBP2yjnx3Qzg4bQ';
     const GID_USERS = '1188820112'; const GID_CHAT = '274206006'; const GID_STEER = '717972533';
 
@@ -239,9 +236,19 @@
         const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_CHAT}&t=${new Date().getTime()}`);
         const text = await res.text();
         const rows = text.split('\n').slice(1).map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/"/g,"").trim()));
-        let kanalID = isGroupChat ? "GRUPPE-" + chatPartner : [myName, chatPartner].sort().join("-");
+        
+        // INTERNER ABGLEICH: Wir machen IDs beim Laden "sauber"
+        let currentKanalClean = (isGroupChat ? "GRUPPE-" + chatPartner : [myName, chatPartner].sort().join("-")).toLowerCase().replace(/[^a-z0-9]/g, "");
+        
         let html = "";
-        rows.forEach(c => { if(c[2] === kanalID) html += `<div class="msg ${c[1] === myName ? 'msg-own' : 'msg-other'}"><small>${c[1]}</small><br>${c[3]}</div>`; });
+        rows.forEach(c => { 
+            if(c[2]) {
+                let rowKanalClean = c[2].toLowerCase().replace(/[^a-z0-9]/g, "");
+                if(rowKanalClean === currentKanalClean) {
+                    html += `<div class="msg ${c[1] === myName ? 'msg-own' : 'msg-other'}"><small>${c[1]}</small><br>${c[3]}</div>`; 
+                }
+            }
+        });
         document.getElementById("chatHistory").innerHTML = html;
         document.getElementById("chatHistory").scrollTop = 99999;
     }
