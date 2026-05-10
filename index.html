@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dark Bulls - Allianz System V14.5</title>
+    <title>Dark Bulls - Allianz System V14.6</title>
+
     <link rel="icon" type="image/png" href="192x192icon.png">
     <link rel="apple-touch-icon" href="192x192icon.png">
     <link rel="manifest" href="manifest.json">
@@ -11,7 +12,7 @@
     <style>
         body { margin: 0; padding: 0; font-family: 'Almendra', serif; background: black; color: white; overflow-x: hidden; min-height: 100vh; }
         
-        /* --- DESIGN PANZER (DEIN ORIGINAL) --- */
+        /* --- DESIGN PANZER (V13.8 STABIL) --- */
         #start { display: flex; align-items: center; justify-content: center; height: 100vh; position: relative; background: black; z-index: 10; }
         #logo-container img { width: 780px; max-width: 75vw; filter: drop-shadow(0 0 60px rgba(255, 0, 0, 0.9)); }
         #loginBar { position: absolute; left: 0; top: 35%; transform: translateY(-50%); background: #39d353; padding: 30px 5px; font-size: 20px; font-weight: bold; color: black; cursor: pointer; z-index: 100; border-radius: 0 10px 10px 0; writing-mode: vertical-rl; text-orientation: upright; width: 40px; text-align: center; }
@@ -59,11 +60,8 @@
         th { background: #222; color: #ff3131; padding: 12px; border: 1px solid #333; position: sticky; top: 0; }
         td { padding: 10px; border: 1px solid #222; text-align: center; }
 
-        /* HAKEN LISTE IM MGMT */
         .player-scroll { background: #000; border: 1px solid #444; padding: 5px; max-height: 200px; overflow-y: auto; text-align: left; margin-bottom: 15px; border-radius: 4px; }
         .player-row { display: flex; align-items: center; gap: 12px; padding: 10px; border-bottom: 1px solid #222; color: #39d353; cursor: pointer; }
-        .player-row:hover { background: #111; }
-        .player-row input { width: 18px; height: 18px; accent-color: #39d353; }
     </style>
 </head>
 <body>
@@ -91,35 +89,6 @@
     </div>
 </div>
 
-<div id="reportModal" class="modal-overlay">
-    <div class="bl-box">
-        <h1 style="color:#ff8c00; text-align:center; margin-top:0;">SPIELER MELDEN (GEGENLISTE)</h1>
-        <div class="bl-grid">
-            <div>
-                <p>Spieler ID <input type="text" id="repID"></p>
-                <p>Allianz <input type="text" id="repAlly"></p>
-                <p>Verstoß <select id="repReason"><option value="Verrat">Verrat</option><option value="Spionage">Spionage</option><option value="Beleidigung">Beleidigung</option></select></p>
-            </div>
-            <div>
-                <p>Spielername <input type="text" id="repName"></p>
-                <p>Punktestand <input type="number" id="repPunkte"></p>
-                <p>Meistgesp. Map <input type="text" id="repMap"></p>
-            </div>
-            <div>
-                <p>Datum Event <input type="date" id="repDate"></p>
-                <p>Beweis vorh.? <select id="repBeweis"><option value="Ja">Ja</option><option value="Nein">Nein</option></select></p>
-                <p>Beweis Link <input type="text" id="repLink"></p>
-            </div>
-        </div>
-        <p style="color:#ffbd00; font-weight:bold; margin-top:10px;">Beschreibung / Story:</p>
-        <textarea id="repStory" class="story-box" placeholder="Was ist passiert?"></textarea>
-        <div style="display:flex; gap:10px; margin-top:15px;">
-            <button class="logbtn" style="flex:1; background:#39d353" onclick="submitReport()">Absenden</button>
-            <button class="logbtn" style="flex:1; background:red; color:white" onclick="document.getElementById('reportModal').style.display='none'">Abbrechen</button>
-        </div>
-    </div>
-</div>
-
 <div id="dashboard">
     <div id="top-bar">
         <div style="font-size: 18px; color:#ff3131"><span id="userNameDisplay"></span> | <span id="userRoleDisplay"></span></div>
@@ -129,8 +98,8 @@
 
     <div class="panel" id="personal">
         <h2>Persönlich</h2>
-        <button onclick="openSupportChat()">Support Chat</button>
-        <button onclick="alert('Folgt')">Pin ändern</button>
+        <button onclick="alert('Support folgt')">Support Chat</button>
+        <button onclick="alert('Pin ändern folgt')">Pin ändern</button>
     </div>
 
     <div class="panel" id="blacklistPanel">
@@ -169,7 +138,7 @@
         <div style="display:flex; gap:10px; margin-bottom:20px;">
             <input list="playerList" id="blSearchInput" placeholder="Spieler suchen...">
             <datalist id="playerList"></datalist>
-            <button onclick="loadBlacklistPlayer()" style="background:#39d353; color:black; padding:10px; border:none; font-family:'Almendra'; font-weight:bold; cursor:pointer;">LADEN</button>
+            <button onclick="loadBlacklistPlayer()" style="background:#39d353; color:black; padding:10px; border:none; font-family:'Almendra'; font-weight:bold;">LADEN</button>
         </div>
         <div class="bl-grid">
             <div><p>ID <span><b id="outID"></b></span></p><p>Allianz <span><b id="outAllianz"></b></span></p><p>Verstoß <span><b id="outVerstoss"></b></span></p></div>
@@ -177,7 +146,36 @@
             <div><p>Datum <span><b id="outDate"></b></span></p><p>Melder <span><b id="outMelder"></b></span></p><p>Beweis <span><b id="outBeweis"></b></span></p></div>
         </div>
         <div class="story-box" id="outStory"></div>
-        <button onclick="document.getElementById('blacklistModal').style.display='none'" style="width:100%; background:red; margin-top:20px; padding:15px; border:none; font-family:'Almendra'; font-weight:bold; cursor:pointer;">ZURÜCK</button>
+        <button onclick="document.getElementById('blacklistModal').style.display='none'" style="width:100%; background:red; margin-top:20px; padding:15px; border:none; font-family:'Almendra'; font-weight:bold;">ZURÜCK</button>
+    </div>
+</div>
+
+<div id="reportModal" class="modal-overlay">
+    <div class="bl-box">
+        <h1 style="color:#ff8c00; text-align:center; margin-top:0;">SPIELER MELDEN (GEGENLISTE)</h1>
+        <div class="bl-grid">
+            <div>
+                <p>Spieler ID <input type="text" id="repID"></p>
+                <p>Allianz <input type="text" id="repAlly"></p>
+                <p>Verstoß <select id="repReason"><option value="Verrat">Verrat</option><option value="Spionage">Spionage</option><option value="Beleidigung">Beleidigung</option></select></p>
+            </div>
+            <div>
+                <p>Spielername <input type="text" id="repName"></p>
+                <p>Punktestand <input type="number" id="repPunkte"></p>
+                <p>Map <input type="text" id="repMap"></p>
+            </div>
+            <div>
+                <p>Datum <input type="date" id="repDate"></p>
+                <p>Beweis? <select id="repBeweis"><option value="Ja">Ja</option><option value="Nein">Nein</option></select></p>
+                <p>Beweis Link <input type="text" id="repLink"></p>
+            </div>
+        </div>
+        <p style="color:#ffbd00; font-weight:bold; margin-top:10px;">Beschreibung:</p>
+        <textarea id="repStory" class="story-box" placeholder="Was ist passiert?"></textarea>
+        <div style="display:flex; gap:10px; margin-top:15px;">
+            <button class="logbtn" style="flex:1; background:#39d353" onclick="submitReport()">Absenden</button>
+            <button class="logbtn" style="flex:1; background:red; color:white" onclick="document.getElementById('reportModal').style.display='none'">Abbruch</button>
+        </div>
     </div>
 </div>
 
@@ -225,7 +223,7 @@
             document.getElementById("userNameDisplay").innerText = myName;
             document.getElementById("userRoleDisplay").innerText = myRole;
             document.getElementById("chat-btn").style.display = "block";
-            if(myRole === "Admin" || myRole === "Ausbilder" || myRole === "Offizier") document.getElementById("btn-mgmt").style.display = "block";
+            if(myRole === "Admin" || myRole === "Ausbilder") document.getElementById("btn-mgmt").style.display = "block";
             if(myRole === "Admin" || myRole === "Buchhalter") document.getElementById("btn-gemeldet").style.display = "block";
             setTimeout(() => { document.querySelectorAll('.panel').forEach(p => p.classList.add('visible')); }, 300);
         } else { alert("Login falsch!"); }
@@ -259,19 +257,7 @@
     }
 
     async function submitReport() {
-        const data = {
-            action: "reportPlayer",
-            id: document.getElementById('repID').value,
-            name: document.getElementById('repName').value,
-            ally: document.getElementById('repAlly').value,
-            points: document.getElementById('repPunkte').value,
-            reason: document.getElementById('repReason').value,
-            map: document.getElementById('repMap').value,
-            date: document.getElementById('repDate').value,
-            proof: document.getElementById('repLink').value,
-            story: document.getElementById('repStory').value,
-            reporter: myName
-        };
+        const data = { action: "reportPlayer", id: document.getElementById('repID').value, name: document.getElementById('repName').value, ally: document.getElementById('repAlly').value, points: document.getElementById('repPunkte').value, reason: document.getElementById('repReason').value, map: document.getElementById('repMap').value, date: document.getElementById('repDate').value, proof: document.getElementById('repLink').value, story: document.getElementById('repStory').value, reporter: myName };
         await fetch(SCRIPT_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(data) });
         alert("Meldung gesendet!"); document.getElementById('reportModal').style.display = 'none';
     }
