@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dark Bulls - Allianz System V13.8 - Gast Fix</title>
+    <title>Dark Bulls - Allianz System V13.8 - Gast Fix Final</title>
 
     <link rel="icon" type="image/png" href="192x192icon.png">
     <link rel="apple-touch-icon" href="192x192icon.png">
@@ -32,7 +32,6 @@
         #bg-bull { position: fixed; left: 50%; top: 45%; transform: translate(-50%, -50%); width: 850px; z-index: 1; opacity: 0.4; pointer-events: none; }
         #top-bar { position: fixed; top: 0; width: 100%; display: flex; justify-content: flex-end; padding: 10px 40px; z-index: 100; background: rgba(0,0,0,0.8); height: 60px; align-items: center; box-sizing: border-box; }
         
-        /* Panels standardmäßig AUS */
         .panel { display: none; opacity: 0; transform: translateY(20px); transition: all 0.6s ease-out; background: rgba(15, 15, 15, 0.95); border: 1px solid #444; padding: 12px; z-index: 10; border-radius: 8px; width: 240px; box-sizing: border-box; position: absolute; }
         .panel.visible { opacity: 1; transform: translateY(0); }
         .panel h2 { color: #ff3131; margin: 0 0 8px 0; font-size: 20px; text-decoration: underline; text-align: center; }
@@ -72,7 +71,10 @@
         <h1 style="color:#ff3131">Anmeldung</h1>
         <input type="text" id="nameInput" placeholder="Name...">
         <input type="password" id="pinInput" placeholder="PIN...">
-        <button class="logbtn" style="width:100%; background:#39d353" onclick="doLogin()">Anmelden</button>
+        <div style="display:flex; gap:10px;">
+            <button class="logbtn" style="flex:1; background:#39d353" onclick="doLogin()">Anmelden</button>
+            <button class="logbtn" style="flex:1; background:#d50000; color:white" onclick="document.getElementById('pinModal').style.display='none'">Abbruch</button>
+        </div>
     </div>
 </div>
 
@@ -85,8 +87,8 @@
 
     <div class="panel" id="personal">
         <h2>Persönlich</h2>
-        <button onclick="alert('Support folgt')">Support Chat</button>
-        <button onclick="alert('In Arbeit')">Pin ändern</button>
+        <button onclick="alert('Support Chat folgt')">Support Chat</button>
+        <button onclick="alert('Pin ändern folgt')">Pin ändern</button>
     </div>
 
     <div class="panel" id="blacklistPanel">
@@ -108,7 +110,7 @@
 <div id="blacklistModal" class="modal-overlay">
     <div class="bl-box">
         <h1 style="color:#ff3131; text-align:center;">DARK BULLS BLACK LISTE</h1>
-        <input list="playerList" id="blSearchInput" placeholder="Spieler wählen..." style="width:100%; padding:12px; background:black; color:#39d353; border:1px solid #444;">
+        <input list="playerList" id="blSearchInput" placeholder="Spieler suchen..." style="width:100%; padding:12px; background:black; color:#39d353; border:1px solid #444;">
         <datalist id="playerList"></datalist>
         <button class="logbtn" style="width:100%; background:#39d353; margin-top:10px;" onclick="loadBlacklistPlayer()">LADEN</button>
         <div class="bl-grid" style="margin-top:20px;">
@@ -147,23 +149,32 @@
             document.getElementById("userNameDisplay").innerText = u.name;
             document.getElementById("userRoleDisplay").innerText = u.role;
             
-            // HARTER RECHTE-CHECK
-            const panels = ["personal", "blacklistPanel", "blacklistAdmin", "admin", "elo"];
-            panels.forEach(id => {
-                const el = document.getElementById(id);
-                if (u.role === "Gast") {
-                    // Gast darf NUR personal sehen
-                    if (id === "personal") { el.style.display = "block"; setTimeout(() => el.classList.add('visible'), 100); }
-                    else { el.style.display = "none"; }
-                } else if (u.role === "Admin") {
-                    // Admin sieht ALLES
-                    el.style.display = "block"; setTimeout(() => el.classList.add('visible'), 100);
-                } else {
-                    // Normales Mitglied sieht Admin-Sachen nicht
-                    if (id === "admin" || id === "blacklistAdmin") { el.style.display = "none"; }
-                    else { el.style.display = "block"; setTimeout(() => el.classList.add('visible'), 100); }
-                }
-            });
+            // PANEL STEUERUNG (NEU & SICHER)
+            const pPers = document.getElementById("personal");
+            const pBlack = document.getElementById("blacklistPanel");
+            const pAdmin = document.getElementById("admin");
+            const pPflege = document.getElementById("blacklistAdmin");
+            const pElo = document.getElementById("elo");
+
+            // Überall display none erzwingen
+            [pPers, pBlack, pAdmin, pPflege, pElo].forEach(p => p.style.display = "none");
+
+            // Freigabe nach Rolle
+            if (u.role === "Gast") {
+                pPers.style.display = "block";
+                setTimeout(() => pPers.classList.add('visible'), 100);
+            } else if (u.role === "Admin") {
+                [pPers, pBlack, pAdmin, pPflege, pElo].forEach((p, i) => {
+                    p.style.display = "block";
+                    setTimeout(() => p.classList.add('visible'), i * 150);
+                });
+            } else {
+                // Normales Mitglied
+                [pPers, pBlack, pElo].forEach((p, i) => {
+                    p.style.display = "block";
+                    setTimeout(() => p.classList.add('visible'), i * 150);
+                });
+            }
             document.getElementById("chat-btn").style.display = "block";
         } else { alert("Login falsch!"); }
     }
