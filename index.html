@@ -3,30 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dark Bulls - Allianz System V14.2</title>
+    <title>Dark Bulls - Allianz System V14.5</title>
     <link href="https://fonts.googleapis.com/css2?family=Almendra:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body { margin: 0; padding: 0; font-family: 'Almendra', serif; background: black; color: white; overflow-x: hidden; min-height: 100vh; }
         
-        /* --- STARTSEITE --- */
-        #start { display: flex; align-items: center; justify-content: center; height: 100vh; position: relative; background: black; z-index: 10; }
-        #logo-container img { width: 750px; max-width: 75vw; filter: drop-shadow(0 0 60px rgba(255, 0, 0, 0.9)); }
-        #loginBar { position: absolute; left: 0; top: 35%; transform: translateY(-50%); background: #39d353; padding: 30px 5px; font-size: 20px; font-weight: bold; color: black; cursor: pointer; z-index: 100; border-radius: 0 10px 10px 0; writing-mode: vertical-rl; text-orientation: upright; width: 40px; text-align: center; }
-
-        /* --- DASHBOARD LOGIK --- */
+        /* --- DASHBOARD & HINTERGRUND --- */
         #dashboard { display: none; position: relative; width: 100vw; min-height: 100vh; background: black; }
-        
-        /* FIX: Bildgröße begrenzt */
         #bg-bull { position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 700px; max-width: 80vw; z-index: 1; opacity: 0.4; pointer-events: none; }
-        
         #top-bar { position: fixed; top: 0; width: 100%; display: flex; justify-content: flex-end; padding: 10px 40px; z-index: 100; background: rgba(0,0,0,0.8); height: 60px; align-items: center; box-sizing: border-box; border-bottom: 1px solid #333; }
         
+        /* --- PANELS POSITIONEN --- */
         .panel { opacity: 0; transform: translateY(20px); transition: all 0.6s ease-out; background: rgba(15, 15, 15, 0.95); border: 1px solid #444; padding: 12px; z-index: 10; border-radius: 8px; width: 240px; position: absolute; box-sizing: border-box; }
         .panel.visible { opacity: 1; transform: translateY(0); }
         .panel h2 { color: #ff3131; margin: 0 0 8px 0; font-size: 20px; text-decoration: underline; text-align: center; }
         .panel button { display: block; width: 100%; margin: 5px 0; background: #39d353; border: none; padding: 10px; font-family: 'Almendra'; font-weight: bold; cursor: pointer; color: black; border-radius: 4px; }
 
-        /* POSITIONEN DER BOXEN */
         @media (min-width: 801px) {
             #personal { left: 40px; top: 80px; }
             #blacklistPanel { left: 40px; top: 320px; }
@@ -35,43 +27,23 @@
             #elo { right: 40px; top: 420px; width: 260px; }
         }
 
+        /* --- CHAT BUTTON --- */
+        #chat-btn { position: fixed; bottom: 30px; right: 40px; padding: 15px 40px; background: #ff8c00; color: black; font-family: 'Almendra'; font-weight: bold; font-size: 24px; border: none; border-radius: 8px; cursor: pointer; z-index: 100; display: none; }
+
         /* --- MODALS --- */
         .modal-overlay { display: none; position: fixed; z-index: 5000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); justify-content: center; align-items: center; }
-        .dark-modal { background: #1a1a1a; padding: 25px; width: 450px; max-width: 90vw; border: 3px solid #333; text-align: center; border-radius: 12px; box-shadow: 0 0 50px red; }
-        .dark-modal input, .dark-modal select, .dark-modal textarea { width: 100%; padding: 10px; margin-bottom: 10px; background: #000; color: #39d353; border: 1px solid #444; font-family: 'Almendra'; font-size: 16px; box-sizing: border-box; outline: none; }
-
-        /* BLACKLIST DETAIL & MELDEN GRID */
-        .bl-box { width: 95%; max-width: 1100px; background: #111; border: 2px solid #333; padding: 25px; border-radius: 10px; position: relative; }
+        .bl-box { width: 95%; max-width: 1100px; background: #111; border: 2px solid #333; padding: 25px; border-radius: 10px; }
         .bl-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; text-align: left; }
-        .bl-grid p { margin: 5px 0; font-size: 18px; font-weight: bold; color: white; border-bottom: 1px solid #222; }
-        .bl-grid span { color: #39d353; float: right; }
-        .bl-grid input, .bl-grid select { background: #000; border: 1px solid #444; color: #39d353; padding: 5px; font-family: 'Almendra'; width: 120px; float: right; margin-top: -3px; }
-        .story-box { background: #000; border: 1px solid #444; padding: 15px; color: #39d353; min-height: 80px; border-radius: 5px; margin-top: 10px; font-size: 18px; white-space: pre-wrap; }
-
-        /* VOLLANSICHT GRID */
-        .full-grid-container { width: 98vw; height: 90vh; background: #0a0a0a; border: 2px solid #444; display: flex; flex-direction: column; overflow: hidden; }
-        table { width: 100%; border-collapse: collapse; font-size: 13px; color: #ccc; }
-        th { background: #222; color: #ff3131; padding: 10px; border: 1px solid #333; position: sticky; top: 0; }
-        td { padding: 8px; border: 1px solid #222; text-align: center; }
+        .bl-grid p { margin: 5px 0; font-size: 18px; font-weight: bold; border-bottom: 1px solid #222; }
+        .bl-grid input, .bl-grid select { background: #000; border: 1px solid #444; color: #39d353; padding: 5px; font-family: 'Almendra'; width: 130px; float: right; }
+        .story-box { background: #000; border: 1px solid #444; padding: 15px; color: #39d353; min-height: 100px; border-radius: 5px; margin-top: 10px; font-size: 18px; white-space: pre-wrap; width: 100%; box-sizing: border-box; }
     </style>
 </head>
 <body>
 
-<div id="start">
-    <div id="loginBar" onclick="document.getElementById('pinModal').style.display='flex'">LOGIN</div>
-    <div id="logo-container"><img src="bulls_start.jpg"></div>
-</div>
-
-<div id="pinModal" class="modal-overlay">
-    <div class="dark-modal">
-        <h1 style="color:#ff3131">Anmeldung</h1>
-        <input type="text" id="nameInput" placeholder="Name...">
-        <input type="password" id="pinInput" placeholder="PIN...">
-        <div style="display:flex; gap:10px;">
-            <button onclick="doLogin()" style="flex:1; background:#39d353; padding:15px; border:none; font-family:'Almendra'; font-weight:bold; cursor:pointer;">Anmelden</button>
-            <button onclick="document.getElementById('pinModal').style.display='none'" style="flex:1; background:red; color:white; border:none; cursor:pointer;">Abbruch</button>
-        </div>
-    </div>
+<div id="start" style="display:flex; align-items:center; justify-content:center; height:100vh;">
+    <div id="loginBar" onclick="document.getElementById('pinModal').style.display='flex'" style="position:absolute; left:0; top:35%; background:#39d353; padding:30px 5px; cursor:pointer; border-radius:0 10px 10px 0; writing-mode:vertical-rl; text-orientation:upright; font-weight:bold; color:black;">LOGIN</div>
+    <img src="bulls_start.jpg" style="width:750px; max-width:75vw;">
 </div>
 
 <div id="dashboard">
@@ -83,8 +55,7 @@
 
     <div class="panel" id="personal">
         <h2>Persönlich</h2>
-        <button onclick="alert('Support folgt')">Support Chat</button>
-        <button onclick="alert('Pin ändern folgt')">Pin ändern</button>
+        <button>Support Chat</button><button>Pin ändern</button>
     </div>
 
     <div class="panel" id="blacklistPanel">
@@ -96,16 +67,14 @@
     <div class="panel" id="blacklistAdmin">
         <h2>Pflege Admin</h2>
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:5px;">
-            <button id="btn-gemeldet" style="display:none; background:#5b5bff; color:white;">Gemeldete</button>
-            <button>Pflege</button>
-            <button>Eintragen</button>
-            <button onclick="openFullGrid()">Vollansicht</button>
+            <button style="background:#5b5bff; color:white;">Gemeldete</button><button>Pflege</button>
+            <button>Eintragen</button><button onclick="openFullGrid()">Volle Ansicht</button>
         </div>
     </div>
 
     <div class="panel" id="admin">
         <h2>Admin</h2>
-        <button onclick="openGroupMgmt()" id="btn-mgmt" style="background:#ffd600; display:none;">Gruppen Mgmt</button>
+        <button onclick="document.getElementById('groupMgmtModal').style.display='flex'" id="btn-mgmt" style="background:#ffd600; display:none;">Gruppen Mgmt</button>
         <button>User Verwaltung</button>
     </div>
 
@@ -113,23 +82,16 @@
         <h2>Elo Bereich</h2>
         <button>Rohstoffrechner</button>
     </div>
+
+    <button id="chat-btn" onclick="alert('Chat öffnet...')">ALLIANZ CHAT</button>
 </div>
 
-<div id="blacklistModal" class="modal-overlay">
-    <div class="bl-box">
-        <h1 style="color:#ff3131; text-align:center; margin-top:0;">DARK BULLS BLACK LISTE</h1>
-        <div style="display:flex; gap:10px; margin-bottom:15px;">
-            <input list="playerList" id="blSearchInput" placeholder="Spieler suchen...">
-            <datalist id="playerList"></datalist>
-            <button onclick="loadBlacklistPlayer()" style="background:#39d353; padding:8px 15px; border:none; font-family:'Almendra'; font-weight:bold;">LADEN</button>
-        </div>
-        <div class="bl-grid">
-            <div><p>Spieler ID <span id="outID"></span></p><p>Allianz <span id="outAllianz"></span></p><p>Verstoß <span id="outVerstoss"></span></p></div>
-            <div><p>Spielername <span id="outName"></span></p><p>Punktestand <span id="outPunkte"></span></p><p>Fallnummer <span id="outFall"></span></p></div>
-            <div><p>Datum <span id="outDate"></span></p><p>Melder <span id="outMelder"></span></p><p>Beweis <span id="outBeweis"></span></p></div>
-        </div>
-        <div class="story-box" id="outStory"></div>
-        <button onclick="document.getElementById('blacklistModal').style.display='none'" style="width:100%; background:red; margin-top:15px; padding:12px; border:none; color:white; font-family:'Almendra';">ZURÜCK</button>
+<div id="pinModal" class="modal-overlay">
+    <div class="dark-modal" style="background:#1a1a1a; padding:25px; border:3px solid #333; text-align:center; border-radius:12px; width:400px;">
+        <h1 style="color:#ff3131">Anmeldung</h1>
+        <input type="text" id="nameInput" placeholder="Name..." style="width:100%; padding:10px; margin-bottom:10px;">
+        <input type="password" id="pinInput" placeholder="PIN..." style="width:100%; padding:10px; margin-bottom:10px;">
+        <button onclick="doLogin()" style="width:100%; background:#39d353; padding:15px; border:none; font-weight:bold; cursor:pointer;">ANMELDEN</button>
     </div>
 </div>
 
@@ -154,38 +116,36 @@
             </div>
         </div>
         <p style="color:#ffbd00; font-weight:bold; margin-top:10px;">Beschreibung / Story:</p>
-        <textarea id="repStory" style="width:100%; height:100px; background:#000; color:#39d353; border:1px solid #444; padding:10px;"></textarea>
+        <textarea id="repStory" class="story-box"></textarea>
         <div style="display:flex; gap:10px; margin-top:15px;">
-            <button onclick="submitReport()" style="flex:1; background:#39d353; padding:12px; border:none; font-family:'Almendra'; font-weight:bold;">ABSEMDEN</button>
-            <button onclick="document.getElementById('reportModal').style.display='none'" style="flex:1; background:red; color:white; border:none; font-family:'Almendra';">ABBRECHEN</button>
+            <button onclick="submitReport()" style="flex:1; background:#39d353; padding:15px; border:none; font-weight:bold; cursor:pointer;">ABSENDEN</button>
+            <button onclick="document.getElementById('reportModal').style.display='none'" style="flex:1; background:red; color:white; border:none; cursor:pointer;">ABBRECHEN</button>
         </div>
     </div>
 </div>
 
-<div id="fullGridModal" class="modal-overlay">
-    <div class="full-grid-container">
-        <div style="padding:15px; background:#1a1a1a; display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #ff3131;">
-            <h2 style="margin:0; color:#ff3131;">DARK BULLS PROFI GRID (A-Q)</h2>
-            <button onclick="document.getElementById('fullGridModal').style.display='none'" style="background:red; color:white; padding:10px; border:none;">SCHLIESSEN</button>
-        </div>
-        <div style="flex:1; overflow:auto;"><table id="gridTable"><thead><tr><th>ID</th><th>Name</th><th>Allianz</th><th>Verstoß</th><th>Punkte</th><th>Datum</th><th>Fall-Nr</th><th>Melder</th><th>Beweis</th></tr></thead><tbody id="gridBody"></tbody></table></div>
+<div id="groupMgmtModal" class="modal-overlay">
+    <div class="bl-box" style="max-width:500px;">
+        <h1 style="color:#ffd600; text-align:center;">Gruppen & Archiv</h1>
+        <input type="text" placeholder="Name der Karte..." style="width:100%; padding:10px; margin-bottom:10px; background:black; color:white; border:1px solid #444;">
+        <input type="text" placeholder="Discord Webhook..." style="width:100%; padding:10px; margin-bottom:10px; background:black; color:white; border:1px solid #444;">
+        <button onclick="document.getElementById('groupMgmtModal').style.display='none'" style="width:100%; background:red; color:white; padding:12px; border:none; cursor:pointer;">SCHLIESSEN</button>
     </div>
 </div>
 
 <script>
-    const SCRIPT_URL = 'DEINE_URL'; 
+    const SCRIPT_URL = 'DEINE_APPS_SCRIPT_URL_HIER_EINTRAGEN'; // WICHTIG FÜR DAS SCHREIBEN
     const SHEET_ID = '1Gjnhol0ou63xW20OnbTo_wugzpOTgBP2yjnx3Qzg4bQ';
-    const GID_USERS = '1188820112'; const GID_BLACKLIST = '1767725514';
+    const GID_USERS = '1188820112';
 
-    let users = []; let myName = ""; let myRole = ""; let blacklistData = [];
+    let users = []; let myName = ""; let myRole = "";
 
     async function loadData() {
         const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_USERS}&t=${new Date().getTime()}`);
         const text = await res.text();
         users = text.split('\n').slice(1).map(r => {
             const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-            const cl = (s) => s ? s.replace(/["']/g, "").trim() : "";
-            return { name: cl(c[0]), pin: cl(c[2]), role: cl(c[3]) };
+            return { name: c[0].replace(/"/g,"").trim(), pin: c[2].replace(/"/g,"").trim(), role: c[3].replace(/"/g,"").trim() };
         });
     }
 
@@ -200,37 +160,36 @@
             document.getElementById("dashboard").style.display = "block";
             document.getElementById("userNameDisplay").innerText = myName;
             document.getElementById("userRoleDisplay").innerText = myRole;
-            if(myRole === "Admin" || myRole === "Ausbilder" || myRole === "Offizier") document.getElementById("btn-mgmt").style.display = "block";
-            if(myRole === "Admin" || myRole === "Buchhalter") document.getElementById("btn-gemeldet").style.display = "block";
+            document.getElementById("chat-btn").style.display = "block";
+            if(myRole === "Admin") document.getElementById("btn-mgmt").style.display = "block";
             setTimeout(() => { document.querySelectorAll('.panel').forEach(p => p.classList.add('visible')); }, 300);
-        } else { alert("Login falsch!"); }
+        } else { alert("Login fehlgeschlagen!"); }
     }
 
-    async function openBlacklist() {
-        document.getElementById('blacklistModal').style.display = 'flex';
-        const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_BLACKLIST}`);
-        const text = await res.text();
-        blacklistData = text.split('\n').slice(1).map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/"/g,"").trim()).slice(0, 17));
-        const dl = document.getElementById('playerList'); dl.innerHTML = "";
-        blacklistData.forEach(p => { if(p[1]) { let o = document.createElement('option'); o.value = p[1]; dl.appendChild(o); }});
-    }
+    async function submitReport() {
+        const data = {
+            id: document.getElementById('repID').value,
+            name: document.getElementById('repName').value,
+            allianz: document.getElementById('repAlly').value,
+            punkte: document.getElementById('repPunkte').value,
+            verstoss: document.getElementById('repReason').value,
+            map: document.getElementById('repMap').value,
+            datum: document.getElementById('repDate').value,
+            beweis: document.getElementById('repLink').value,
+            story: document.getElementById('repStory').value,
+            melder: myName
+        };
 
-    function loadBlacklistPlayer() {
-        const p = blacklistData.find(x => x[1] === document.getElementById('blSearchInput').value);
-        if(p) {
-            document.getElementById('outID').innerText = p[1]; document.getElementById('outName').innerText = p[2];
-            document.getElementById('outAllianz').innerText = p[5]; document.getElementById('outVerstoss').innerText = p[6];
-            document.getElementById('outPunkte').innerText = p[16]; document.getElementById('outDate').innerText = p[14];
-            document.getElementById('outStory').innerText = p[13]; document.getElementById('outMelder').innerText = p[7];
-            document.getElementById('outFall').innerText = p[12]; document.getElementById('outBeweis').innerText = p[15];
-        }
-    }
+        if(!data.name) return alert("Bitte mindestens den Namen angeben!");
 
-    function openFullGrid() {
-        document.getElementById('fullGridModal').style.display = 'flex';
-        let html = "";
-        blacklistData.forEach(p => { if(p[1]) html += `<tr><td>${p[1]}</td><td>${p[2]}</td><td>${p[5]}</td><td>${p[6]}</td><td>${p[16]}</td><td>${p[14]}</td><td>${p[12]}</td><td>${p[7]}</td><td><a href="${p[15]}" target="_blank">🔗</a></td></tr>`; });
-        document.getElementById('gridBody').innerHTML = html;
+        const btn = event.target; btn.innerText = "Sende..."; btn.disabled = true;
+
+        try {
+            await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', cache: 'no-cache', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data) });
+            alert("Meldung wurde im System gespeichert!");
+            document.getElementById('reportModal').style.display = 'none';
+        } catch (e) { alert("Fehler beim Senden!"); }
+        btn.innerText = "ABSENDEN"; btn.disabled = false;
     }
 
     window.onload = loadData;
