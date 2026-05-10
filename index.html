@@ -11,11 +11,9 @@
         /* --- STARTSEITE --- */
         #start { display: flex; align-items: center; justify-content: center; height: 100vh; position: relative; background: black; z-index: 100; }
         #logo-container img { width: 780px; max-width: 75vw; filter: drop-shadow(0 0 60px rgba(255, 0, 0, 0.9)); cursor: pointer; }
-        
         #loginBar { position: absolute; left: 0; top: 35%; transform: translateY(-50%); background: #39d353; padding: 30px 5px; font-size: 20px; font-weight: bold; color: black; cursor: pointer; z-index: 100; border-radius: 0 10px 10px 0; writing-mode: vertical-rl; text-orientation: upright; width: 40px; text-align: center; }
-        #regBar { position: absolute; left: 0; top: 65%; transform: translateY(-50%); background: #ffd600; padding: 25px 5px; font-size: 14px; font-weight: bold; color: black; cursor: pointer; z-index: 100; border-radius: 0 10px 10px 0; writing-mode: vertical-rl; text-orientation: upright; width: 40px; text-align: center; }
 
-        /* --- DASHBOARD DESIGN --- */
+        /* --- DASHBOARD DESIGN (PANZER-MODUS) --- */
         #dashboard { display: none; position: relative; width: 100vw; min-height: 100vh; background: black; }
         #bg-bull { position: fixed; left: 50%; top: 45%; transform: translate(-50%, -50%); width: 850px; z-index: 1; opacity: 0.4; pointer-events: none; }
         #top-bar { position: fixed; top: 0; width: 100%; display: flex; justify-content: flex-end; padding: 10px 40px; z-index: 100; background: rgba(0,0,0,0.8); box-sizing: border-box; border-bottom: 1px solid #444; }
@@ -25,7 +23,7 @@
         .panel h2 { color: #ff3131; margin: 0 0 8px 0; font-size: 20px; text-decoration: underline; text-align: center; }
         .panel button { display: block; width: 100%; margin: 5px 0; background: #39d353; border: none; padding: 10px; font-family: 'Almendra'; font-weight: bold; cursor: pointer; color: black; border-radius: 4px; }
 
-        /* PANEL POSITIONEN PC */
+        /* POSITIONIERUNG PC */
         @media (min-width: 801px) {
             #personal { left: 40px; top: 80px; }
             #blacklistPanel { left: 40px; top: 320px; }
@@ -124,21 +122,18 @@
 
     <div class="panel" id="personal">
         <h2>Persönlich</h2>
-        <button onclick="alert('Support folgt...')">Support Chat</button>
-        <button onclick="alert('Pin folgt...')">Pin ändern</button>
+        <button onclick="openSupportChat()">Support Chat</button>
     </div>
 
     <div class="panel" id="blacklistPanel">
         <h2>Black Liste</h2>
         <button onclick="alert('In Arbeit...')">Anschauen</button>
-        <button onclick="alert('In Arbeit...')">Spieler Melden</button>
     </div>
 
     <div class="panel" id="blacklistAdmin">
         <h2>Pflege Admin</h2>
         <button id="btn-mgmt" style="background:#ffd600; display:none;" onclick="openGroupMgmt()">Gruppen Management</button>
         <button>Spieler eintragen</button>
-        <button>Volle Ansicht</button>
     </div>
 
     <div class="panel" id="admin">
@@ -155,7 +150,7 @@
 </div>
 
 <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxds0mEtSLiXLP3YibzD8Dd2VYcXo_xs_5pZgRGK23EW9DjKHq4dfpoLZeqUDRF2RS6_A/exec'; 
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbynCvti8eTql0fsOt7d1Yd3WeWXnV0qhfgaiPg3_G1OA0Lmg9IpOo7kc_cwd5IoBhbT0Q/exec'; 
     const SHEET_ID = '1Gjnhol0ou63xW20OnbTo_wugzpOTgBP2yjnx3Qzg4bQ';
     const GID_USERS = '1188820112'; const GID_CHAT = '274206006'; const GID_STEER = '717972533';
 
@@ -212,7 +207,7 @@
         if(selected.length === 0) document.querySelectorAll(".user-chk:checked").forEach(c => selected.push(c.value));
         if(!name || !hook || selected.length === 0) return alert("Fehler: Bitte alles ausfüllen!");
         await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "createGroup", groupName: name, webhook: hook, allowedUsers: selected.join(",") }) });
-        alert("Gruppe wurde in Tabelle gespeichert!"); location.reload();
+        alert("Gruppe wurde gespeichert!"); location.reload();
     }
 
     function switchChatTab(tab) {
@@ -220,7 +215,9 @@
         document.getElementById('tab-' + tab).classList.add('active');
         const sidebar = document.getElementById("chatSidebar"); sidebar.innerHTML = "";
         if(tab === 'mitglieder') {
-            users.forEach(u => { if(u.name !== myName) sidebar.innerHTML += `<div class="contact-item" onclick="startChat('${u.name}', false)">${u.name}</div>`; });
+            users.forEach(u => { if(u.name !== myName) sidebar.innerHTML += `<div class="contact-item" onclick="startChat('${u.name}', false)">👤 ${u.name}</div>`; });
+        } else if(tab === 'pn') {
+            sidebar.innerHTML = `<div class='contact-item' onclick='startChat("SUPPORT", false)'>🛡️ SUPPORT</div>`;
         } else if(tab === 'gruppen') {
             activeGroups.forEach(g => {
                 if(g.allowed === "ALLE" || g.allowed.includes(myName) || myRole === "Admin") 
@@ -233,7 +230,7 @@
 
     async function sendChatMessage() {
         const input = document.getElementById("chatInput"); const msg = input.value.trim(); if(!msg) return;
-        let kanalID = isGroupChat ? "GRUPPE-" + chatPartner : [myName, chatPartner].sort().join("-");
+        let kanalID = isGroupChat ? "GRUPPE-" + chatPartner : (chatPartner === "SUPPORT" ? "SUPPORT-"+myName : [myName, chatPartner].sort().join("-"));
         await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: isGroupChat ? "sendGroupChat" : "sendChat", absender: myName, kanalID: kanalID, nachricht: msg }) });
         input.value = ""; loadChatHistory();
     }
@@ -242,14 +239,18 @@
         if(!chatPartner) return;
         const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_CHAT}&t=${new Date().getTime()}`);
         const text = await res.text();
-        const rows = text.split('\n').slice(1).map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/"/g,"").trim()));
-        let kanalID = isGroupChat ? "GRUPPE-" + chatPartner : [myName, chatPartner].sort().join("-");
+        const rows = text.split('\n').slice(1).map(r => r.split(/,(?=(?:non-existent-regex-trick))?/).map(s => s.replace(/"/g,"").trim()));
+        let kanalID = isGroupChat ? "GRUPPE-" + chatPartner : (chatPartner === "SUPPORT" ? "SUPPORT-"+myName : [myName, chatPartner].sort().join("-"));
         let html = "";
-        rows.forEach(c => { if(c[2] === kanalID) html += `<div class="msg ${c[1] === myName ? 'msg-own' : 'msg-other'}"><small>${c[1]}</small><br>${c[3]}</div>`; });
+        rows.forEach(c => { 
+            const rowKanal = c[2] ? c[2].trim() : "";
+            if(rowKanal === kanalID) html += `<div class="msg ${c[1] === myName ? 'msg-own' : 'msg-other'}"><small>${c[1]}</small><br>${c[3]}</div>`; 
+        });
         document.getElementById("chatHistory").innerHTML = html;
         document.getElementById("chatHistory").scrollTop = 99999;
     }
 
+    function openSupportChat() { document.getElementById('fullChatModal').style.display = 'flex'; switchChatTab('pn'); startChat('SUPPORT', false); }
     window.onload = loadData;
 </script>
 </body>
