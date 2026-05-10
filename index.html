@@ -37,7 +37,7 @@
         .panel h2 { color: #ff3131; margin: 0 0 8px 0; font-size: 20px; text-decoration: underline; }
         .panel button { display: block; width: 100%; margin: 5px 0; background: #39d353; border: none; padding: 10px; font-family: 'Almendra'; font-weight: bold; cursor: pointer; color: black; border-radius: 4px; }
 
-        /* --- BLACKLIST DESIGN (BEIBEHALTEN) --- */
+        /* --- BLACKLIST DESIGN --- */
         .bl-box { width: 95%; max-width: 1200px; background: #111; border: 2px solid #333; padding: 30px; border-radius: 10px; }
         .bl-header { color: #ff3131; font-size: 55px; text-align: center; margin-bottom: 20px; font-weight: bold; }
         .bl-search-row { display: flex; gap: 20px; align-items: center; margin-bottom: 30px; background: #1a1a1a; padding: 15px; border-radius: 10px; }
@@ -269,18 +269,35 @@
             myName = u.name; myRole = u.role;
             document.getElementById("pinModal").style.display = "none";
             document.getElementById("start").style.display = "none";
-            document.getElementById("dashboard").style.display = "block";
+            const dash = document.getElementById("dashboard");
+            dash.style.display = (window.innerWidth <= 800) ? "flex" : "block";
             document.getElementById("userNameDisplay").innerText = u.name;
             document.getElementById("userRoleDisplay").innerText = u.role;
+            
+            // STATUS UPDATE
             fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "updateStatus", playerName: myName }) });
+            
             switchChatTab('mitglieder');
             setInterval(loadChatHistory, 4000);
             setInterval(loadData, 10000);
+
             setTimeout(() => {
                 document.querySelectorAll('.panel').forEach((panel, index) => {
-                    if (u.role === "Admin" || panel.id === "personal" || (panel.id === "blacklistPanel" && u.role !== "Gast")) {
-                        panel.style.display = "block";
-                        setTimeout(() => panel.classList.add('visible'), index * 120);
+                    // RECHTE-FILTER: 
+                    // Gast sieht NUR 'personal'. Alle anderen sehen ihre jeweiligen Bereiche.
+                    if (u.role === "Gast") {
+                        if (panel.id === "personal") {
+                            panel.style.display = "block";
+                            setTimeout(() => panel.classList.add('visible'), 100);
+                        } else {
+                            panel.style.display = "none";
+                        }
+                    } else {
+                        // Logik für Admin/Mitglieder wie gehabt
+                        if (u.role === "Admin" || panel.id === "personal" || (panel.id === "blacklistPanel" && u.role !== "Gast")) {
+                            panel.style.display = "block";
+                            setTimeout(() => panel.classList.add('visible'), index * 120);
+                        }
                     }
                 });
                 document.getElementById("chat-btn").style.display = "block";
@@ -355,9 +372,6 @@
         document.getElementById("chatHistory").innerHTML += `<div class="msg msg-own"><small>${myName}</small><br>${msg}</div>`;
         input.value = "";
         await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "sendChat", absender: myName, kanalID: kanalID, nachricht: msg }) });
-        if(isSup) {
-            fetch(WEBHOOK_SUP, { method: "POST", headers: {"Content-Type":"application/json"}, body: JSON.stringify({ content: `💬 **Support-Chat (${kanalID})**\n**${myName}**: ${msg}` })});
-        }
     }
 
     async function loadChatHistory() {
@@ -372,7 +386,7 @@
         history.innerHTML = html; history.scrollTop = history.scrollHeight;
     }
 
-    /* --- BASIS FUNKTIONEN (WIEDERHERGESTELLT) --- */
+    /* --- BASIS FUNKTIONEN --- */
     function openChangePin() { document.getElementById("pinUser").innerText = myName; document.getElementById("pinChangeModal").style.display = "flex"; }
     function closePinModal() { document.getElementById('pinChangeModal').style.display = 'none'; }
     async function submitPinChange() {
