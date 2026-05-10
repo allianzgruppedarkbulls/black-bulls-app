@@ -270,22 +270,32 @@
             document.getElementById("pinModal").style.display = "none";
             document.getElementById("start").style.display = "none";
             document.getElementById("dashboard").style.display = "block";
-            document.getElementById("userNameDisplay").innerText = u.name;
-            document.getElementById("userRoleDisplay").innerText = u.role;
-            fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "updateStatus", playerName: myName }) });
-            switchChatTab('mitglieder');
-            setInterval(loadChatHistory, 4000);
-            setInterval(loadData, 10000);
-            setTimeout(() => {
-                document.querySelectorAll('.panel').forEach((panel, index) => {
-                    if (u.role === "Admin" || panel.id === "personal" || (panel.id === "blacklistPanel" && u.role !== "Gast")) {
-                        panel.style.display = "block";
-                        setTimeout(() => panel.classList.add('visible'), index * 120);
+            document.getElementById("userNameDisplay").innerText = myName;
+            document.getElementById("userRoleDisplay").innerText = myRole;
+
+            // --- DER GAST-RIEGEL ---
+            if (myRole === "Gast") {
+                // Diese Bereiche werden für Gäste komplett gelöscht/ausgeblendet
+                document.getElementById("blacklistPanel").remove();
+                document.getElementById("blacklistAdmin").remove();
+                document.getElementById("admin").remove();
+                document.getElementById("elo").remove();
+                
+                // Nur Persönlich anzeigen
+                const pers = document.getElementById("personal");
+                pers.style.display = "block";
+                setTimeout(() => pers.classList.add('visible'), 100);
+            } else {
+                // Logik für Admins und Mitglieder
+                document.querySelectorAll('.panel').forEach((p, i) => {
+                    if (myRole === "Admin" || p.id === "personal" || p.id === "blacklistPanel" || p.id === "elo") {
+                        p.style.display = "block";
+                        setTimeout(() => p.classList.add('visible'), i * 150);
                     }
                 });
-                document.getElementById("chat-btn").style.display = "block";
-                setTimeout(() => document.getElementById("chat-btn").style.opacity = "1", 500);
-            }, 600);
+            }
+            
+            document.getElementById("chat-btn").style.display = "block";
         } else { alert("Login falsch!"); }
     }
 
