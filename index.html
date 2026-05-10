@@ -213,4 +213,60 @@
         let selected = document.getElementById("chk-alle").checked ? ["ALLE"] : [];
         if(selected.length === 0) document.querySelectorAll(".user-chk:checked").forEach(c => selected.push(c.value));
         if(!name || !hook || selected.length === 0) return alert("Bitte alles ausfüllen!");
-        await fetch(SCRIPT_URL, { method: "POST", body:
+        await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "createGroup", groupName: name, webhook: hook, allowedUsers: selected.join(",") }) });
+        alert("Gespeichert!"); location.reload();
+    }
+
+    async function archiveCurrentGroup() {
+        const name = document.getElementById("newGroupName").value;
+        if(!confirm("Wirklich archivieren?")) return;
+        await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "closeGroup", groupName: name }) });
+        alert("Archiviert!"); location.reload();
+    }
+
+    function switchChatTab(tab) {
+        document.querySelectorAll('.chat-tab').forEach(t => t.classList.remove('active'));
+        document.getElementById('tab-' + tab).classList.add('active');
+        const sidebar = document.getElementById("chatSidebar"); sidebar.innerHTML = "";
+        if(tab === 'mitglieder') {
+            users.forEach(u => { if(u.name !== myName) sidebar.innerHTML += `<div class="contact-item" onclick="startChat('${u.name}', false)">👤 ${u.name}</div>`; });
+        } else if(tab === 'gruppen') {
+            activeGroups.forEach(g => {
+                if(g.allowed === "ALLE" || g.allowed.includes(myName) || myRole === "Admin") 
+                    sidebar.innerHTML += `<div class="contact-item" onclick="startChat('${g.name}', true)">📢 ${g.name}</div>`;
+            });
+        }
+    }
+
+    function startChat(partner, isGrp) { chatPartner = partner; isGroupChat = isGrp; document.getElementById("chatHeader").innerText = partner; loadChatHistory(); }
+
+    async function sendChatMessage() {
+        const input = document.getElementById("chatInput"); const msg = input.value.trim(); if(!msg) return;
+        let kanalID = isGroupChat ? "GRUPPE-" + chatPartner : [myName, chatPartner].sort().join("-");
+        await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: isGroupChat ? "sendGroupChat" : "sendChat", absender: myName, kanalID: kanalID, nachricht: msg }) });
+        input.value = ""; loadChatHistory();
+    }
+
+    async function loadChatHistory() {
+        if(!chatPartner) return;
+        const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_CHAT}&t=${new Date().getTime()}`);
+        const text = await res.text();
+        const rows = text.split('\n').slice(1).map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/"/g,"").trim()));
+        let currentKanalClean = (isGroupChat ? chatPartner : [myName, chatPartner].sort().join("-")).toLowerCase().replace(/[^a-z0-9]/g, "");
+        let html = "";
+        rows.forEach(c => { 
+            if(c[2]) {
+                let rowKanalClean = c[2].toLowerCase().replace(/[^a-z0-9]/g, "").replace("gruppe", "");
+                if(rowKanalClean === currentKanalClean) {
+                    html += `<div class="msg ${c[1] === myName ? 'msg-own' : 'msg-other'}"><small>${c[1]}</small><br>${c[3]}</div>`; 
+                }
+            }
+        });
+        document.getElementById("chatHistory").innerHTML = html;
+        document.getElementById("chatHistory").scrollTop = 99999;
+    }
+
+    window.onload = loadData;
+</script>
+</body>
+</html>
