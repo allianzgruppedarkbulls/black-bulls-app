@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>DARK BULLS - SUPPORT TICKET</title>
+    <script src="config.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Almendra:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #0c0c0e; color: #dbdee1; font-family: 'Almendra', serif; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; box-sizing: border-box; }
+        .ticket-box { width: 500px; max-width: 95vw; background-color: #1e1f22; border: 2px solid #f23f43; border-radius: 12px; padding: 30px; box-shadow: 0 0 30px rgba(242, 63, 67, 0.3); text-align: center; box-sizing: border-box; }
+        h1 { color: #f23f43; text-transform: uppercase; margin-top: 0; margin-bottom: 20px; letter-spacing: 1px; font-size: 26px; }
+        label { display: block; text-align: left; font-weight: bold; margin-bottom: 8px; color: #fff; font-size: 16px; }
+        input[type="text"], textarea { width: 100%; padding: 12px; background: #2b2d31; color: #fff; border: 1px solid #111; font-family: 'Almendra'; font-size: 16px; border-radius: 5px; box-sizing: border-box; outline: none; margin-bottom: 20px; }
+        input:focus, textarea:focus { border-color: #f23f43; }
+        .btn-send { width: 100%; background: #f23f43; color: white; border: none; padding: 14px; font-family: 'Almendra'; font-weight: bold; font-size: 18px; border-radius: 6px; cursor: pointer; text-transform: uppercase; transition: 0.2s; }
+        .btn-send:hover { background: #fff; color: #000; transform: scale(1.02); }
+        .back-link { display: block; margin-top: 15px; color: #949ba4; text-decoration: none; font-size: 15px; }
+        .back-link:hover { color: #fff; text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+<div class="ticket-box">
+    <h1>🚨 Support-Ticket eröffnen</h1>
+    <p style="color: #aaa; font-size: 15px; margin-top: -10px; margin-bottom: 25px;">Schildere dein Anliegen. Die Allianz-Leitung wird sich umgehend melden.</p>
+    
+    <label>Betreff (Pflichtfeld)</label>
+    <input type="text" id="ticketSubject" placeholder="Worum geht es? (z.B. Ressourcen-Konflikt, Fehlverhalten)..." required>
+    
+    <label>Deine Nachricht</label>
+    <textarea id="ticketMessage" rows="5" placeholder="Beschreibe das Problem so genau wie möglich..." required></textarea>
+    
+    <button class="btn-send" onclick="submitTicket()">Übertragung starten</button>
+    
+    <a href="dashboard.html" class="back-link">Zurück zum HQ</a>
+</div>
+
+<script>
+    const API = window.BULLS_CONFIG.SCRIPT_URL;
+    const MY_NAME = localStorage.getItem('bulls_user');
+    const MY_ROLE = localStorage.getItem('bulls_role') || "Mitglied";
+
+    if(!MY_NAME) { window.location.href = "index.html"; }
+
+    async function submitTicket() {
+        const subject = document.getElementById("ticketSubject").value.trim();
+        const message = document.getElementById("ticketMessage").value.trim();
+        
+        if(!subject || !message) {
+            alert("❌ FEHLER: Sowohl Betreff als auch Nachricht müssen zwingend ausgefüllt werden!");
+            return;
+        }
+
+        const payload = {
+            action: "sendSupportTicket",
+            sender: MY_NAME,
+            role: MY_ROLE,
+            betreff: subject,
+            text: message
+        };
+
+        try {
+            const res = await fetch(API, { method: "POST", body: JSON.stringify(payload) });
+            const data = await res.json();
+            if(data.ok) {
+                alert("✓ TICKET ERGATTERT! Der rote Support-Kanal wurde in deinem Funkgerät freigeschaltet.");
+                window.location.href = "Chat.html"; // Leitet direkt in den Chat weiter
+            }
+        } catch(e) { alert("Funkstörung beim Übermitteln des Tickets."); }
+    }
+</script>
+</body>
+</html>
