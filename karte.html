@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Bulls - Strategische Weltkarte (Zoom)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #0b0b0b;
+            color: #f0f0f0;
+            margin: 0;
+            padding: 10px;
+            overflow: hidden;
+        }
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #111;
+            padding: 10px 20px;
+            border: 2px solid #ff0000;
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+        .btn-link {
+            background: #ff0000;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 13px;
+        }
+        .btn-link:hover { background: #ff3333; }
+        
+        /* Zoom-Kartencontainer */
+        #mapViewport {
+            width: 100vw;
+            height: 85vh;
+            background: #111;
+            border: 1px solid #444;
+            border-radius: 6px;
+            position: relative;
+            overflow: hidden;
+            cursor: grab;
+        }
+        #mapViewport:active { cursor: grabbing; }
+        
+        #mapCanvas {
+            position: absolute;
+            transform-origin: 0 0;
+            will-change: transform;
+        }
+        #mapImage {
+            display: block;
+            width: 1600px; /* Basis-Auflösung zum Zoomen */
+            height: auto;
+        }
+        
+        /* Pins für alle Länder & KI */
+        .map-pin {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.8);
+            white-space: nowrap;
+            border: 1px solid #fff;
+        }
+        .pin-eign { background: #2ecc71; color: #000; }
+        .pin-gegn { background: #e74c3c; color: #fff; }
+        .pin-ki   { background: #f39c12; color: #000; }
+
+        /* Detail-Infobox */
+        #infoBox {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(17, 17, 17, 0.95);
+            border: 2px solid #d4af37;
+            padding: 15px;
+            border-radius: 6px;
+            width: 300px;
+            display: none;
+            z-index: 1000;
+        }
+        .zoom-controls {
+            position: fixed;
+            top: 80px;
+            right: 30px;
+            background: rgba(0,0,0,0.8);
+            border: 1px solid #555;
+            padding: 5px;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            z-index: 1000;
+        }
+        .zoom-btn {
+            background: #222;
+            color: #fff;
+            border: 1px solid #777;
+            padding: 8px 12px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        .zoom-btn:hover { background: #ff0000; }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <h3 style="margin:0; color:#d4af37;">Dark Bulls - Strategische Weltkarte (EU-22 Zoom & Alle Länder)</h3>
+        <a href="rechner.html" class="btn-link" target="_blank">&larr; Zum Materialrechner</a>
+    </div>
+
+    <div class="zoom-controls">
+        <button class="zoom-btn" onclick="zoomIn()">+</button>
+        <button class="zoom-btn" onclick="zoomOut()">-</button>
+        <button class="zoom-btn" onclick="resetZoom()">Reset</button>
+    </div>
+
+    <div id="mapViewport">
+        <div id="mapCanvas">
+            <img src="EU-22.jpeg" id="mapImage" alt="EU-22 Weltkarte">
+            <div id="pinsLayer"></div>
+        </div>
+    </div>
+
+    <div id="infoBox">
+        <h4 id="infoTitle" style="margin:0 0 8px 0; color:#d4af37;"></h4>
+        <p id="infoText" style="margin:0; font-size:13px;"></p>
+    </div>
+
+    <script>
+        // Alle Länder (Eigene, Gegner & KI-Phasen Länder) mit Koordinaten auf dem 1600px Bild
+        const worldCountries = [
+            { name: "Deutschland", type: "eign", x: 750, y: 380, info: "18 Infanterie, 3 Pak, 1 Flak, 1 Panzerwagen" },
+            { name: "Ukraine", type: "eign", x: 1000, y: 420, info: "12 Infanterie, 2 Pak, Aktiv bewirtschaftet" },
+            { name: "Italien", type: "eign", x: 730, y: 620, info: "15 Infanterie, 2 Pak, Hafen gesichert" },
+            { name: "Frankreich", type: "gegn", x: 600, y: 490, info: "Feindlicher Sektor - Truppen gesichtet" },
+            { name: "Großbritannien", type: "gegn", x: 550, y: 280, info: "Feindliche Marine & Luftwaffe aktiv" },
+            { name: "Marokko", type: "ki", x: 450, y: 900, info: "KI-Phase: Bereit zur Einnahme / Rohstoffquelle" },
+            { name: "Algerien", type: "ki", x: 620, y: 920, info: "KI-Phase: Neutral / Öl- und Stahlressource" },
+            { name: "Libyen", type: "ki", x: 800, y: 930, info: "KI-Phase: Neutral / Offenes Ziel" },
+            { name: "Polen", type: "gegn", x: 900, y: 360, info: "Gegnerischer Pufferstaat" }
+        ];
+
+        let scale = 1, panX = 0, panY = 0;
+        let isDragging = false, startX = 0, startY = 0;
+
+        const viewport = document.getElementById('mapViewport');
+        const canvas = document.getElementById('mapCanvas');
+        const pinsLayer = document.getElementById('pinsLayer');
+
+        function renderPins() {
+            let html = '';
+            worldCountries.forEach((c, idx) => {
+                let cssClass = c.type === 'eign' ? 'pin-eign' : (c.type === 'gegn' ? 'pin-gegn' : 'pin-ki');
+                html += `<div class="map-pin ${cssClass}" style="left: ${c.x}px; top: ${c.y}px;" onclick="showInfo(${idx})">${c.name}</div>`;
+            });
+            pinsLayer.innerHTML = html;
+        }
+
+        function showInfo(idx) {
+            let c = worldCountries[idx];
+            document.getElementById('infoBox').style.display = 'block';
+            document.getElementById('infoTitle').innerText = c.name + " (" + c.type.toUpperCase() + ")";
+            document.getElementById('infoText').innerText = c.info;
+        }
+
+        // Zoom & Pan Logik
+        function updateTransform() {
+            canvas.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
+        }
+
+        viewport.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startX = e.clientX - panX;
+            startY = e.clientY - panY;
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            panX = e.clientX - startX;
+            panY = e.clientY - startY;
+            updateTransform();
+        });
+
+        window.addEventListener('mouseup', () => { isDragging = false; });
+
+        viewport.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            let zoomFactor = 1.1;
+            if (e.deltaY < 0) {
+                scale *= zoomFactor;
+            } else {
+                scale /= zoomFactor;
+            }
+            scale = Math.max(0.5, Math.min(scale, 5)); // Zoom-Limits
+            updateTransform();
+        });
+
+        function zoomIn() { scale = Math.min(scale * 1.2, 5); updateTransform(); }
+        function zoomOut() { scale = Math.max(scale / 1.2, 0.5); updateTransform(); }
+        function resetZoom() { scale = 1; panX = 0; panY = 0; updateTransform(); }
+
+        window.onload = renderPins;
+    </script>
+</body>
+</html>
